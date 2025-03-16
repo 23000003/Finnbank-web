@@ -1,25 +1,25 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 // position default to top right
 export const showToast = {
-    success: (message: string) => {
-        toast.success(message)
-    },
-    // to refactor
-    loading : (message: string) => {
-        toast(message, {
-            position: "top-right",
-            // onOpen: () => window.alert('Called when I open'),
-            // onClose: (reason?: boolean | string) => window.alert('Called when I close')
-        })
-    },
-    error: (message: string) => {
-        toast.error(message)
-    },
-    warning: (message: string) => {
-        toast.warning(message)
-    },
-    info: (message: string) => {
-        toast.info(message)
-    }
-}
+  success: (message: string) => {
+    toast.success(message);
+  },
+  // to refactor
+  loading: (message: string) => {
+    toast(message, {
+      position: "top-right",
+      // onOpen: () => window.alert('Called when I open'),
+      // onClose: (reason?: boolean | string) => window.alert('Called when I close')
+    });
+  },
+  error: (message: string) => {
+    toast.error(message);
+  },
+  warning: (message: string) => {
+    toast.warning(message);
+  },
+  info: (message: string) => {
+    toast.info(message);
+  },
+};
