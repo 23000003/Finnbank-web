@@ -23,4 +23,5 @@ jobs:
             git reset --hard && git clean -fd && git pull origin main
             npm ci
             npm run build
-            rm -rf ../dist && mv ./dist ../
+            rm -rf ../dist
+            mv ./dist ../

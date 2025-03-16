@@ -9,6 +9,7 @@ function RouteComponent() {
   return (
     <div>
       <h1>Welcome to Landing Page!! SKSKSKSK</h1>
+      <h2>Test</h2>
       <button onClick={() => showToast.warning("HERE")}>Show Toast</button>
       <Link to="/welcome/signin">Go to Sign In</Link>
       <Link to="/welcome/signup">Go to Sign Up</Link>
