@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  beforeLoad: ({ context }) => {
+  beforeLoad: ({ context, location }) => {
     const ctx = context as { test: boolean };
     if (ctx.test && location.pathname.startsWith("/welcome/")) {
       console.log("Before Load");
