@@ -12,7 +12,7 @@ const router = createRouter({
   history, // support client-side routing in production
   routeTree,
   context: {
-    test: false,
+    test: true,
   },
 });
 

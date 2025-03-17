@@ -8,13 +8,15 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
   beforeLoad: ({ context, location }) => {
     const ctx = context as { test: boolean };
-    if (ctx.test && location.pathname.startsWith("/welcome/")) {
-      console.log("Before Load");
+    console.log("location", location.pathname);
+
+    if (ctx.test && !location.pathname.startsWith("/home")) {
+      console.log("Before Load1");
       throw redirect({
         to: "/home/dashboard",
       });
-    } else if (!ctx.test && location.pathname.startsWith("/home/")) {
-      console.log("Before Load");
+    } else if (!ctx.test && !location.pathname.startsWith("/welcome")) {
+      console.log("Before Load2");
       throw redirect({
         to: "/welcome",
       });
