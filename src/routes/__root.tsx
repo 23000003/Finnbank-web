@@ -1,5 +1,4 @@
-import { createRootRoute, Outlet, useLocation, useRouter } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { createRootRoute, Outlet, redirect, useLocation, useRouter } from "@tanstack/react-router";
 import LandingLayout from "../components/layout/LandingLayout";
 import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
@@ -7,6 +6,20 @@ import { ToastContainer } from "react-toastify";
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
+  beforeLoad: ({ context, location }) => {
+    const ctx = context as { test: boolean };
+    if (ctx.test && !location.pathname.startsWith("/home/dashboard")) {
+      console.log("Before Load");
+      throw redirect({
+        to: "/home/dashboard",
+      });
+    } else if (!ctx.test && !location.pathname.startsWith("/welcome/sign")) {
+      console.log("Before Load");
+      throw redirect({
+        to: "/welcome",
+      });
+    }
+  },
 });
 
 function RootComponent() {
@@ -25,7 +38,6 @@ function RootComponent() {
       {isAuthenticated ? <HomeLayout /> : IsAtAuthPage()}
       <Outlet />
       <ToastContainer autoClose={3000} />
-      <TanStackRouterDevtools />
     </>
   );
 }

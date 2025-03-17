@@ -11,6 +11,9 @@ import { routeTree } from "./routeTree.gen";
 const router = createRouter({
   history, // support client-side routing in production
   routeTree,
+  context: {
+    test: 1,
+  },
 });
 
 // Register the router instance for type safety
