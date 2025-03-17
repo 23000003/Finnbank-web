@@ -6,14 +6,14 @@ import { ToastContainer } from "react-toastify";
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: ({ context }) => {
     const ctx = context as { test: boolean };
-    if (ctx.test && !location.pathname.startsWith("/home/dashboard")) {
+    if (ctx.test && location.pathname.startsWith("/welcome/")) {
       console.log("Before Load");
       throw redirect({
         to: "/home/dashboard",
       });
-    } else if (!ctx.test && !location.pathname.startsWith("/welcome/sign")) {
+    } else if (!ctx.test && location.pathname.startsWith("/home/")) {
       console.log("Before Load");
       throw redirect({
         to: "/welcome",
