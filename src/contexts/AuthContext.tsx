@@ -21,7 +21,8 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() =>{
-
+        setIsAuthenticated(false);
+        setLoading(false);
     },[])
 
     const login = async (email: string, password: string) => {
