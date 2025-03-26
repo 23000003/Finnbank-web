@@ -6,13 +6,14 @@ const history = createHashHistory();
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 // Create a new router instance
 const router = createRouter({
   history, // support client-side routing in production
   routeTree,
   context: {
-    test: false,
+    auth: undefined!
   },
 });
 
@@ -23,13 +24,22 @@ declare module "@tanstack/react-router" {
   }
 }
 
+const InitApp = () => {
+  const auth = useAuth();
+  return (
+    <RouterProvider router={router} context={{ auth: auth }}/>
+  )
+}
+
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <InitApp />
+      </AuthProvider>
     </StrictMode>
   );
 }
