@@ -7,32 +7,38 @@ import {
 import LandingLayout from "../components/layout/LandingLayout";
 import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
-import { AuthContextType } from "../types/contexts";
+import { Context } from "../types/contexts.types";
+import { useAuth } from "../contexts/AuthContext";
+import AuthLayout from "../components/layout/AuthLayout";
 
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   beforeLoad: ({ context, location }) => {
-    const ctx = context as AuthContextType;
-    if (ctx.isAuthenticated && !location.pathname.startsWith("/home")) {
+    const { auth } = context as Context;
+    // redirect to dashboard if authenticated
+    if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
       throw redirect({
         to: "/home/dashboard",
       });
-    } else if (!ctx.isAuthenticated && !location.pathname.startsWith("/welcome")) {
+    // redirect to welcome (landing page) if not authenticated
+    } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
       throw redirect({
         to: "/welcome",
       });
     }
+    return { auth };
   },
 });
 
 function RootComponent() {
-  const isAuthenticated = false;
+
+  const { isAuthenticated } = useAuth();
 
   const IsAtAuthPage = () => {
     const loc = useLocation();
     if (loc.pathname.startsWith("/welcome/sign")) {
-      return <div>Auth Layout</div>;
+      return <AuthLayout />;
     }
     return <LandingLayout />;
   };

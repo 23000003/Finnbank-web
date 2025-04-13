@@ -17,9 +17,11 @@ import { Route as WelcomeSignupImport } from './routes/welcome/signup'
 import { Route as WelcomeSigninImport } from './routes/welcome/signin'
 import { Route as HomeUpdatesImport } from './routes/home/updates'
 import { Route as HomeTransferImport } from './routes/home/transfer'
+import { Route as HomeProfileImport } from './routes/home/profile'
 import { Route as HomeMyAccountsImport } from './routes/home/my-accounts'
 import { Route as HomeInboxImport } from './routes/home/inbox'
 import { Route as HomeDashboardImport } from './routes/home/dashboard'
+import { Route as HomeActivityImport } from './routes/home/activity'
 
 // Create/Update Routes
 
@@ -59,6 +61,12 @@ const HomeTransferRoute = HomeTransferImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const HomeProfileRoute = HomeProfileImport.update({
+  id: '/home/profile',
+  path: '/home/profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const HomeMyAccountsRoute = HomeMyAccountsImport.update({
   id: '/home/my-accounts',
   path: '/home/my-accounts',
@@ -77,6 +85,12 @@ const HomeDashboardRoute = HomeDashboardImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const HomeActivityRoute = HomeActivityImport.update({
+  id: '/home/activity',
+  path: '/home/activity',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -86,6 +100,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/home/activity': {
+      id: '/home/activity'
+      path: '/home/activity'
+      fullPath: '/home/activity'
+      preLoaderRoute: typeof HomeActivityImport
       parentRoute: typeof rootRoute
     }
     '/home/dashboard': {
@@ -107,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/home/my-accounts'
       fullPath: '/home/my-accounts'
       preLoaderRoute: typeof HomeMyAccountsImport
+      parentRoute: typeof rootRoute
+    }
+    '/home/profile': {
+      id: '/home/profile'
+      path: '/home/profile'
+      fullPath: '/home/profile'
+      preLoaderRoute: typeof HomeProfileImport
       parentRoute: typeof rootRoute
     }
     '/home/transfer': {
@@ -151,9 +179,11 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home/activity': typeof HomeActivityRoute
   '/home/dashboard': typeof HomeDashboardRoute
   '/home/inbox': typeof HomeInboxRoute
   '/home/my-accounts': typeof HomeMyAccountsRoute
+  '/home/profile': typeof HomeProfileRoute
   '/home/transfer': typeof HomeTransferRoute
   '/home/updates': typeof HomeUpdatesRoute
   '/welcome/signin': typeof WelcomeSigninRoute
@@ -163,9 +193,11 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/home/activity': typeof HomeActivityRoute
   '/home/dashboard': typeof HomeDashboardRoute
   '/home/inbox': typeof HomeInboxRoute
   '/home/my-accounts': typeof HomeMyAccountsRoute
+  '/home/profile': typeof HomeProfileRoute
   '/home/transfer': typeof HomeTransferRoute
   '/home/updates': typeof HomeUpdatesRoute
   '/welcome/signin': typeof WelcomeSigninRoute
@@ -176,9 +208,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/home/activity': typeof HomeActivityRoute
   '/home/dashboard': typeof HomeDashboardRoute
   '/home/inbox': typeof HomeInboxRoute
   '/home/my-accounts': typeof HomeMyAccountsRoute
+  '/home/profile': typeof HomeProfileRoute
   '/home/transfer': typeof HomeTransferRoute
   '/home/updates': typeof HomeUpdatesRoute
   '/welcome/signin': typeof WelcomeSigninRoute
@@ -190,9 +224,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/home/activity'
     | '/home/dashboard'
     | '/home/inbox'
     | '/home/my-accounts'
+    | '/home/profile'
     | '/home/transfer'
     | '/home/updates'
     | '/welcome/signin'
@@ -201,9 +237,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/home/activity'
     | '/home/dashboard'
     | '/home/inbox'
     | '/home/my-accounts'
+    | '/home/profile'
     | '/home/transfer'
     | '/home/updates'
     | '/welcome/signin'
@@ -212,9 +250,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/home/activity'
     | '/home/dashboard'
     | '/home/inbox'
     | '/home/my-accounts'
+    | '/home/profile'
     | '/home/transfer'
     | '/home/updates'
     | '/welcome/signin'
@@ -225,9 +265,11 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HomeActivityRoute: typeof HomeActivityRoute
   HomeDashboardRoute: typeof HomeDashboardRoute
   HomeInboxRoute: typeof HomeInboxRoute
   HomeMyAccountsRoute: typeof HomeMyAccountsRoute
+  HomeProfileRoute: typeof HomeProfileRoute
   HomeTransferRoute: typeof HomeTransferRoute
   HomeUpdatesRoute: typeof HomeUpdatesRoute
   WelcomeSigninRoute: typeof WelcomeSigninRoute
@@ -237,9 +279,11 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HomeActivityRoute: HomeActivityRoute,
   HomeDashboardRoute: HomeDashboardRoute,
   HomeInboxRoute: HomeInboxRoute,
   HomeMyAccountsRoute: HomeMyAccountsRoute,
+  HomeProfileRoute: HomeProfileRoute,
   HomeTransferRoute: HomeTransferRoute,
   HomeUpdatesRoute: HomeUpdatesRoute,
   WelcomeSigninRoute: WelcomeSigninRoute,
@@ -258,9 +302,11 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/home/activity",
         "/home/dashboard",
         "/home/inbox",
         "/home/my-accounts",
+        "/home/profile",
         "/home/transfer",
         "/home/updates",
         "/welcome/signin",
@@ -271,6 +317,9 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/home/activity": {
+      "filePath": "home/activity.tsx"
+    },
     "/home/dashboard": {
       "filePath": "home/dashboard.tsx"
     },
@@ -279,6 +328,9 @@ export const routeTree = rootRoute
     },
     "/home/my-accounts": {
       "filePath": "home/my-accounts.tsx"
+    },
+    "/home/profile": {
+      "filePath": "home/profile.tsx"
     },
     "/home/transfer": {
       "filePath": "home/transfer.tsx"

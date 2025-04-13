@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter, createHashHistory } from "@tanstack/react-router";
+import './index.css';
 
 const history = createHashHistory();
 
