@@ -1,4 +1,3 @@
-
 export type PersonalData = {
   fullName: string;
   email: string;
@@ -7,4 +6,4 @@ export type PersonalData = {
   dateCreated: string;
   accountNumber: string;
   nationalIdNumber: string;
-}
+};

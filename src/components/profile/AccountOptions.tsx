@@ -1,9 +1,8 @@
-
 export default function AccountOptions() {
   return (
-    <div className='flex flex-col gap-4'>
+    <div className="flex flex-col gap-4">
       <h1 className="text-xl font-semibold">Account Options</h1>
-      <div className='flex flex-col bg-white p-4 rounded-lg gap-4'>
+      <div className="flex flex-col bg-white p-4 rounded-lg gap-4">
         {/* Language DropDown */}
         <div className="relative">
           <div className="relative">
@@ -16,15 +15,19 @@ export default function AccountOptions() {
               <option value="japanese">日本語 (Japanese)</option>
               <option value="korean">한국어 (Korean)</option>
             </select>
-            <label 
-              htmlFor="language-select" 
+            <label
+              htmlFor="language-select"
               className="absolute left-3 top-2 text-xs text-gray-500 pointer-events-none"
             >
               Language
             </label>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
             </div>
           </div>
@@ -47,15 +50,19 @@ export default function AccountOptions() {
               <option value="newyork">(GMT-5) New York, USA</option>
               <option value="losangeles">(GMT-8) Los Angeles, USA</option>
             </select>
-            <label 
-              htmlFor="timezone-select" 
+            <label
+              htmlFor="timezone-select"
               className="absolute left-3 top-2 text-xs text-gray-500 pointer-events-none"
             >
               Time zone
             </label>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+              <svg
+                className="fill-current h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
             </div>
           </div>
@@ -79,5 +86,5 @@ export default function AccountOptions() {
         </button>
       </div>
     </div>
-  )
+  );
 }

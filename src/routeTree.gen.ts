@@ -10,271 +10,271 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as WelcomeIndexImport } from './routes/welcome/index'
-import { Route as WelcomeSignupImport } from './routes/welcome/signup'
-import { Route as WelcomeSigninImport } from './routes/welcome/signin'
-import { Route as HomeUpdatesImport } from './routes/home/updates'
-import { Route as HomeTransferImport } from './routes/home/transfer'
-import { Route as HomeProfileImport } from './routes/home/profile'
-import { Route as HomeMyAccountsImport } from './routes/home/my-accounts'
-import { Route as HomeInboxImport } from './routes/home/inbox'
-import { Route as HomeDashboardImport } from './routes/home/dashboard'
-import { Route as HomeActivityImport } from './routes/home/activity'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as IndexImport } from "./routes/index";
+import { Route as WelcomeIndexImport } from "./routes/welcome/index";
+import { Route as WelcomeSignupImport } from "./routes/welcome/signup";
+import { Route as WelcomeSigninImport } from "./routes/welcome/signin";
+import { Route as HomeUpdatesImport } from "./routes/home/updates";
+import { Route as HomeTransferImport } from "./routes/home/transfer";
+import { Route as HomeProfileImport } from "./routes/home/profile";
+import { Route as HomeMyAccountsImport } from "./routes/home/my-accounts";
+import { Route as HomeInboxImport } from "./routes/home/inbox";
+import { Route as HomeDashboardImport } from "./routes/home/dashboard";
+import { Route as HomeActivityImport } from "./routes/home/activity";
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const WelcomeIndexRoute = WelcomeIndexImport.update({
-  id: '/welcome/',
-  path: '/welcome/',
+  id: "/welcome/",
+  path: "/welcome/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const WelcomeSignupRoute = WelcomeSignupImport.update({
-  id: '/welcome/signup',
-  path: '/welcome/signup',
+  id: "/welcome/signup",
+  path: "/welcome/signup",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const WelcomeSigninRoute = WelcomeSigninImport.update({
-  id: '/welcome/signin',
-  path: '/welcome/signin',
+  id: "/welcome/signin",
+  path: "/welcome/signin",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeUpdatesRoute = HomeUpdatesImport.update({
-  id: '/home/updates',
-  path: '/home/updates',
+  id: "/home/updates",
+  path: "/home/updates",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeTransferRoute = HomeTransferImport.update({
-  id: '/home/transfer',
-  path: '/home/transfer',
+  id: "/home/transfer",
+  path: "/home/transfer",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeProfileRoute = HomeProfileImport.update({
-  id: '/home/profile',
-  path: '/home/profile',
+  id: "/home/profile",
+  path: "/home/profile",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeMyAccountsRoute = HomeMyAccountsImport.update({
-  id: '/home/my-accounts',
-  path: '/home/my-accounts',
+  id: "/home/my-accounts",
+  path: "/home/my-accounts",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeInboxRoute = HomeInboxImport.update({
-  id: '/home/inbox',
-  path: '/home/inbox',
+  id: "/home/inbox",
+  path: "/home/inbox",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeDashboardRoute = HomeDashboardImport.update({
-  id: '/home/dashboard',
-  path: '/home/dashboard',
+  id: "/home/dashboard",
+  path: "/home/dashboard",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const HomeActivityRoute = HomeActivityImport.update({
-  id: '/home/activity',
-  path: '/home/activity',
+  id: "/home/activity",
+  path: "/home/activity",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/activity': {
-      id: '/home/activity'
-      path: '/home/activity'
-      fullPath: '/home/activity'
-      preLoaderRoute: typeof HomeActivityImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/dashboard': {
-      id: '/home/dashboard'
-      path: '/home/dashboard'
-      fullPath: '/home/dashboard'
-      preLoaderRoute: typeof HomeDashboardImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/inbox': {
-      id: '/home/inbox'
-      path: '/home/inbox'
-      fullPath: '/home/inbox'
-      preLoaderRoute: typeof HomeInboxImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/my-accounts': {
-      id: '/home/my-accounts'
-      path: '/home/my-accounts'
-      fullPath: '/home/my-accounts'
-      preLoaderRoute: typeof HomeMyAccountsImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/profile': {
-      id: '/home/profile'
-      path: '/home/profile'
-      fullPath: '/home/profile'
-      preLoaderRoute: typeof HomeProfileImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/transfer': {
-      id: '/home/transfer'
-      path: '/home/transfer'
-      fullPath: '/home/transfer'
-      preLoaderRoute: typeof HomeTransferImport
-      parentRoute: typeof rootRoute
-    }
-    '/home/updates': {
-      id: '/home/updates'
-      path: '/home/updates'
-      fullPath: '/home/updates'
-      preLoaderRoute: typeof HomeUpdatesImport
-      parentRoute: typeof rootRoute
-    }
-    '/welcome/signin': {
-      id: '/welcome/signin'
-      path: '/welcome/signin'
-      fullPath: '/welcome/signin'
-      preLoaderRoute: typeof WelcomeSigninImport
-      parentRoute: typeof rootRoute
-    }
-    '/welcome/signup': {
-      id: '/welcome/signup'
-      path: '/welcome/signup'
-      fullPath: '/welcome/signup'
-      preLoaderRoute: typeof WelcomeSignupImport
-      parentRoute: typeof rootRoute
-    }
-    '/welcome/': {
-      id: '/welcome/'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeIndexImport
-      parentRoute: typeof rootRoute
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/activity": {
+      id: "/home/activity";
+      path: "/home/activity";
+      fullPath: "/home/activity";
+      preLoaderRoute: typeof HomeActivityImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/dashboard": {
+      id: "/home/dashboard";
+      path: "/home/dashboard";
+      fullPath: "/home/dashboard";
+      preLoaderRoute: typeof HomeDashboardImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/inbox": {
+      id: "/home/inbox";
+      path: "/home/inbox";
+      fullPath: "/home/inbox";
+      preLoaderRoute: typeof HomeInboxImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/my-accounts": {
+      id: "/home/my-accounts";
+      path: "/home/my-accounts";
+      fullPath: "/home/my-accounts";
+      preLoaderRoute: typeof HomeMyAccountsImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/profile": {
+      id: "/home/profile";
+      path: "/home/profile";
+      fullPath: "/home/profile";
+      preLoaderRoute: typeof HomeProfileImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/transfer": {
+      id: "/home/transfer";
+      path: "/home/transfer";
+      fullPath: "/home/transfer";
+      preLoaderRoute: typeof HomeTransferImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/home/updates": {
+      id: "/home/updates";
+      path: "/home/updates";
+      fullPath: "/home/updates";
+      preLoaderRoute: typeof HomeUpdatesImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/welcome/signin": {
+      id: "/welcome/signin";
+      path: "/welcome/signin";
+      fullPath: "/welcome/signin";
+      preLoaderRoute: typeof WelcomeSigninImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/welcome/signup": {
+      id: "/welcome/signup";
+      path: "/welcome/signup";
+      fullPath: "/welcome/signup";
+      preLoaderRoute: typeof WelcomeSignupImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/welcome/": {
+      id: "/welcome/";
+      path: "/welcome";
+      fullPath: "/welcome";
+      preLoaderRoute: typeof WelcomeIndexImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/home/activity': typeof HomeActivityRoute
-  '/home/dashboard': typeof HomeDashboardRoute
-  '/home/inbox': typeof HomeInboxRoute
-  '/home/my-accounts': typeof HomeMyAccountsRoute
-  '/home/profile': typeof HomeProfileRoute
-  '/home/transfer': typeof HomeTransferRoute
-  '/home/updates': typeof HomeUpdatesRoute
-  '/welcome/signin': typeof WelcomeSigninRoute
-  '/welcome/signup': typeof WelcomeSignupRoute
-  '/welcome': typeof WelcomeIndexRoute
+  "/": typeof IndexRoute;
+  "/home/activity": typeof HomeActivityRoute;
+  "/home/dashboard": typeof HomeDashboardRoute;
+  "/home/inbox": typeof HomeInboxRoute;
+  "/home/my-accounts": typeof HomeMyAccountsRoute;
+  "/home/profile": typeof HomeProfileRoute;
+  "/home/transfer": typeof HomeTransferRoute;
+  "/home/updates": typeof HomeUpdatesRoute;
+  "/welcome/signin": typeof WelcomeSigninRoute;
+  "/welcome/signup": typeof WelcomeSignupRoute;
+  "/welcome": typeof WelcomeIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/home/activity': typeof HomeActivityRoute
-  '/home/dashboard': typeof HomeDashboardRoute
-  '/home/inbox': typeof HomeInboxRoute
-  '/home/my-accounts': typeof HomeMyAccountsRoute
-  '/home/profile': typeof HomeProfileRoute
-  '/home/transfer': typeof HomeTransferRoute
-  '/home/updates': typeof HomeUpdatesRoute
-  '/welcome/signin': typeof WelcomeSigninRoute
-  '/welcome/signup': typeof WelcomeSignupRoute
-  '/welcome': typeof WelcomeIndexRoute
+  "/": typeof IndexRoute;
+  "/home/activity": typeof HomeActivityRoute;
+  "/home/dashboard": typeof HomeDashboardRoute;
+  "/home/inbox": typeof HomeInboxRoute;
+  "/home/my-accounts": typeof HomeMyAccountsRoute;
+  "/home/profile": typeof HomeProfileRoute;
+  "/home/transfer": typeof HomeTransferRoute;
+  "/home/updates": typeof HomeUpdatesRoute;
+  "/welcome/signin": typeof WelcomeSigninRoute;
+  "/welcome/signup": typeof WelcomeSignupRoute;
+  "/welcome": typeof WelcomeIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/home/activity': typeof HomeActivityRoute
-  '/home/dashboard': typeof HomeDashboardRoute
-  '/home/inbox': typeof HomeInboxRoute
-  '/home/my-accounts': typeof HomeMyAccountsRoute
-  '/home/profile': typeof HomeProfileRoute
-  '/home/transfer': typeof HomeTransferRoute
-  '/home/updates': typeof HomeUpdatesRoute
-  '/welcome/signin': typeof WelcomeSigninRoute
-  '/welcome/signup': typeof WelcomeSignupRoute
-  '/welcome/': typeof WelcomeIndexRoute
+  __root__: typeof rootRoute;
+  "/": typeof IndexRoute;
+  "/home/activity": typeof HomeActivityRoute;
+  "/home/dashboard": typeof HomeDashboardRoute;
+  "/home/inbox": typeof HomeInboxRoute;
+  "/home/my-accounts": typeof HomeMyAccountsRoute;
+  "/home/profile": typeof HomeProfileRoute;
+  "/home/transfer": typeof HomeTransferRoute;
+  "/home/updates": typeof HomeUpdatesRoute;
+  "/welcome/signin": typeof WelcomeSigninRoute;
+  "/welcome/signup": typeof WelcomeSignupRoute;
+  "/welcome/": typeof WelcomeIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/home/activity'
-    | '/home/dashboard'
-    | '/home/inbox'
-    | '/home/my-accounts'
-    | '/home/profile'
-    | '/home/transfer'
-    | '/home/updates'
-    | '/welcome/signin'
-    | '/welcome/signup'
-    | '/welcome'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/home/activity"
+    | "/home/dashboard"
+    | "/home/inbox"
+    | "/home/my-accounts"
+    | "/home/profile"
+    | "/home/transfer"
+    | "/home/updates"
+    | "/welcome/signin"
+    | "/welcome/signup"
+    | "/welcome";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/home/activity'
-    | '/home/dashboard'
-    | '/home/inbox'
-    | '/home/my-accounts'
-    | '/home/profile'
-    | '/home/transfer'
-    | '/home/updates'
-    | '/welcome/signin'
-    | '/welcome/signup'
-    | '/welcome'
+    | "/"
+    | "/home/activity"
+    | "/home/dashboard"
+    | "/home/inbox"
+    | "/home/my-accounts"
+    | "/home/profile"
+    | "/home/transfer"
+    | "/home/updates"
+    | "/welcome/signin"
+    | "/welcome/signup"
+    | "/welcome";
   id:
-    | '__root__'
-    | '/'
-    | '/home/activity'
-    | '/home/dashboard'
-    | '/home/inbox'
-    | '/home/my-accounts'
-    | '/home/profile'
-    | '/home/transfer'
-    | '/home/updates'
-    | '/welcome/signin'
-    | '/welcome/signup'
-    | '/welcome/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/home/activity"
+    | "/home/dashboard"
+    | "/home/inbox"
+    | "/home/my-accounts"
+    | "/home/profile"
+    | "/home/transfer"
+    | "/home/updates"
+    | "/welcome/signin"
+    | "/welcome/signup"
+    | "/welcome/";
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  HomeActivityRoute: typeof HomeActivityRoute
-  HomeDashboardRoute: typeof HomeDashboardRoute
-  HomeInboxRoute: typeof HomeInboxRoute
-  HomeMyAccountsRoute: typeof HomeMyAccountsRoute
-  HomeProfileRoute: typeof HomeProfileRoute
-  HomeTransferRoute: typeof HomeTransferRoute
-  HomeUpdatesRoute: typeof HomeUpdatesRoute
-  WelcomeSigninRoute: typeof WelcomeSigninRoute
-  WelcomeSignupRoute: typeof WelcomeSignupRoute
-  WelcomeIndexRoute: typeof WelcomeIndexRoute
+  IndexRoute: typeof IndexRoute;
+  HomeActivityRoute: typeof HomeActivityRoute;
+  HomeDashboardRoute: typeof HomeDashboardRoute;
+  HomeInboxRoute: typeof HomeInboxRoute;
+  HomeMyAccountsRoute: typeof HomeMyAccountsRoute;
+  HomeProfileRoute: typeof HomeProfileRoute;
+  HomeTransferRoute: typeof HomeTransferRoute;
+  HomeUpdatesRoute: typeof HomeUpdatesRoute;
+  WelcomeSigninRoute: typeof WelcomeSigninRoute;
+  WelcomeSignupRoute: typeof WelcomeSignupRoute;
+  WelcomeIndexRoute: typeof WelcomeIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -289,11 +289,11 @@ const rootRouteChildren: RootRouteChildren = {
   WelcomeSigninRoute: WelcomeSigninRoute,
   WelcomeSignupRoute: WelcomeSignupRoute,
   WelcomeIndexRoute: WelcomeIndexRoute,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {

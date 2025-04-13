@@ -1,8 +1,3 @@
-
 export default function LandingFooter() {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <div></div>;
 }

@@ -8,10 +8,9 @@ export default function useActionStatus() {
 
   useEffect(() => {
     if (loading) {
-      console.log("Loading...");
       showToast.loading("Loading...");
     }
-  },[loading])
+  }, [loading]);
 
   useEffect(() => {
     if (errorMessage) {
@@ -20,7 +19,8 @@ export default function useActionStatus() {
     }
   }, [errorMessage]);
 
-  useEffect(() => { // only trigger this for action states like post/patch/delete
+  useEffect(() => {
+    // only trigger this for action states like post/patch/delete
     if (successMessage) {
       showToast.success(successMessage);
       setSuccessMessage(null);

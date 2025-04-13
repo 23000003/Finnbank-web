@@ -1,29 +1,40 @@
 type ActivityProps = {
   mockData: {
-    date: string
-    refNo: string
-    message: string
-    transactionType: string
-    amount: string
-    fee: string
-  }[]
-}
+    date: string;
+    refNo: string;
+    message: string;
+    transactionType: string;
+    amount: string;
+    fee: string;
+  }[];
+};
 
 export default function ActivityDataTable(props: ActivityProps) {
-  
-  const { mockData } = props
-  
+  const { mockData } = props;
+
   return (
     <div className="border rounded-lg overflow-hidden">
       <table className="w-full">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ref. No</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Date
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Ref. No
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Message
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Type
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Amount
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Fee
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -38,8 +49,12 @@ export default function ActivityDataTable(props: ActivityProps) {
                     {item.transactionType}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{item.amount}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">{item.fee}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                  {item.amount}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                  {item.fee}
+                </td>
               </tr>
             ))
           ) : (
@@ -52,5 +67,5 @@ export default function ActivityDataTable(props: ActivityProps) {
         </tbody>
       </table>
     </div>
-  )
+  );
 }

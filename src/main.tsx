@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter, createHashHistory } from "@tanstack/react-router";
-import './index.css';
+import "./index.css";
 
 const history = createHashHistory();
 
@@ -14,7 +14,7 @@ const router = createRouter({
   history, // support client-side routing in production
   routeTree,
   context: {
-    auth: undefined!
+    auth: undefined!,
   },
 });
 
@@ -27,10 +27,8 @@ declare module "@tanstack/react-router" {
 
 const InitApp = () => {
   const auth = useAuth();
-  return (
-    <RouterProvider router={router} context={{ auth: auth }}/>
-  )
-}
+  return <RouterProvider router={router} context={{ auth: auth }} />;
+};
 
 // Render the app
 const rootElement = document.getElementById("root")!;

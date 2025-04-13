@@ -22,11 +22,9 @@ export default function HomeLayout() {
       <HomeNavbar />
       {location.pathname === `${basePath}/profile` ? (
         <ProfileNavbar />
-      ) : (
-        location.pathname === `${basePath}/transfer` ? (
-          <TransferNavbar />
-        ) : null
-      )}
+      ) : location.pathname === `${basePath}/transfer` ? (
+        <TransferNavbar />
+      ) : null}
       <main className="flex-grow p-6 px-4 pb-14 md:px-40" style={{ backgroundColor: "#f3f3f6" }}>
         <div className="text-2xl">
           <span>{routeName}</span>

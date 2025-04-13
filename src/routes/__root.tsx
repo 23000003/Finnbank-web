@@ -1,9 +1,4 @@
-import { 
-  createRootRoute, 
-  redirect, 
-  useLocation, 
-  useRouter 
-} from "@tanstack/react-router";
+import { createRootRoute, redirect, useLocation, useRouter } from "@tanstack/react-router";
 import LandingLayout from "../components/layout/LandingLayout";
 import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
@@ -21,7 +16,7 @@ export const Route = createRootRoute({
       throw redirect({
         to: "/home/dashboard",
       });
-    // redirect to welcome (landing page) if not authenticated
+      // redirect to welcome (landing page) if not authenticated
     } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
       throw redirect({
         to: "/welcome",
@@ -32,7 +27,6 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-
   const { isAuthenticated } = useAuth();
 
   const IsAtAuthPage = () => {
@@ -45,10 +39,7 @@ function RootComponent() {
 
   return (
     <>
-      { isAuthenticated 
-        ? <HomeLayout /> 
-        : IsAtAuthPage() 
-      }
+      {isAuthenticated ? <HomeLayout /> : IsAtAuthPage()}
       <ToastContainer autoClose={3000} />
     </>
   );
