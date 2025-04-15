@@ -7,20 +7,52 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
     name: Deploy Finnbank Web
     runs-on: ubuntu-latest
+
     steps:
-      - name: Build and Host
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Upload via SCP
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DCISM_HOST }}
           username: ${{ secrets.DCISM_ACCOUNT }}
           password: ${{ secrets.DCISM_PASSWORD }}
           port: ${{ secrets.DCISM_SSH_PORT }}
-          script: |
-            cd finnbank.dcism.org/Finnbank-web
-            git reset --hard && git clean -fd && git pull origin main
-            npm ci
-            npm run build
-            rm -rf ../dist && mv ./dist ../
+          source: "dist/"
+          target: "~/finnbank.dcism.org/"
+          overwrite: true # remove existing files
+          strip_components: 1 # remove the first directory in the path
+
+
+
+
+
+
+# jobs:
+#   build:
+#     name: Deploy Finnbank Web
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Build and Host
+#         uses: appleboy/ssh-action@v1.2.0
+#         with:
+#           host: ${{ secrets.DCISM_HOST }}
+#           username: ${{ secrets.DCISM_ACCOUNT }}
+#           password: ${{ secrets.DCISM_PASSWORD }}
+#           port: ${{ secrets.DCISM_SSH_PORT }}
+#           script: |
+#             cd finnbank.dcism.org/Finnbank-web
+#             git reset --hard && git clean -fd && git pull origin main
+#             npm ci
+#             npm run build
+#             rm -rf ../dist && mv ./dist ../
