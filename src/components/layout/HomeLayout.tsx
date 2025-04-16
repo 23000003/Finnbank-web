@@ -2,15 +2,13 @@ import { Outlet, useLocation } from "@tanstack/react-router";
 import HomeNavbar from "./navbar/HomeNavbar";
 import HomeFooter from "./footer/HomeFooter";
 import ProfileNavbar from "./navbar/ProfileNavbar";
-import TransferNavbar from "./navbar/TransferNavbar";
+import ServiceNavbar from "./navbar/ServiceNavbar";
 
 const basePath = "/home";
 
 const routeNames: Record<string, string> = {
   [`${basePath}/dashboard`]: "Dashboard",
-  [`${basePath}/transfer`]: "Transfer",
   [`${basePath}/activity`]: "Activity",
-  [`${basePath}/updates`]: "Updates",
 };
 
 export default function HomeLayout() {
@@ -20,13 +18,13 @@ export default function HomeLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       <HomeNavbar />
-      {location.pathname === `${basePath}/profile` ? (
+      {location.pathname.startsWith(`${basePath}/profile`) ? (
         <ProfileNavbar />
-      ) : location.pathname === `${basePath}/transfer` ? (
-        <TransferNavbar />
+      ) : location.pathname.startsWith(`${basePath}/service/`) ? (
+        <ServiceNavbar />
       ) : null}
       <main className="flex-grow p-6 px-4 pb-14 md:px-40" style={{ backgroundColor: "#f3f3f6" }}>
-        <div className="text-2xl">
+        <div className="text-2xl font-semibold">
           <span>{routeName}</span>
         </div>
         <Outlet />

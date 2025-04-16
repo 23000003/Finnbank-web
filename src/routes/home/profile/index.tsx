@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProfileCard from "../../components/profile/ProfileCard";
-import AccountOptions from "../../components/profile/AccountOptions";
-import InfoCard from "../../components/profile/InfoCard";
-import { useProfileData } from "../../hooks/useProfileData";
-import { useAuth } from "../../contexts/AuthContext";
+import ProfileCard from "../../../components/profile/ProfileCard";
+import AccountOptions from "../../../components/profile/AccountOptions";
+import InfoCard from "../../../components/profile/InfoCard";
+import { useProfileData } from "../../../hooks/useProfileData";
+import { useAuth } from "../../../contexts/AuthContext";
 
-export const Route = createFileRoute("/home/profile")({
+export const Route = createFileRoute("/home/profile/")({
   component: RouteComponent,
 });
 

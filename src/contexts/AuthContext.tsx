@@ -12,7 +12,7 @@ const Auth = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [username, setUsername] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
