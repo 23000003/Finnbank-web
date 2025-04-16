@@ -31,8 +31,6 @@ jobs:
           source: "dist/"
           target: "~/finnbank.dcism.org/"
           overwrite: true # remove existing files
-          strip_components: 1 # remove the first directory in the path
-
 
 
 
