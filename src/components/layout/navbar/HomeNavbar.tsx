@@ -8,22 +8,22 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 // @design to be change in toggle or recommend
 
-type NavLinks = "dashboard" | "transfer" | "activity" | "updates";
+type NavLinks = "dashboard" | "service" | "activity";
 
 export default function HomeNavbar() {
   const location = useLocation();
   const { logout } = useAuth();
 
   return (
-    <nav className="bg-blue-500 text-white h-16 flex items-center justify-between px-16">
-      <div className="flex items-center gap-3 justify-between w-1/2">
+    <nav className="bg-blue-500 text-white h-16 flex items-center justify-between px-4 md:px-40">
+      <div className="flex items-center gap-3 w-1/2">
         <div className="flex items-center gap-3">
           <img src={reactLogo} alt="finnbank-logo" />
           <h1 className="text-2xl font-bold">Finnbank</h1>
         </div>
         {/* Navbar Links */}
-        <div className="flex gap-4">
-          {["dashboard", "transfer", "activity", "updates"].map((link) => {
+        <div className="ml-10 flex gap-4">
+          {["dashboard", "service", "activity"].map((link) => {
             const match = location.pathname.includes(link);
             return (
               <Link
@@ -45,28 +45,19 @@ export default function HomeNavbar() {
 }
 
 function Profile({ logout }: { logout: () => void }) {
-  const [toggle, setToggle] = useState<"notif" | "settings" | "user" | null>(null);
+  const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
 
   return (
     <div className="flex items-center w-full gap-6 justify-end">
       {/* notif and settings icon */}
       <div className="flex gap-8 mr-5">
-        <div className="flex flex-col">
+        <Link className="flex flex-col" to="/home/updates">
           <img
             src={notif}
             alt="notif-icon"
             className="w-4 h-5 cursor-pointer hover:opacity-60 duration-300"
-            onClick={() => setToggle(toggle === "notif" ? null : "notif")}
           />
-          {toggle === "notif" ? (
-            <div className="flex flex-col absolute mt-8 bg-white w-60 p-3 rounded-lg shadow">
-              <span className="text-black border-b w-full text-start text-lg">Inbox</span>
-              <div className="flex mt-2">
-                <span className="text-black">Notif</span>
-              </div>
-            </div>
-          ) : null}
-        </div>
+        </Link>
         <div className="flex flex-col">
           <img
             src={settings}
