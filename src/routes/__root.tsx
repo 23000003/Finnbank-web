@@ -22,6 +22,7 @@ export const Route = createRootRoute({
         to: "/welcome",
       });
     }
+
     return { auth };
   },
 });
