@@ -4,7 +4,7 @@ import { Outlet } from "@tanstack/react-router";
 import LandingNavbar from "./navbar/LandingNavbar";
 import LandingFooter from "./footer/LandingFooter";
 
-export default function LandingLayout() {
+const LandingLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <LandingNavbar />
@@ -14,4 +14,6 @@ export default function LandingLayout() {
       <LandingFooter />
     </div>
   );
-}
+};
+
+export default LandingLayout;

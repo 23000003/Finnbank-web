@@ -9,9 +9,7 @@ type ActivityProps = {
   }[];
 };
 
-export default function ActivityDataTable(props: ActivityProps) {
-  const { mockData } = props;
-
+const ActivityDataTable: React.FC<ActivityProps> = ({ mockData }) => {
   return (
     <div className="border rounded-lg overflow-hidden">
       <table className="w-full">
@@ -68,4 +66,6 @@ export default function ActivityDataTable(props: ActivityProps) {
       </table>
     </div>
   );
-}
+};
+
+export default ActivityDataTable;

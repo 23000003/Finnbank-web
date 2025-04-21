@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import reactLogo from "../../../assets/react.svg";
 
-export default function LandingNavbar() {
+const LandingNavbar: React.FC = () => {
   return (
     <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
       <div className="flex flex-wrap items-center justify-between h-16 mx-auto max-w-screen-2xl">
@@ -26,4 +26,6 @@ export default function LandingNavbar() {
       </div>
     </nav>
   );
-}
+};
+
+export default LandingNavbar;

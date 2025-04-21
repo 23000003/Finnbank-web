@@ -3,9 +3,7 @@ type InfoProps = {
   value: string;
 };
 
-export default function InfoCard(props: InfoProps) {
-  const { type, value } = props;
-
+const InfoCard: React.FC<InfoProps> = ({ type, value }) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-between items-center">
@@ -22,7 +20,7 @@ export default function InfoCard(props: InfoProps) {
               <span className="bg-gray-200 p-1 px-3 mr-auto rounded-xl font-semibold text-[10px]">
                 Primary
               </span>
-              <span className={`text-sm ${type === "Addresses" ? "w-3/4" : ""}`}>{value}</span>
+              <span className={`text-sm ${type === "Addresses" ? "w-2/3" : ""}`}>{value}</span>
             </div>
             <span className="text-xs text-blue-600 font-semibold hover:text-blue-400 cursor-pointer">
               Change
@@ -32,4 +30,6 @@ export default function InfoCard(props: InfoProps) {
       </div>
     </div>
   );
-}
+};
+
+export default InfoCard;

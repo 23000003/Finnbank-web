@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { showToast } from "../../utils/toast";
 
-export default function LoginForm() {
+const LoginForm: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -96,4 +96,6 @@ export default function LoginForm() {
       </button>
     </form>
   );
-}
+};
+
+export default LoginForm;

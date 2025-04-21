@@ -5,7 +5,7 @@ export const showToast = {
   success: (message: string) => {
     toast.success(message);
   },
-  // to refactor
+  // to refactor based on real time fetching
   loading: (message: string) => {
     toast(message, {
       position: "top-right",
