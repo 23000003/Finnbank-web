@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import useActionStatus from "./useActionStatus";
 import { AccountService } from "../services/account.service";
+import { PersonalData } from "../types/user.types";
 
 export const useProfileData = (userId: number) => {
+  const [profileData, setProfileData] = useState<PersonalData>();
   const [infoCardContent, setInfoCardContent] = useState<
     {
       type: "Emails" | "Phone Numbers" | "Addresses";
@@ -13,10 +15,11 @@ export const useProfileData = (userId: number) => {
   const { setLoading, setErrorMessage, setSuccessMessage, loading } = useActionStatus();
 
   useEffect(() => {
-    setLoading(true);
+    console.log("Fetching user personal data...");
     const fetchUserPersonalData = async () => {
       try {
         const data = await AccountService.getAccountPersonalData(userId);
+        setProfileData(data);
         console.log("User Personal Data:", data);
         setInfoCardContent([
           {
@@ -45,6 +48,7 @@ export const useProfileData = (userId: number) => {
   }, [setErrorMessage, setLoading, setSuccessMessage, userId]);
 
   return {
+    profileData: profileData as PersonalData,
     infoCardContent,
     loading,
   };

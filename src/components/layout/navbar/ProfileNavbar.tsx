@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 
 type NavLinks = "profile/wallet" | "profile/settings";
 
-export default function ProfileNavbar() {
+const ProfileNavbar: React.FC = () => {
   const location = useLocation();
 
   const matchPaths = (link: string): boolean => {
@@ -37,4 +37,6 @@ export default function ProfileNavbar() {
       </div>
     </div>
   );
-}
+};
+
+export default ProfileNavbar;

@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 
 type NavLinks = "transfer" | "loan" | "pay-bills";
 
-export default function ServiceNavbar() {
+const ServiceNavbar: React.FC = () => {
   const location = useLocation();
 
   return (
@@ -23,4 +23,6 @@ export default function ServiceNavbar() {
       </div>
     </div>
   );
-}
+};
+
+export default ServiceNavbar;

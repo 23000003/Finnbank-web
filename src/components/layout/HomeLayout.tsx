@@ -11,7 +11,7 @@ const routeNames: Record<string, string> = {
   [`${basePath}/activity`]: "Activity",
 };
 
-export default function HomeLayout() {
+const HomeLayout: React.FC = () => {
   const location = useLocation();
   const routeName = routeNames[location.pathname];
 
@@ -37,4 +37,6 @@ export default function HomeLayout() {
       <HomeFooter />
     </div>
   );
-}
+};
+
+export default HomeLayout;

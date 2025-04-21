@@ -1,7 +1,7 @@
 import { Outlet } from "@tanstack/react-router";
 import AuthFooter from "./footer/AuthFooter";
 
-export default function AuthLayout() {
+const AuthLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow flex md:flex-row ">
@@ -19,4 +19,6 @@ export default function AuthLayout() {
       </main>
     </div>
   );
-}
+};
+
+export default AuthLayout;

@@ -6,4 +6,8 @@ export type PersonalData = {
   dateCreated: string;
   accountNumber: string;
   nationalIdNumber: string;
+  birthDate: string;
+  nationality: string;
+  accountStatus: string;
+  accountType: string;
 };

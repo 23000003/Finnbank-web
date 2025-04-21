@@ -9,7 +9,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 type NavLinks = "dashboard" | "service" | "activity";
 
-export default function HomeNavbar() {
+const HomeNavbar: React.FC = () => {
   const location = useLocation();
   const { logout } = useAuth();
 
@@ -66,9 +66,10 @@ export default function HomeNavbar() {
       </div>
     </nav>
   );
-}
+};
+export default HomeNavbar;
 
-function Profile({ logout }: { logout: () => void }) {
+const Profile: React.FC<{ logout: () => void }> = ({ logout }) => {
   const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
 
   return (
@@ -114,4 +115,4 @@ function Profile({ logout }: { logout: () => void }) {
       </div>
     </div>
   );
-}
+};

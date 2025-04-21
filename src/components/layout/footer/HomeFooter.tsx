@@ -1,4 +1,4 @@
-export default function HomeFooter() {
+const HomeFooter: React.FC = () => {
   return (
     <footer className="w-full border-t border-gray-200 bg-white mt-auto px-4 md:px-12 lg:px-24">
       <div className="mx-auto py-8">
@@ -25,4 +25,6 @@ export default function HomeFooter() {
       </div>
     </footer>
   );
-}
+};
+
+export default HomeFooter;

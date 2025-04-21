@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
-export default function AuthFooter() {
+const AuthFooter: React.FC = () => {
   return (
     <div className="pt-6 border-t border-gray-200 max-w-md w-full">
       <div className="flex justify-center space-x-6 mb-4">
@@ -41,4 +41,6 @@ export default function AuthFooter() {
       </p>
     </div>
   );
-}
+};
+
+export default AuthFooter;

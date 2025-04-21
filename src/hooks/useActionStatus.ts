@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { showToast } from "../utils/toast";
 
 export default function useActionStatus() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
