@@ -2,7 +2,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import reactLogo from "../../../assets/react.svg";
 import notif from "../../../assets/notif.svg";
-import settings from "../../../assets/settings.svg";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 
@@ -15,30 +14,55 @@ export default function HomeNavbar() {
   const { logout } = useAuth();
 
   return (
-    <nav className="bg-blue-500 text-white h-16 flex items-center justify-between px-4 md:px-40">
-      <div className="flex items-center gap-3 w-1/2">
-        <div className="flex items-center gap-3">
-          <img src={reactLogo} alt="finnbank-logo" />
-          <h1 className="text-2xl font-bold">Finnbank</h1>
+    <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
+      <div className="flex flex-wrap items-center justify-between h-16 mx-auto max-w-screen-2xl">
+        <div className="flex items-center justify-between w-full lg:w-auto">
+          <div className="flex items-center gap-2">
+            <img src={reactLogo} alt="finnbank-logo" className="h-8 w-8" />
+            <h1 className="text-2xl font-bold">Finnbank</h1>
+          </div>
+
+          <div className="lg:hidden flex items-center">
+            <button className="text-white focus:outline-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-        {/* Navbar Links */}
-        <div className="ml-10 flex gap-4">
+
+        <div className="hidden lg:flex gap-4 ml-0 lg:ml-10">
           {["dashboard", "service", "activity"].map((link) => {
             const match = location.pathname.includes(link);
             return (
               <Link
                 key={link}
                 to={`/home/${link as NavLinks}`}
-                className={`px-4 py-2 rounded-lg hover:bg-blue-600 duration-300 ${match ? "underline" : ""}`}
+                className={`px-3 py-2 rounded-lg hover:bg-blue-600 duration-300 ${
+                  match ? "underline" : ""
+                }`}
               >
                 {link.charAt(0).toUpperCase() + link.slice(1)}
               </Link>
             );
           })}
         </div>
-      </div>
-      <div className="flex w-1/2 items-center  justify-around">
-        <Profile logout={logout} />
+
+        {/* Profile section */}
+        <div className="hidden lg:flex items-center">
+          <Profile logout={logout} />
+        </div>
       </div>
     </nav>
   );
@@ -58,22 +82,6 @@ function Profile({ logout }: { logout: () => void }) {
             className="w-4 h-5 cursor-pointer hover:opacity-60 duration-300"
           />
         </Link>
-        <div className="flex flex-col">
-          <img
-            src={settings}
-            alt="settings-icon"
-            className="w-6 h-5 cursor-pointer hover:opacity-60 duration-300"
-            onClick={() => setToggle(toggle === "settings" ? null : "settings")}
-          />
-          {toggle === "settings" ? (
-            <div className="flex flex-col absolute mt-8 bg-white w-60 p-3 rounded-lg shadow">
-              <span className="text-black border-b w-full text-start text-lg">Settings</span>
-              <div className="flex mt-2">
-                <span className="text-black">Notif</span>
-              </div>
-            </div>
-          ) : null}
-        </div>
       </div>
       {/* user view bar */}
       <div className="flex flex-col">

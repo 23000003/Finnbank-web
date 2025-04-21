@@ -22,15 +22,15 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex flex-row w-full">
-      <div className="w-1/2">
-        <div className="flex flex-col mx-24 gap-8">
+    <div className="flex flex-row w-full gap-20 justify-center">
+      <div className="max-w-[500px] w-full">
+        <div className="flex flex-col gap-8">
           <ProfileCard />
           <AccountOptions />
         </div>
       </div>
-      <div className="w-1/2">
-        <div className="flex flex-col mx-24 gap-8">
+      <div className="max-w-[400px] w-full">
+        <div className="flex flex-col gap-8">
           {infoCardContent.map((info, index) => (
             <InfoCard
               key={index}
