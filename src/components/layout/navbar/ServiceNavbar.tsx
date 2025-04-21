@@ -6,8 +6,8 @@ export default function ServiceNavbar() {
   const location = useLocation();
 
   return (
-    <nav className="bg-gray-200 text-black h-16 flex items-center px-4 md:px-40">
-      <div className="flex gap-4 ml-48">
+    <div className="bg-gray-200 text-black h-16 flex items-center justify-center">
+      <div className="flex gap-4">
         {["transfer", "loan", "pay-bills"].map((link) => {
           const match = location.pathname.includes(link);
           return (
@@ -21,6 +21,6 @@ export default function ServiceNavbar() {
           );
         })}
       </div>
-    </nav>
+    </div>
   );
 }

@@ -23,11 +23,16 @@ export default function HomeLayout() {
       ) : location.pathname.startsWith(`${basePath}/service/`) ? (
         <ServiceNavbar />
       ) : null}
-      <main className="flex-grow p-6 px-4 pb-14 md:px-40" style={{ backgroundColor: "#f3f3f6" }}>
-        <div className="text-2xl font-semibold">
-          <span>{routeName}</span>
+      <main
+        className="flex-grow p-6 sm:px-6 md:px-12 lg:px-24 pb-14"
+        style={{ backgroundColor: "#f3f3f6" }}
+      >
+        <div className="max-w-screen-2xl mx-auto">
+          <div className="text-2xl font-semibold">
+            <span>{routeName}</span>
+          </div>
+          <Outlet />
         </div>
-        <Outlet />
       </main>
       <HomeFooter />
     </div>

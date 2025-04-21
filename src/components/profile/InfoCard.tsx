@@ -19,10 +19,7 @@ export default function InfoCard(props: InfoProps) {
           <span>X</span>
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex flex-col gap-1">
-              <span
-                style={{ fontSize: "10px" }}
-                className="bg-gray-200 p-1 px-3 mr-auto rounded-xl font-semibold"
-              >
+              <span className="bg-gray-200 p-1 px-3 mr-auto rounded-xl font-semibold text-[10px]">
                 Primary
               </span>
               <span className={`text-sm ${type === "Addresses" ? "w-3/4" : ""}`}>{value}</span>

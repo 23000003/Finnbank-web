@@ -20,8 +20,8 @@ export default function ProfileNavbar() {
   };
 
   return (
-    <nav className="bg-gray-200 text-black h-16 flex items-center justify-between px-4 md:px-40">
-      <div className="flex gap-4 ml-48">
+    <div className="bg-gray-200 text-black h-16 flex items-center justify-center">
+      <div className="flex gap-4">
         {["account", "wallet", "settings"].map((link) => {
           const match = matchPaths(link);
           return (
@@ -35,6 +35,6 @@ export default function ProfileNavbar() {
           );
         })}
       </div>
-    </nav>
+    </div>
   );
 }
