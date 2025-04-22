@@ -11,3 +11,9 @@ export type PersonalData = {
   accountStatus: string;
   accountType: string;
 };
+
+export type LoginResponse = {
+  access_token: string;
+  fullname: string;
+  userId: number;
+};
