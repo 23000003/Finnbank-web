@@ -11,6 +11,16 @@ export const Route = createRootRoute({
   notFoundComponent: NotFoundComponent,
   beforeLoad: ({ context, location }) => {
     const { auth } = context as Context;
+
+    if (auth.tokenExp) {
+      const tokenExp = new Date(auth.tokenExp * 1000);
+      const now = new Date();
+      if (tokenExp < now) {
+        auth.logout();
+        return;
+      }
+    }
+
     // redirect to dashboard if authenticated
     if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
       throw redirect({
