@@ -2,6 +2,7 @@ import React, { useEffect, useState, createContext, useContext } from "react";
 import { AuthContextType } from "../types/contexts.types";
 import { jwtDecode } from "jwt-decode";
 import { AccountService } from "../services/account.service";
+import { showToast } from "../utils/toast";
 
 const Auth = createContext<AuthContextType>({
   loading: true,
@@ -18,7 +19,7 @@ type TokenDecoded = {
 };
 
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null); //fullname
   const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,12 +37,13 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       const { exp } = jwtDecode<TokenDecoded>(data.access_token);
       setTokenExp(exp);
       setIsAuthenticated(true);
-      setUsername("Kenny");
-      setUserId(1);
+      setUsername(data.fullname);
+      setUserId(data.userId);
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
-      return false;
+      showToast.error("Login Failed");
+      throw new Error("Bad Request");
     }
   };
 

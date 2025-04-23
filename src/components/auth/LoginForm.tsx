@@ -22,7 +22,8 @@ const LoginForm: React.FC = () => {
     await login(email, password)
       .then(() => {
         showToast.success("Login successful");
-        navigate({ to: "/home/dashboard", replace: true });
+        console.log("Login OK");
+        navigate({ to: "/home/dashboard" });
       })
       .catch((error) => {
         showToast.error(error.message);

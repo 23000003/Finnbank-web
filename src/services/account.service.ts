@@ -2,7 +2,7 @@ import { LoginResponse, PersonalData } from "../types/user.types";
 import { api } from "../configs/axios";
 
 export class AccountService {
-  private static prefix: string = "/account";
+  private static prefix: string = "/auth";
   static async login(email: string, password: string) {
     try {
       const data = await api
@@ -14,6 +14,32 @@ export class AccountService {
       return data;
     } catch (err) {
       console.error("Error logging in:", err);
+      throw err;
+    }
+  }
+
+  static async register(
+    surname: string,
+    firstname: string,
+    middlename: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) {
+    try {
+      const data = await api
+        .post(`${this.prefix}/register`, {
+          surname,
+          firstname,
+          middlename,
+          email,
+          password,
+          confirmPassword,
+        })
+        .then((res) => res.data);
+      return data;
+    } catch (err) {
+      console.error("Error registering:", err);
       throw err;
     }
   }
