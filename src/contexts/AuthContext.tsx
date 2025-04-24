@@ -34,11 +34,12 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     try {
       console.log(email, password);
       const data = await AccountService.login(email, password);
-      const { exp } = jwtDecode<TokenDecoded>(data.access_token);
+      const { access_token: token, full_name: name, account_id: userId } = data.data;
+      const { exp } = jwtDecode<TokenDecoded>(token);
       setTokenExp(exp);
       setIsAuthenticated(true);
-      setUsername(data.fullname);
-      setUserId(data.userId);
+      setUsername(name);
+      setUserId(Number(userId));
       return true;
     } catch (err) {
       console.error("Error logging in:", err);

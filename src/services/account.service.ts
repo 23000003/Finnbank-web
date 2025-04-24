@@ -24,17 +24,28 @@ export class AccountService {
     middlename: string,
     email: string,
     password: string,
-    confirmPassword: string
+    phoneNumber: string,
+    address: string,
+    nationalID: string,
+    birthDate: string,
+    nationality: string,
+    accountType: string
   ) {
+    const formattedBirthDate = new Date(birthDate).toISOString();
     try {
       const data = await api
-        .post(`${this.prefix}/register`, {
-          surname,
-          firstname,
-          middlename,
+        .post(`${this.prefix}/signup`, {
           email,
           password,
-          confirmPassword,
+          first_name: firstname,
+          middle_name: middlename,
+          last_name: surname,
+          phone_number: phoneNumber,
+          address,
+          account_type: accountType,
+          national_id: nationalID,
+          nationality,
+          birthdate: formattedBirthDate,
         })
         .then((res) => res.data);
       return data;
