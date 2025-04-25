@@ -54,7 +54,7 @@ export class AccountService {
       throw err;
     }
   }
-  static async getAccountPersonalData(userId: number) {
+  static async getAccountPersonalData(userId: string) {
     try {
       console.log(userId);
       const data: PersonalData = {

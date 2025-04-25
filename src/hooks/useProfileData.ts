@@ -3,7 +3,7 @@ import useActionStatus from "./useActionStatus";
 import { AccountService } from "../services/account.service";
 import { PersonalData } from "../types/user.types";
 
-export const useProfileData = (userId: number) => {
+export const useProfileData = (userId: string) => {
   const [profileData, setProfileData] = useState<PersonalData>();
   const [infoCardContent, setInfoCardContent] = useState<
     {
