@@ -18,7 +18,7 @@ type TokenDecoded = {
 };
 
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null); //fullname
   const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

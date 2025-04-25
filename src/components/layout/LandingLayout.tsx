@@ -8,7 +8,7 @@ const LandingLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <LandingNavbar />
-      <main className="flex-grow" style={{ backgroundColor: "#f3f3f6" }}>
+      <main className="flex-grow z-0" style={{ backgroundColor: "#f3f3f6" }}>
         <Outlet />
       </main>
       <LandingFooter />

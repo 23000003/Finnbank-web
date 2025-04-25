@@ -1,11 +1,12 @@
 // import React from 'react'
 import { Link, useLocation } from "@tanstack/react-router";
-import reactLogo from "../../../assets/react.svg";
 import notif from "../../../assets/notif.svg";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 
 // @design to be change in toggle or recommend
+
+import finnbanklogo from "../../../assets/finnbanklogo.png";
 
 type NavLinks = "dashboard" | "service" | "activity";
 
@@ -18,7 +19,7 @@ const HomeNavbar: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between h-16 mx-auto max-w-screen-2xl">
         <div className="flex items-center justify-between w-full lg:w-auto">
           <div className="flex items-center gap-2">
-            <img src={reactLogo} alt="finnbank-logo" className="h-8 w-8" />
+            <img src={finnbanklogo} alt="finnbank-logo" className="h-13 w-18" />
             <h1 className="text-2xl font-bold">Finnbank</h1>
           </div>
 
