@@ -21,7 +21,7 @@ type TokenDecoded = {
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null); //fullname
-  const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [tokenExp, setTokenExp] = useState<number | null>(null);
 
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       setTokenExp(exp);
       setIsAuthenticated(true);
       setUsername(name);
-      setUserId(Number(userId));
+      setUserId(String(userId));
       return true;
     } catch (err) {
       console.error("Error logging in:", err);

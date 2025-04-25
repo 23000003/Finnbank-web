@@ -23,7 +23,7 @@ const LoginForm: React.FC = () => {
       .then(() => {
         showToast.success("Login successful");
         console.log("Login OK");
-        navigate({ to: "/home/dashboard" });
+        navigate({ to: "/home/dashboard", replace: true });
       })
       .catch((error) => {
         showToast.error(error.message);
