@@ -7,7 +7,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 
 // @design to be change in toggle or recommend
 
-type NavLinks = "dashboard" | "service" | "activity";
+type NavLinks = "dashboard" | "service" | "activity" | "updates";
 
 const HomeNavbar: React.FC = () => {
   const location = useLocation();
@@ -43,7 +43,7 @@ const HomeNavbar: React.FC = () => {
         </div>
 
         <div className="hidden lg:flex gap-4 ml-0 lg:ml-10">
-          {["dashboard", "service", "activity"].map((link) => {
+          {["dashboard", "service", "activity", "updates"].map((link) => {
             const match = location.pathname.includes(link);
             return (
               <Link
