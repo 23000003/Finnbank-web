@@ -19,3 +19,11 @@ export type LoginResponse = {
     account_id: string;
   };
 };
+
+export type Acc = {
+  account_id: string;
+};
+
+export type OpenedAccountResponse = {
+  data: Acc;
+};

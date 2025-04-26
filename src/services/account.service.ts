@@ -1,5 +1,7 @@
 import { LoginResponse, PersonalData } from "../types/user.types";
 import { api } from "../configs/axios";
+import { OpenedAccountService } from "./opened-account.service";
+import { Acc, OpenedAccountResponse } from "../types/user.types";
 
 export class AccountService {
   private static prefix: string = "/auth";
@@ -33,8 +35,8 @@ export class AccountService {
   ) {
     const formattedBirthDate = new Date(birthDate).toISOString();
     try {
-      const data = await api
-        .post(`${this.prefix}/signup`, {
+      const data: Acc = await api
+        .post<OpenedAccountResponse>(`${this.prefix}/signup`, {
           email,
           password,
           first_name: firstname,
@@ -47,7 +49,11 @@ export class AccountService {
           nationality,
           birthdate: formattedBirthDate,
         })
-        .then((res) => res.data);
+        .then((res) => res.data.data);
+      if (data) {
+        const openedAccount = await OpenedAccountService.createOpenedAccount(data.account_id);
+        console.log("Opened account:", openedAccount);
+      }
       return data;
     } catch (err) {
       console.error("Error registering:", err);

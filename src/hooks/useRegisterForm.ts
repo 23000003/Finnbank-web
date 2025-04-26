@@ -75,7 +75,7 @@ export const useRegisterForm = () => {
     setIsLoading(true);
     const address = `${formData.country}, ${formData.province}, ${formData.city}`;
     try {
-      await AccountService.register(
+      const data = await AccountService.register(
         formData.surname,
         formData.firstname,
         formData.middlename,
@@ -88,6 +88,7 @@ export const useRegisterForm = () => {
         formData.nationality,
         formData.account_type
       );
+      console.log("Registration data:", data);
       showToast.success("Registration successful");
       navigate({ to: "/welcome/signin" });
     } catch (error) {

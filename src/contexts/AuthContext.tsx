@@ -26,8 +26,19 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   const [tokenExp, setTokenExp] = useState<number | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const name = localStorage.getItem("username");
+    const userId = localStorage.getItem("userId");
+    const tokenExp = localStorage.getItem("tokenExp");
+
+    if (token && name && userId && tokenExp) {
+      setIsAuthenticated(true);
+      setUsername(name);
+      setUserId(userId);
+      setTokenExp(Number(tokenExp));
+    }
+
     setLoading(false);
-    // Fetch from localstorage
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -36,6 +47,12 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       const data = await AccountService.login(email, password);
       const { access_token: token, full_name: name, account_id: userId } = data.data;
       const { exp } = jwtDecode<TokenDecoded>(token);
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", name);
+      localStorage.setItem("userId", String(userId));
+      localStorage.setItem("tokenExp", String(exp));
+
       setTokenExp(exp);
       setIsAuthenticated(true);
       setUsername(name);
@@ -49,6 +66,10 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   };
 
   const logout = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("tokenExp");
     // remove from localstorage
     setIsAuthenticated(false);
     setUsername(null);
