@@ -59,14 +59,12 @@ export class OpenedAccountService {
       throw error;
     }
   }
-  static async createOpenedAccount(accountId: string, balance: number, accountType: string) {
+  static async createOpenedAccount(accountId: string) {
     try {
       const response = await api.post(
         `${this.prefix}/create-account`,
         {
           account_id: accountId,
-          balance,
-          account_type: accountType,
         },
         {
           headers: {

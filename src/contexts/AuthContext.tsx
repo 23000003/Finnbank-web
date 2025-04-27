@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
 import { AuthContextType } from "../types/interfaces/auth-context.interface";
 import { jwtDecode } from "jwt-decode";
-import { AccountService } from "../services/account.service";
+import { AuthService } from "../services/auth.service";
 
 const Auth = createContext<AuthContextType>({
   loading: true,
@@ -18,34 +18,56 @@ type TokenDecoded = {
 };
 
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null); //fullname
-  const [userId, setUserId] = useState<string | null>("4dea2d3f-c174-47bb-9240-a054490eb1fd");
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [tokenExp, setTokenExp] = useState<number | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const name = localStorage.getItem("username");
+    const userId = localStorage.getItem("userId");
+    const tokenExp = localStorage.getItem("tokenExp");
+
+    if (token && name && userId && tokenExp) {
+      setIsAuthenticated(true);
+      setUsername(name);
+      setUserId(userId);
+      setTokenExp(Number(tokenExp));
+    }
+
     setLoading(false);
-    // Fetch from localstorage
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
       console.log(email, password);
-      const data = await AccountService.login(email, password);
-      const { exp } = jwtDecode<TokenDecoded>(data.access_token);
+      const data = await AuthService.login(email, password);
+      const { access_token: token, full_name: name, account_id: userId } = data;
+      const { exp } = jwtDecode<TokenDecoded>(token);
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", name);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("tokenExp", String(exp));
+
       setTokenExp(exp);
       setIsAuthenticated(true);
-      setUsername("Kenny");
-      setUserId("1");
+      setUsername(name);
+      setUserId(String(userId));
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
-      return false;
+      throw new Error("User does not exists.");
     }
   };
 
   const logout = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("tokenExp");
     // remove from localstorage
     setIsAuthenticated(false);
     setUsername(null);

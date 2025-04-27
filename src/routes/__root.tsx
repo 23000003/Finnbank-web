@@ -20,9 +20,10 @@ export const Route = createRootRoute({
         return;
       }
     }
-
     // redirect to dashboard if authenticated
     if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
+      console.log(location.pathname);
+      console.log("redirecting to dashboard");
       throw redirect({
         to: "/home/dashboard",
       });

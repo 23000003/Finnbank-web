@@ -18,8 +18,7 @@ function RouteComponent() {
           />
           <span className="text-3xl font-bold text-gray-800">FINNBANK</span>
         </div>
-        <h1 className="text-2xl font-semibold text-gray-800">Start your banking journey with us</h1>
-        <p className="text-gray-500 text-sm">Sign up to start now!</p>
+        <h1 className="text-3xl font-light text-gray-500">Sign up to start now!</h1>
       </div>
       <RegisterForm />
       <div className="text-center text-sm text-gray-600 mt-5">

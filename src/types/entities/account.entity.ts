@@ -13,3 +13,17 @@ export type PersonalData = {
   accountStatus: AccountStatusEnum;
   accountType: AccountTypeEnum;
 };
+
+export type LoginResponse = {
+  access_token: string;
+  full_name: string;
+  account_id: string;
+};
+
+export type Acc = {
+  account_id: string;
+};
+
+export type OpenedAccountResponse = {
+  data: Acc;
+};
