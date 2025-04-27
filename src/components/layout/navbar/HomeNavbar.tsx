@@ -10,7 +10,7 @@ type NavLinks = "dashboard" | "service" | "activity";
 
 const HomeNavbar: React.FC = () => {
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, username } = useAuth();
 
   return (
     <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
@@ -60,7 +60,7 @@ const HomeNavbar: React.FC = () => {
 
         {/* Profile section */}
         <div className="hidden lg:flex items-center">
-          <Profile logout={logout} />
+          <Profile logout={logout} username={username as string} />
         </div>
       </div>
     </nav>
@@ -68,7 +68,7 @@ const HomeNavbar: React.FC = () => {
 };
 export default HomeNavbar;
 
-const Profile: React.FC<{ logout: () => void }> = ({ logout }) => {
+const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, username }) => {
   const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
 
   return (
@@ -90,7 +90,7 @@ const Profile: React.FC<{ logout: () => void }> = ({ logout }) => {
           onClick={() => setToggle(toggle === "user" ? null : "user")}
         >
           <img src="" alt="user-profile-image" className="bg-white w-9 h-9 rounded-full" />
-          <span>John Doe</span>
+          <span>{username}</span>
         </div>
         {toggle === "user" ? (
           <div className="flex flex-col absolute mt-12 bg-white w-60 p-3 rounded-lg shadow right-5">
