@@ -4,6 +4,7 @@ import AccountInformation from "../../../components/profile/AccountInformation";
 import InfoCard from "../../../components/profile/InfoCard";
 import { useProfileData } from "../../../hooks/useProfileData";
 import { useAuth } from "../../../contexts/AuthContext";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/home/profile/")({
   component: RouteComponent,
@@ -24,7 +25,12 @@ function RouteComponent() {
   return (
     <div className="flex flex-col md:flex-row w-full gap-20 justify-center items-center md:items-start">
       <div className="max-w-[500px] w-full">
-        <div className="flex flex-col gap-8">
+        <motion.div
+          className="flex flex-col gap-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           <ProfileCard
             fullName={profileData.fullName}
             dateCreated={profileData.dateCreated}
@@ -38,10 +44,15 @@ function RouteComponent() {
             accountType={profileData.accountType}
             birthdate={profileData.birthDate}
           />
-        </div>
+        </motion.div>
       </div>
       <div className="max-w-[500px] md:max-w-[400px] w-full">
-        <div className="flex flex-col gap-8">
+        <motion.div
+          className="flex flex-col gap-8"
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           {infoCardContent.map((info, index) => (
             <InfoCard
               key={index}
@@ -49,7 +60,7 @@ function RouteComponent() {
               value={info.value}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import useActionStatus from "./useActionStatus";
 import { AccountService } from "../services/account.service";
-import { PersonalData } from "../types/user.types";
+import { PersonalData } from "../types/entities/account.entity";
+
+interface InfoCard {
+  type: "Emails" | "Phone Numbers" | "Addresses";
+  value: string;
+}
+
+type InfoCardContent = InfoCard[];
 
 export const useProfileData = (userId: string) => {
   const [profileData, setProfileData] = useState<PersonalData>();
-  const [infoCardContent, setInfoCardContent] = useState<
-    {
-      type: "Emails" | "Phone Numbers" | "Addresses";
-      value: string;
-    }[]
-  >([]);
+  const [infoCardContent, setInfoCardContent] = useState<InfoCardContent>([]);
 
   const { setLoading, setErrorMessage, setSuccessMessage, loading } = useActionStatus();
 

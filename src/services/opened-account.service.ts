@@ -1,17 +1,61 @@
 import { api } from "../configs/axios";
+import { OpenedAccount, OpenedAccountNumber } from "../types/entities/opened-account.entity";
+
+type OpenedAccountResponse = {
+  data: OpenedAccount[];
+};
 
 export class OpenedAccountService {
   private static prefix: string = "/opened-account";
-  static async getAllOpenedAccountsOfUser(userId: number) {
+  static async getAllOpenedAccountsOfUser(userId: string) {
     try {
-      const response = await api.get(`${this.prefix}/get-all/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
-      return response.data;
+      console.log(userId);
+      const response = await api
+        .get<OpenedAccountResponse>(`${this.prefix}/get-all/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        })
+        .then((res) => res.data.data);
+      console.log(response);
+      return response;
     } catch (error) {
       console.error("Error fetching opened accounts:", error);
+      throw error;
+    }
+  }
+  static async getOpenedAccountIdByAccountNumber(accountNumber: string) {
+    try {
+      const res = await api
+        .get<{ data: number }>(`${this.prefix}/find-by-account-number/${accountNumber}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        })
+        .then((res) => res.data.data);
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching opened account ID:", error);
+      throw error;
+    }
+  }
+  static async getBothAccountNumber(senderId: number, receiverId: number) {
+    try {
+      const res = await api
+        .get<{ data: OpenedAccountNumber[] }>(
+          `${this.prefix}/get-both-account-number/${senderId}/${receiverId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          }
+        )
+        .then((res) => res.data.data);
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching opened account ID:", error);
       throw error;
     }
   }

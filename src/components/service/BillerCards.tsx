@@ -9,12 +9,13 @@ type Biller =
   | "water-utilities"
   | "electric-utilities";
 
-export default function BillerCards() {
+const BillerCards: React.FC = () => {
   return (
     <div className="grid grid-cols-3 gap-4">
       {Billers.map((biller, index) => (
         <Link
-          to={`/home/service/billers/${biller.name.toLowerCase().replace(/\s+/g, "-") as Biller}`}
+          to="/home/service/billers/$billers"
+          params={{ billers: biller.name.toLowerCase().replace(/\s+/g, "-") as Biller }}
           key={index}
           className="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition-colors hover:shadow-md"
         >
@@ -34,4 +35,6 @@ export default function BillerCards() {
       ))}
     </div>
   );
-}
+};
+
+export default BillerCards;

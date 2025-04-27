@@ -1,24 +1,23 @@
 // import React from 'react'
 import { Link, useLocation } from "@tanstack/react-router";
-import reactLogo from "../../../assets/react.svg";
 import notif from "../../../assets/notif.svg";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-
+import logo from "../../../assets/finnbank-logo.png";
 // @design to be change in toggle or recommend
 
-type NavLinks = "dashboard" | "service" | "activity" | "updates";
+type NavLinks = "dashboard" | "service" | "activity";
 
 const HomeNavbar: React.FC = () => {
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, username } = useAuth();
 
   return (
     <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
       <div className="flex flex-wrap items-center justify-between h-16 mx-auto max-w-screen-2xl">
         <div className="flex items-center justify-between w-full lg:w-auto">
           <div className="flex items-center gap-2">
-            <img src={reactLogo} alt="finnbank-logo" className="h-8 w-8" />
+            <img src={logo} alt="finnbank-logo" className="h-12 w-16" />
             <h1 className="text-2xl font-bold">Finnbank</h1>
           </div>
 
@@ -43,7 +42,7 @@ const HomeNavbar: React.FC = () => {
         </div>
 
         <div className="hidden lg:flex gap-4 ml-0 lg:ml-10">
-          {["dashboard", "service", "activity", "updates"].map((link) => {
+          {["dashboard", "service", "activity"].map((link) => {
             const match = location.pathname.includes(link);
             return (
               <Link
@@ -61,7 +60,7 @@ const HomeNavbar: React.FC = () => {
 
         {/* Profile section */}
         <div className="hidden lg:flex items-center">
-          <Profile logout={logout} />
+          <Profile logout={logout} username={username as string} />
         </div>
       </div>
     </nav>
@@ -69,7 +68,7 @@ const HomeNavbar: React.FC = () => {
 };
 export default HomeNavbar;
 
-const Profile: React.FC<{ logout: () => void }> = ({ logout }) => {
+const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, username }) => {
   const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
 
   return (
@@ -91,7 +90,7 @@ const Profile: React.FC<{ logout: () => void }> = ({ logout }) => {
           onClick={() => setToggle(toggle === "user" ? null : "user")}
         >
           <img src="" alt="user-profile-image" className="bg-white w-9 h-9 rounded-full" />
-          <span>John Doe</span>
+          <span>{username}</span>
         </div>
         {toggle === "user" ? (
           <div className="flex flex-col absolute mt-12 bg-white w-60 p-3 rounded-lg shadow right-5">

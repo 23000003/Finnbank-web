@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRegisterForm } from "../../hooks/useRegisterForm";
+
 const RegisterForm: React.FC = () => {
   const {
     currentStep,

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
-import { AuthContextType } from "../types/contexts.types";
+import { AuthContextType } from "../types/interfaces/auth-context.interface";
 import { jwtDecode } from "jwt-decode";
-import { AccountService } from "../services/account.service";
-import { showToast } from "../utils/toast";
+import { AuthService } from "../services/auth.service";
 
 const Auth = createContext<AuthContextType>({
   loading: true,
@@ -44,13 +43,13 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   const login = async (email: string, password: string) => {
     try {
       console.log(email, password);
-      const data = await AccountService.login(email, password);
-      const { access_token: token, full_name: name, account_id: userId } = data.data;
+      const data = await AuthService.login(email, password);
+      const { access_token: token, full_name: name, account_id: userId } = data;
       const { exp } = jwtDecode<TokenDecoded>(token);
 
       localStorage.setItem("token", token);
       localStorage.setItem("username", name);
-      localStorage.setItem("userId", String(userId));
+      localStorage.setItem("userId", userId);
       localStorage.setItem("tokenExp", String(exp));
 
       setTokenExp(exp);
@@ -60,8 +59,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
-      showToast.error("Login Failed");
-      throw new Error("Bad Request");
+      throw new Error("User does not exists.");
     }
   };
 

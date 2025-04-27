@@ -8,9 +8,6 @@ const InfoCard: React.FC<InfoProps> = ({ type, value }) => {
     <div className="flex flex-col">
       <div className="flex flex-row justify-between items-center">
         <h1 className="text-xl font-semibold">{type}</h1>
-        <span className="text-sm text-blue-600 font-semibold hover:text-blue-400 cursor-pointer">
-          + Add
-        </span>
       </div>
       <div className="flex flex-row bg-white justify-between items-center p-4 rounded-lg mt-4">
         <div className="flex flex-row gap-4 items-start w-full px-2">

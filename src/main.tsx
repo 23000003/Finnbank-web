@@ -1,16 +1,18 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createRouter, createHashHistory } from "@tanstack/react-router";
+import { createRouter, createHashHistory } from "@tanstack/react-router";
 import "./index.css";
 
 const history = createHashHistory();
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ActivityData } from "./types/entities/transaction.entity";
+import InitApp from "./InitApp";
 
 // Create a new router instance
-const router = createRouter({
+export const router = createRouter({
   history, // support client-side routing in production
   routeTree,
   context: {
@@ -23,12 +25,10 @@ declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
+  interface HistoryState {
+    activityData?: ActivityData;
+  }
 }
-
-const InitApp = () => {
-  const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth: auth }} />;
-};
 
 // Render the app
 const rootElement = document.getElementById("root")!;

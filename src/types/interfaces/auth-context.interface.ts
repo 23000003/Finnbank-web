@@ -1,4 +1,4 @@
-export type AuthContextType = {
+export interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   username: string | null;
@@ -6,8 +6,8 @@ export type AuthContextType = {
   tokenExp: number | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
-};
+}
 
-export type Context = {
+export interface Context {
   auth: AuthContextType;
-};
+}

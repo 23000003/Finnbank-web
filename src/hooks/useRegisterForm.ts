@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { showToast } from "../utils/toast";
-import { AccountService } from "../services/account.service";
+import { AuthService } from "../services/auth.service";
 
 export const useRegisterForm = () => {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export const useRegisterForm = () => {
     setIsLoading(true);
     const address = `${formData.country}, ${formData.province}, ${formData.city}`;
     try {
-      const data = await AccountService.register(
+      const data = await AuthService.register(
         formData.surname,
         formData.firstname,
         formData.middlename,
