@@ -12,6 +12,10 @@ export const Route = createRootRoute({
   beforeLoad: ({ context, location }) => {
     const { auth } = context as Context;
 
+    if (auth.loading) {
+      return;
+    }
+
     if (auth.tokenExp) {
       const tokenExp = new Date(auth.tokenExp * 1000);
       const now = new Date();
@@ -21,14 +25,15 @@ export const Route = createRootRoute({
       }
     }
     // redirect to dashboard if authenticated
+    console.log(location.pathname);
     if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
-      console.log(location.pathname);
       console.log("redirecting to dashboard");
       throw redirect({
         to: "/home/dashboard",
       });
       // redirect to welcome (landing page) if not authenticated
     } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
+      console.log("redirecting to welcome");
       throw redirect({
         to: "/welcome",
       });
