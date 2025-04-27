@@ -11,7 +11,7 @@ export const Route = createFileRoute("/home/profile/")({
 
 function RouteComponent() {
   const { userId } = useAuth();
-  const { infoCardContent, loading, profileData } = useProfileData(userId as number);
+  const { infoCardContent, loading, profileData } = useProfileData(userId as string);
 
   if (loading) {
     return (

@@ -16,9 +16,10 @@ function RouteComponent() {
     }
   };
 
+  // TODO: Remove this
   const handleCreate = async () => {
     try {
-      const data = await OpenedAccountService.createOpenedAccount(1, 1000, "savings");
+      const data = await OpenedAccountService.createOpenedAccount("1");
       console.log("Created account:", data);
     } catch (error) {
       console.error("Error creating opened account:", error);

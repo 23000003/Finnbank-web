@@ -13,7 +13,17 @@ export type PersonalData = {
 };
 
 export type LoginResponse = {
-  access_token: string;
-  fullname: string;
-  userId: number;
+  data: {
+    access_token: string;
+    full_name: string;
+    account_id: string;
+  };
+};
+
+export type Acc = {
+  account_id: string;
+};
+
+export type OpenedAccountResponse = {
+  data: Acc;
 };
