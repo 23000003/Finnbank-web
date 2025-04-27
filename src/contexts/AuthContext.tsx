@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createContext, useContext } from "react";
-import { AuthContextType } from "../types/contexts.types";
+import { AuthContextType } from "../types/interfaces/auth-context.interface";
 import { jwtDecode } from "jwt-decode";
 import { AccountService } from "../services/account.service";
 
@@ -20,7 +20,7 @@ type TokenDecoded = {
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [username, setUsername] = useState<string | null>(null); //fullname
-  const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<string | null>("4dea2d3f-c174-47bb-9240-a054490eb1fd");
   const [loading, setLoading] = useState<boolean>(true);
   const [tokenExp, setTokenExp] = useState<number | null>(null);
 
@@ -37,7 +37,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       setTokenExp(exp);
       setIsAuthenticated(true);
       setUsername("Kenny");
-      setUserId(1);
+      setUserId("1");
       return true;
     } catch (err) {
       console.error("Error logging in:", err);

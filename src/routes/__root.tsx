@@ -2,7 +2,7 @@ import { createRootRoute, redirect, useLocation, useRouter } from "@tanstack/rea
 import LandingLayout from "../components/layout/LandingLayout";
 import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
-import { Context } from "../types/contexts.types";
+import { Context } from "../types/interfaces/auth-context.interface";
 import { useAuth } from "../contexts/AuthContext";
 import AuthLayout from "../components/layout/AuthLayout";
 

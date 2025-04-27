@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { showToast } from "../../utils/toast";
+import { getInputBorderClass } from "../../utils/input-error";
 
 const LoginForm: React.FC = () => {
   const { login } = useAuth();
@@ -29,13 +30,6 @@ const LoginForm: React.FC = () => {
       });
   };
 
-  // Turn input field to red if empty (helper fn)
-  const getInputBorderClass = (value: string) => {
-    return hasSubmitted && !value
-      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
-  };
-
   return (
     <form className="space-y-6" onSubmit={handleLogin}>
       {/* Email */}
@@ -49,7 +43,7 @@ const LoginForm: React.FC = () => {
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(email)}`}
+          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(email, hasSubmitted)}`}
         />
         {hasSubmitted && !email && <p className="text-sm text-red-600">Email is required</p>}
       </div>
@@ -65,7 +59,7 @@ const LoginForm: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
-          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(password)}`}
+          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(password, hasSubmitted)}`}
         />
         {hasSubmitted && !password && <p className="text-sm text-red-600">Password is required</p>}
       </div>

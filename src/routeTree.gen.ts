@@ -25,14 +25,10 @@ import { Route as HomeProfileIndexImport } from "./routes/home/profile/index";
 import { Route as HomeServiceTransferImport } from "./routes/home/service/transfer";
 import { Route as HomeServicePayBillsImport } from "./routes/home/service/pay-bills";
 import { Route as HomeServiceLoanImport } from "./routes/home/service/loan";
+import { Route as HomeReceiptIdImport } from "./routes/home/receipt/$id";
 import { Route as HomeProfileWalletImport } from "./routes/home/profile/wallet";
 import { Route as HomeProfileSettingsImport } from "./routes/home/profile/settings";
-import { Route as HomeServiceBillersWaterUtilitiesImport } from "./routes/home/service/billers/water-utilities";
-import { Route as HomeServiceBillersLoansImport } from "./routes/home/service/billers/loans";
-import { Route as HomeServiceBillersInternetImport } from "./routes/home/service/billers/internet";
-import { Route as HomeServiceBillersInsuranceImport } from "./routes/home/service/billers/insurance";
-import { Route as HomeServiceBillersElectricUtilitiesImport } from "./routes/home/service/billers/electric-utilities";
-import { Route as HomeServiceBillersCreditCardImport } from "./routes/home/service/billers/credit-card";
+import { Route as HomeServiceBillersBillersImport } from "./routes/home/service/billers/$billers";
 
 // Create/Update Routes
 
@@ -120,6 +116,12 @@ const HomeServiceLoanRoute = HomeServiceLoanImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const HomeReceiptIdRoute = HomeReceiptIdImport.update({
+  id: "/home/receipt/$id",
+  path: "/home/receipt/$id",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const HomeProfileWalletRoute = HomeProfileWalletImport.update({
   id: "/home/profile/wallet",
   path: "/home/profile/wallet",
@@ -132,39 +134,9 @@ const HomeProfileSettingsRoute = HomeProfileSettingsImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
-const HomeServiceBillersWaterUtilitiesRoute = HomeServiceBillersWaterUtilitiesImport.update({
-  id: "/home/service/billers/water-utilities",
-  path: "/home/service/billers/water-utilities",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const HomeServiceBillersLoansRoute = HomeServiceBillersLoansImport.update({
-  id: "/home/service/billers/loans",
-  path: "/home/service/billers/loans",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const HomeServiceBillersInternetRoute = HomeServiceBillersInternetImport.update({
-  id: "/home/service/billers/internet",
-  path: "/home/service/billers/internet",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const HomeServiceBillersInsuranceRoute = HomeServiceBillersInsuranceImport.update({
-  id: "/home/service/billers/insurance",
-  path: "/home/service/billers/insurance",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const HomeServiceBillersElectricUtilitiesRoute = HomeServiceBillersElectricUtilitiesImport.update({
-  id: "/home/service/billers/electric-utilities",
-  path: "/home/service/billers/electric-utilities",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const HomeServiceBillersCreditCardRoute = HomeServiceBillersCreditCardImport.update({
-  id: "/home/service/billers/credit-card",
-  path: "/home/service/billers/credit-card",
+const HomeServiceBillersBillersRoute = HomeServiceBillersBillersImport.update({
+  id: "/home/service/billers/$billers",
+  path: "/home/service/billers/$billers",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -249,6 +221,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeProfileWalletImport;
       parentRoute: typeof rootRoute;
     };
+    "/home/receipt/$id": {
+      id: "/home/receipt/$id";
+      path: "/home/receipt/$id";
+      fullPath: "/home/receipt/$id";
+      preLoaderRoute: typeof HomeReceiptIdImport;
+      parentRoute: typeof rootRoute;
+    };
     "/home/service/loan": {
       id: "/home/service/loan";
       path: "/home/service/loan";
@@ -284,46 +263,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeServiceIndexImport;
       parentRoute: typeof rootRoute;
     };
-    "/home/service/billers/credit-card": {
-      id: "/home/service/billers/credit-card";
-      path: "/home/service/billers/credit-card";
-      fullPath: "/home/service/billers/credit-card";
-      preLoaderRoute: typeof HomeServiceBillersCreditCardImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/home/service/billers/electric-utilities": {
-      id: "/home/service/billers/electric-utilities";
-      path: "/home/service/billers/electric-utilities";
-      fullPath: "/home/service/billers/electric-utilities";
-      preLoaderRoute: typeof HomeServiceBillersElectricUtilitiesImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/home/service/billers/insurance": {
-      id: "/home/service/billers/insurance";
-      path: "/home/service/billers/insurance";
-      fullPath: "/home/service/billers/insurance";
-      preLoaderRoute: typeof HomeServiceBillersInsuranceImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/home/service/billers/internet": {
-      id: "/home/service/billers/internet";
-      path: "/home/service/billers/internet";
-      fullPath: "/home/service/billers/internet";
-      preLoaderRoute: typeof HomeServiceBillersInternetImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/home/service/billers/loans": {
-      id: "/home/service/billers/loans";
-      path: "/home/service/billers/loans";
-      fullPath: "/home/service/billers/loans";
-      preLoaderRoute: typeof HomeServiceBillersLoansImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/home/service/billers/water-utilities": {
-      id: "/home/service/billers/water-utilities";
-      path: "/home/service/billers/water-utilities";
-      fullPath: "/home/service/billers/water-utilities";
-      preLoaderRoute: typeof HomeServiceBillersWaterUtilitiesImport;
+    "/home/service/billers/$billers": {
+      id: "/home/service/billers/$billers";
+      path: "/home/service/billers/$billers";
+      fullPath: "/home/service/billers/$billers";
+      preLoaderRoute: typeof HomeServiceBillersBillersImport;
       parentRoute: typeof rootRoute;
     };
   }
@@ -343,17 +287,13 @@ export interface FileRoutesByFullPath {
   "/welcome": typeof WelcomeIndexRoute;
   "/home/profile/settings": typeof HomeProfileSettingsRoute;
   "/home/profile/wallet": typeof HomeProfileWalletRoute;
+  "/home/receipt/$id": typeof HomeReceiptIdRoute;
   "/home/service/loan": typeof HomeServiceLoanRoute;
   "/home/service/pay-bills": typeof HomeServicePayBillsRoute;
   "/home/service/transfer": typeof HomeServiceTransferRoute;
   "/home/profile": typeof HomeProfileIndexRoute;
   "/home/service": typeof HomeServiceIndexRoute;
-  "/home/service/billers/credit-card": typeof HomeServiceBillersCreditCardRoute;
-  "/home/service/billers/electric-utilities": typeof HomeServiceBillersElectricUtilitiesRoute;
-  "/home/service/billers/insurance": typeof HomeServiceBillersInsuranceRoute;
-  "/home/service/billers/internet": typeof HomeServiceBillersInternetRoute;
-  "/home/service/billers/loans": typeof HomeServiceBillersLoansRoute;
-  "/home/service/billers/water-utilities": typeof HomeServiceBillersWaterUtilitiesRoute;
+  "/home/service/billers/$billers": typeof HomeServiceBillersBillersRoute;
 }
 
 export interface FileRoutesByTo {
@@ -368,17 +308,13 @@ export interface FileRoutesByTo {
   "/welcome": typeof WelcomeIndexRoute;
   "/home/profile/settings": typeof HomeProfileSettingsRoute;
   "/home/profile/wallet": typeof HomeProfileWalletRoute;
+  "/home/receipt/$id": typeof HomeReceiptIdRoute;
   "/home/service/loan": typeof HomeServiceLoanRoute;
   "/home/service/pay-bills": typeof HomeServicePayBillsRoute;
   "/home/service/transfer": typeof HomeServiceTransferRoute;
   "/home/profile": typeof HomeProfileIndexRoute;
   "/home/service": typeof HomeServiceIndexRoute;
-  "/home/service/billers/credit-card": typeof HomeServiceBillersCreditCardRoute;
-  "/home/service/billers/electric-utilities": typeof HomeServiceBillersElectricUtilitiesRoute;
-  "/home/service/billers/insurance": typeof HomeServiceBillersInsuranceRoute;
-  "/home/service/billers/internet": typeof HomeServiceBillersInternetRoute;
-  "/home/service/billers/loans": typeof HomeServiceBillersLoansRoute;
-  "/home/service/billers/water-utilities": typeof HomeServiceBillersWaterUtilitiesRoute;
+  "/home/service/billers/$billers": typeof HomeServiceBillersBillersRoute;
 }
 
 export interface FileRoutesById {
@@ -394,17 +330,13 @@ export interface FileRoutesById {
   "/welcome/": typeof WelcomeIndexRoute;
   "/home/profile/settings": typeof HomeProfileSettingsRoute;
   "/home/profile/wallet": typeof HomeProfileWalletRoute;
+  "/home/receipt/$id": typeof HomeReceiptIdRoute;
   "/home/service/loan": typeof HomeServiceLoanRoute;
   "/home/service/pay-bills": typeof HomeServicePayBillsRoute;
   "/home/service/transfer": typeof HomeServiceTransferRoute;
   "/home/profile/": typeof HomeProfileIndexRoute;
   "/home/service/": typeof HomeServiceIndexRoute;
-  "/home/service/billers/credit-card": typeof HomeServiceBillersCreditCardRoute;
-  "/home/service/billers/electric-utilities": typeof HomeServiceBillersElectricUtilitiesRoute;
-  "/home/service/billers/insurance": typeof HomeServiceBillersInsuranceRoute;
-  "/home/service/billers/internet": typeof HomeServiceBillersInternetRoute;
-  "/home/service/billers/loans": typeof HomeServiceBillersLoansRoute;
-  "/home/service/billers/water-utilities": typeof HomeServiceBillersWaterUtilitiesRoute;
+  "/home/service/billers/$billers": typeof HomeServiceBillersBillersRoute;
 }
 
 export interface FileRouteTypes {
@@ -421,17 +353,13 @@ export interface FileRouteTypes {
     | "/welcome"
     | "/home/profile/settings"
     | "/home/profile/wallet"
+    | "/home/receipt/$id"
     | "/home/service/loan"
     | "/home/service/pay-bills"
     | "/home/service/transfer"
     | "/home/profile"
     | "/home/service"
-    | "/home/service/billers/credit-card"
-    | "/home/service/billers/electric-utilities"
-    | "/home/service/billers/insurance"
-    | "/home/service/billers/internet"
-    | "/home/service/billers/loans"
-    | "/home/service/billers/water-utilities";
+    | "/home/service/billers/$billers";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
@@ -445,17 +373,13 @@ export interface FileRouteTypes {
     | "/welcome"
     | "/home/profile/settings"
     | "/home/profile/wallet"
+    | "/home/receipt/$id"
     | "/home/service/loan"
     | "/home/service/pay-bills"
     | "/home/service/transfer"
     | "/home/profile"
     | "/home/service"
-    | "/home/service/billers/credit-card"
-    | "/home/service/billers/electric-utilities"
-    | "/home/service/billers/insurance"
-    | "/home/service/billers/internet"
-    | "/home/service/billers/loans"
-    | "/home/service/billers/water-utilities";
+    | "/home/service/billers/$billers";
   id:
     | "__root__"
     | "/"
@@ -469,17 +393,13 @@ export interface FileRouteTypes {
     | "/welcome/"
     | "/home/profile/settings"
     | "/home/profile/wallet"
+    | "/home/receipt/$id"
     | "/home/service/loan"
     | "/home/service/pay-bills"
     | "/home/service/transfer"
     | "/home/profile/"
     | "/home/service/"
-    | "/home/service/billers/credit-card"
-    | "/home/service/billers/electric-utilities"
-    | "/home/service/billers/insurance"
-    | "/home/service/billers/internet"
-    | "/home/service/billers/loans"
-    | "/home/service/billers/water-utilities";
+    | "/home/service/billers/$billers";
   fileRoutesById: FileRoutesById;
 }
 
@@ -495,17 +415,13 @@ export interface RootRouteChildren {
   WelcomeIndexRoute: typeof WelcomeIndexRoute;
   HomeProfileSettingsRoute: typeof HomeProfileSettingsRoute;
   HomeProfileWalletRoute: typeof HomeProfileWalletRoute;
+  HomeReceiptIdRoute: typeof HomeReceiptIdRoute;
   HomeServiceLoanRoute: typeof HomeServiceLoanRoute;
   HomeServicePayBillsRoute: typeof HomeServicePayBillsRoute;
   HomeServiceTransferRoute: typeof HomeServiceTransferRoute;
   HomeProfileIndexRoute: typeof HomeProfileIndexRoute;
   HomeServiceIndexRoute: typeof HomeServiceIndexRoute;
-  HomeServiceBillersCreditCardRoute: typeof HomeServiceBillersCreditCardRoute;
-  HomeServiceBillersElectricUtilitiesRoute: typeof HomeServiceBillersElectricUtilitiesRoute;
-  HomeServiceBillersInsuranceRoute: typeof HomeServiceBillersInsuranceRoute;
-  HomeServiceBillersInternetRoute: typeof HomeServiceBillersInternetRoute;
-  HomeServiceBillersLoansRoute: typeof HomeServiceBillersLoansRoute;
-  HomeServiceBillersWaterUtilitiesRoute: typeof HomeServiceBillersWaterUtilitiesRoute;
+  HomeServiceBillersBillersRoute: typeof HomeServiceBillersBillersRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -520,17 +436,13 @@ const rootRouteChildren: RootRouteChildren = {
   WelcomeIndexRoute: WelcomeIndexRoute,
   HomeProfileSettingsRoute: HomeProfileSettingsRoute,
   HomeProfileWalletRoute: HomeProfileWalletRoute,
+  HomeReceiptIdRoute: HomeReceiptIdRoute,
   HomeServiceLoanRoute: HomeServiceLoanRoute,
   HomeServicePayBillsRoute: HomeServicePayBillsRoute,
   HomeServiceTransferRoute: HomeServiceTransferRoute,
   HomeProfileIndexRoute: HomeProfileIndexRoute,
   HomeServiceIndexRoute: HomeServiceIndexRoute,
-  HomeServiceBillersCreditCardRoute: HomeServiceBillersCreditCardRoute,
-  HomeServiceBillersElectricUtilitiesRoute: HomeServiceBillersElectricUtilitiesRoute,
-  HomeServiceBillersInsuranceRoute: HomeServiceBillersInsuranceRoute,
-  HomeServiceBillersInternetRoute: HomeServiceBillersInternetRoute,
-  HomeServiceBillersLoansRoute: HomeServiceBillersLoansRoute,
-  HomeServiceBillersWaterUtilitiesRoute: HomeServiceBillersWaterUtilitiesRoute,
+  HomeServiceBillersBillersRoute: HomeServiceBillersBillersRoute,
 };
 
 export const routeTree = rootRoute
@@ -554,17 +466,13 @@ export const routeTree = rootRoute
         "/welcome/",
         "/home/profile/settings",
         "/home/profile/wallet",
+        "/home/receipt/$id",
         "/home/service/loan",
         "/home/service/pay-bills",
         "/home/service/transfer",
         "/home/profile/",
         "/home/service/",
-        "/home/service/billers/credit-card",
-        "/home/service/billers/electric-utilities",
-        "/home/service/billers/insurance",
-        "/home/service/billers/internet",
-        "/home/service/billers/loans",
-        "/home/service/billers/water-utilities"
+        "/home/service/billers/$billers"
       ]
     },
     "/": {
@@ -600,6 +508,9 @@ export const routeTree = rootRoute
     "/home/profile/wallet": {
       "filePath": "home/profile/wallet.tsx"
     },
+    "/home/receipt/$id": {
+      "filePath": "home/receipt/$id.tsx"
+    },
     "/home/service/loan": {
       "filePath": "home/service/loan.tsx"
     },
@@ -615,23 +526,8 @@ export const routeTree = rootRoute
     "/home/service/": {
       "filePath": "home/service/index.tsx"
     },
-    "/home/service/billers/credit-card": {
-      "filePath": "home/service/billers/credit-card.tsx"
-    },
-    "/home/service/billers/electric-utilities": {
-      "filePath": "home/service/billers/electric-utilities.tsx"
-    },
-    "/home/service/billers/insurance": {
-      "filePath": "home/service/billers/insurance.tsx"
-    },
-    "/home/service/billers/internet": {
-      "filePath": "home/service/billers/internet.tsx"
-    },
-    "/home/service/billers/loans": {
-      "filePath": "home/service/billers/loans.tsx"
-    },
-    "/home/service/billers/water-utilities": {
-      "filePath": "home/service/billers/water-utilities.tsx"
+    "/home/service/billers/$billers": {
+      "filePath": "home/service/billers/$billers.tsx"
     }
   }
 }

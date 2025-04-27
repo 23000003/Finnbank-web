@@ -1,3 +1,5 @@
+import { AccountStatusEnum, AccountTypeEnum } from "../enums/account.enum";
+
 export type PersonalData = {
   fullName: string;
   email: string;
@@ -8,12 +10,6 @@ export type PersonalData = {
   nationalIdNumber: string;
   birthDate: string;
   nationality: string;
-  accountStatus: string;
-  accountType: string;
-};
-
-export type LoginResponse = {
-  access_token: string;
-  fullname: string;
-  userId: number;
+  accountStatus: AccountStatusEnum;
+  accountType: AccountTypeEnum;
 };

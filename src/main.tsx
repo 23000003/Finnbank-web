@@ -8,6 +8,7 @@ const history = createHashHistory();
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { ActivityData } from "./types/entities/transaction.entity";
 
 // Create a new router instance
 const router = createRouter({
@@ -22,6 +23,9 @@ const router = createRouter({
 declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
+  }
+  interface HistoryState {
+    activityData?: ActivityData;
   }
 }
 

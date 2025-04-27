@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import ActivityDataTable from "../../components/activity/ActivityDataTable";
 import { useEffect, useState } from "react";
-import StatementService from "../../services/statement.service";
 import useActionStatus from "../../hooks/useActionStatus";
-import { ActivityData } from "../../types/activity.types";
+import { ActivityData } from "../../types/entities/transaction.entity";
+import { useAuth } from "../../contexts/AuthContext";
+import TransactionService from "../../services/transaction.service";
+import { ArrowDown } from "lucide-react";
 
 export const Route = createFileRoute("/home/activity")({
   component: RouteComponent,
@@ -11,28 +13,34 @@ export const Route = createFileRoute("/home/activity")({
 
 function RouteComponent() {
   const [activityData, setActivityData] = useState<ActivityData[]>([]);
+  const [openedAccountIds, setOpenedAccountIds] = useState<number[]>([]);
+  const [limit, setLimit] = useState(10);
+  const [filterByTime, setFilterByTime] = useState("all");
 
   const { setErrorMessage, setLoading, setSuccessMessage, loading } = useActionStatus();
+  const { userId } = useAuth();
 
   useEffect(() => {
-    setLoading(true);
     const fetchActivityData = async () => {
       try {
-        const data = await StatementService.getAllStatements(1);
+        const { data, openData } = await TransactionService.getAllTransaction(
+          userId as string,
+          limit
+        );
         setActivityData(data);
-        setLoading(false);
+        setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
         setSuccessMessage("Activity data fetched successfully");
       } catch (err) {
         setErrorMessage("Error fetching activity data");
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
-    setTimeout(() => {
-      fetchActivityData();
-    }, 1000);
-  }, [setErrorMessage, setLoading, setSuccessMessage]);
+    fetchActivityData();
+  }, [setErrorMessage, setLoading, setSuccessMessage, userId, limit]);
 
-  if (loading) {
+  if (loading && activityData.length === 0) {
     return (
       <div className="flex justify-center items-center">
         <span>Loading...</span>
@@ -41,11 +49,15 @@ function RouteComponent() {
   }
 
   return (
-    <div className="pt-5">
+    <div className="pt-5 mb-24">
       <div className="mt-6 mb-4 flex flex-row justify-between items-center">
         <div>
           <span className="text-gray-600 mr-2">Filter by:</span>
-          <select className="border rounded px-3 py-1">
+          <select
+            className="border rounded px-3 py-1 cursor-pointer"
+            value={filterByTime}
+            onChange={(e) => setFilterByTime(e.target.value)}
+          >
             <option value="all">All</option>
             <option value="7days">7 days</option>
             <option value="1m">1 month</option>
@@ -58,7 +70,18 @@ function RouteComponent() {
         </div>
       </div>
 
-      <ActivityDataTable mockData={activityData} />
+      <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
+      {activityData.length === limit ? (
+        <div
+          className="flex items-center justify-center py-4 gap-2 cursor-pointer hover:text-blue-400 text-blue-500 duration-300"
+          onClick={() => {
+            setLimit((prevLimit) => prevLimit + 10);
+          }}
+        >
+          <span className="text-sm">View more</span>
+          <ArrowDown className="h-6 w-5" />
+        </div>
+      ) : null}
     </div>
   );
 }
