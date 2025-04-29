@@ -6,6 +6,7 @@ import { ActivityData } from "../../types/entities/transaction.entity";
 import { useAuth } from "../../contexts/AuthContext";
 import TransactionService from "../../services/transaction.service";
 import { ArrowDown } from "lucide-react";
+import GenerateStatement from "../../components/activity/GenerateStatement";
 
 export const Route = createFileRoute("/home/activity")({
   component: RouteComponent,
@@ -65,9 +66,7 @@ function RouteComponent() {
             <option value="1yr">1 year</option>
           </select>
         </div>
-        <div className="cursor-pointer text-blue-700 hover:text-blue-500">
-          <span className="text-sm">Generate Statement</span>
-        </div>
+        <GenerateStatement />
       </div>
 
       <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
