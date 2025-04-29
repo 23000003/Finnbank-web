@@ -2,6 +2,7 @@ import React, { useEffect, useState, createContext, useContext } from "react";
 import { AuthContextType } from "../types/interfaces/auth-context.interface";
 import { jwtDecode } from "jwt-decode";
 import { AuthService } from "../services/auth.service";
+import { AxiosError } from "axios";
 
 const Auth = createContext<AuthContextType>({
   loading: true,
@@ -28,20 +29,30 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     const token = localStorage.getItem("token");
     const name = localStorage.getItem("username");
     const userId = localStorage.getItem("userId");
-    const tokenExp = localStorage.getItem("tokenExp");
 
-    if (token && name && userId && tokenExp) {
+    if (token && name && userId) {
       setIsAuthenticated(true);
       setUsername(name);
       setUserId(userId);
-      setTokenExp(Number(tokenExp));
+      try {
+        const { exp } = jwtDecode<TokenDecoded>(token);
+        setTokenExp(exp);
+        console.log(exp, "EXP");
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        logout();
+      }
+      console.log("HERE");
     }
 
+    console.log("Token Exp:", tokenExp);
     setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log(email, password);
       const data = await AuthService.login(email, password);
       const { access_token: token, full_name: name, account_id: userId } = data;
@@ -50,7 +61,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       localStorage.setItem("token", token);
       localStorage.setItem("username", name);
       localStorage.setItem("userId", userId);
-      localStorage.setItem("tokenExp", String(exp));
 
       setTokenExp(exp);
       setIsAuthenticated(true);
@@ -59,7 +69,12 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
+      if ((err as AxiosError).status === 400) {
+        throw new Error("Somethings wrong.");
+      }
       throw new Error("User does not exists.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,7 +82,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("userId");
-    localStorage.removeItem("tokenExp");
     // remove from localstorage
     setIsAuthenticated(false);
     setUsername(null);

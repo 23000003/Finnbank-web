@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import ChangePass from "../../../components/profile/ChangePass";
-import ChangePinNumber from "../../../components/profile/ChangePinNumber";
+import ChangePass from "../../../components/profile/settings/ChangePass";
+import ChangePin from "../../../components/profile/settings/ChangePin";
 
 export const Route = createFileRoute("/home/profile/settings")({
   component: RouteComponent,
@@ -32,7 +32,7 @@ function RouteComponent() {
       </div>
 
       <ChangePass isOpen={isPasswordModalOpen} onClose={() => setPasswordModalOpen(false)} />
-      <ChangePinNumber isOpen={isChangePinModalOpen} onClose={() => setChangePinModalOpen(false)} />
+      <ChangePin isOpen={isChangePinModalOpen} onClose={() => setChangePinModalOpen(false)} />
     </div>
   );
 }

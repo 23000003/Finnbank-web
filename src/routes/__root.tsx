@@ -12,14 +12,20 @@ export const Route = createRootRoute({
   beforeLoad: ({ context, location }) => {
     const { auth } = context as Context;
 
+    console.log("TEST");
+
     if (auth.loading) {
       return;
     }
 
+    console.log("Auth loading complete", auth);
+    console.log(auth.tokenExp, "HEY");
     if (auth.tokenExp) {
       const tokenExp = new Date(auth.tokenExp * 1000);
+      console.log("Token expiredqweqweqw, logging out...");
       const now = new Date();
       if (tokenExp < now) {
+        console.log("Token expired, logging out...");
         auth.logout();
         return;
       }
