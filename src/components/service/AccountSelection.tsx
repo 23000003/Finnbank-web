@@ -19,8 +19,6 @@ const AccountSelection: React.FC<AccountSelectionProps> = ({
       <div className="flex flex-col gap-4">
         {accounts.map((account) => {
           if (account.account_type.toUpperCase() === "CHECKING") return null;
-          console.log("HERE");
-          console.log(selectedAccount?.account_type === account.account_type);
           return (
             <div
               key={account.account_type}

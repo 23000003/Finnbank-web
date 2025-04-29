@@ -1,5 +1,5 @@
 // import React from 'react'
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import notif from "../../../assets/notif.svg";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -70,6 +70,12 @@ export default HomeNavbar;
 
 const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, username }) => {
   const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    setToggle(null);
+    navigate({ to: "/welcome", replace: true });
+  };
 
   return (
     <div className="flex items-center w-full gap-6 justify-end">
@@ -104,7 +110,7 @@ const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, u
               </Link>
               <span
                 className="text-red-500 hover:text-red-300 duration-300 cursor-pointer"
-                onClick={logout}
+                onClick={handleLogout}
               >
                 Logout
               </span>
