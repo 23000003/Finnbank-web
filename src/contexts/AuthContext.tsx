@@ -49,6 +49,8 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   const login = async (email: string, password: string) => {
     try {
       console.log(email, password);
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const data = await AuthService.login(email, password);
       const { access_token: token, full_name: name, account_id: userId } = data;
       const { exp } = jwtDecode<TokenDecoded>(token);

@@ -1,10 +1,12 @@
 import { Bankcard } from "../../types/entities/bankcard.entity";
 import { hideAccountNumber } from "../../utils/hide-account-number";
 import { motion } from "framer-motion";
-import { useNavigate } from "@tanstack/react-router";
+import { Dialog } from "@headlessui/react";
+import { useState } from "react";
+import ChangePinModal from "../settings/ChangePinModal";
 
 const WalletCardInfo: React.FC<{ viewBankcard: Bankcard }> = ({ viewBankcard }) => {
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   const formatDate = (date: string): string => {
     const parsedDate = new Date(date);
@@ -70,7 +72,7 @@ const WalletCardInfo: React.FC<{ viewBankcard: Bankcard }> = ({ viewBankcard }) 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          onClick={() => navigate({ to: "/home/profile/settings" })}
+          onClick={() => setIsOpen(true)}
         >
           Change Pin
         </motion.div>
@@ -83,6 +85,21 @@ const WalletCardInfo: React.FC<{ viewBankcard: Bankcard }> = ({ viewBankcard }) 
           🔒 For security reasons, please don't share your card details with anyone.
         </motion.div>
       </div>
+      {/* Change pin modal */}
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center">
+          <Dialog.Panel className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <ChangePinModal
+              selectedCard={{
+                cardNumber: viewBankcard.card_number,
+                cardId: viewBankcard.bankcard_id,
+              }}
+              handleClose={() => setIsOpen(false)}
+            />
+          </Dialog.Panel>
+        </div>
+      </Dialog>
     </motion.div>
   );
 };
