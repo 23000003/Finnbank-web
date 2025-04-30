@@ -1,40 +1,32 @@
-import { LoginResponse, PersonalData } from "../types/user.types";
+import { PersonalData } from "../types/entities/account.entity";
 import { api } from "../configs/axios";
+import { AccountStatusEnum, AccountTypeEnum } from "../types/enums/account.enum";
 
 export class AccountService {
   private static prefix: string = "/account";
-  static async login(email: string, password: string) {
+  static async getAccountPersonalData(userId: string) {
     try {
       const data = await api
-        .post<LoginResponse>(`${this.prefix}/login`, {
-          email,
-          password,
+        .get(`${this.prefix}/get-user-by-id/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
         })
-        .then((res) => res.data);
-      return data;
-    } catch (err) {
-      console.error("Error logging in:", err);
-      throw err;
-    }
-  }
-  static async getAccountPersonalData(userId: number) {
-    try {
-      console.log(userId);
-      const data: PersonalData = {
-        fullName: "John Doe",
-        email: "johndoe@example.com",
-        phoneNumber: "+1234567890",
-        address: "123 Fake Street, Springfield",
-        dateCreated: "2023-01-01",
-        accountNumber: "1234567891568422",
-        nationalIdNumber: "9876543212473412",
-        birthDate: "2005-01-01",
-        nationality: "American",
-        accountStatus: "Active",
-        accountType: "Personal",
+        .then((res) => res.data.data);
+      const personalData: PersonalData = {
+        fullName: ((data.first_name as string) + " " + data.last_name) as string,
+        email: data.email as string,
+        phoneNumber: data.phone_number as string,
+        address: data.address as string,
+        dateCreated: data.date_created as string,
+        accountNumber: data.account_number as string,
+        nationalIdNumber: data.national_id as string,
+        birthDate: data.birthdate as string,
+        nationality: data.nationality as string,
+        accountStatus: data.account_status as AccountStatusEnum,
+        accountType: data.account_type as AccountTypeEnum,
       };
-
-      return data;
+      return personalData;
     } catch (err) {
       console.error("Error fetching account personal data:", err);
       throw err;

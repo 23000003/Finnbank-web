@@ -1,19 +1,23 @@
+import { AccountStatusEnum, AccountTypeEnum } from "../../types/enums/account.enum";
+
 type AccountOptionsProps = {
   nationality: string;
   accountNumber: string;
   nationalIdNumber: string;
-  accountStatus: string;
-  accountType: string;
+  accountStatus: AccountStatusEnum;
+  accountType: AccountTypeEnum;
   birthdate: string;
 };
 
-const AccountInformation: React.FC<AccountOptionsProps> = (props: AccountOptionsProps) => {
-  const { nationalIdNumber, accountNumber, nationality, accountStatus, accountType, birthdate } =
-    props;
-
-  // prevent error, will use this for close/open account
-  console.log(accountStatus);
-
+const AccountInformation: React.FC<AccountOptionsProps> = ({
+  nationalIdNumber,
+  accountNumber,
+  accountStatus,
+  accountType,
+  birthdate,
+  nationality,
+}) => {
+  console.log("Status", accountStatus);
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-xl font-semibold">Account Options</h1>
@@ -23,30 +27,39 @@ const AccountInformation: React.FC<AccountOptionsProps> = (props: AccountOptions
         {/* Timezone Dropdown */}
         <TimezoneDropdown />
         {/* Info */}
-        <div className="flex flex-col gap-1 mt-4">
-          <span className="text-xs text-gray-500 font-semibold">Account Type</span>
-          <span className="text-sm font-semibold">{accountType}</span>
-        </div>
-        <div className="flex flex-col gap-1 mt-2">
-          <span className="text-xs text-gray-500 font-semibold">Account Number</span>
-          <span className="text-sm font-semibold">{accountNumber}</span>
-        </div>
-        <div className="flex flex-col gap-1 mt-2">
-          <span className="text-xs text-gray-500 font-semibold">Birthdate</span>
-          <span className="text-sm font-semibold">{birthdate}</span>
-        </div>
-        <div className="flex flex-col gap-1 mt-4">
-          <span className="text-xs text-gray-500 font-semibold">Nationality</span>
-          <span className="text-sm font-semibold">{nationality}</span>
-        </div>
-        <div className="flex flex-col gap-1 mt-2">
-          <span className="text-xs text-gray-500 font-semibold">National ID No.</span>
-          <span className="text-sm font-semibold">{nationalIdNumber}</span>
-        </div>
-        {/* Close account */}
-        <button className="flex items-center justify-center gap-2 border-red-500 border text-red-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-6">
-          <span>Close your account</span>
-        </button>
+        {[
+          { label: "Account Type", value: accountType },
+          { label: "Account Number", value: accountNumber },
+          { label: "Birthdate", value: birthdate },
+          { label: "Nationality", value: nationality },
+          { label: "National ID No.", value: nationalIdNumber },
+        ].map(({ label, value }) => (
+          <div key={label} className="flex flex-col gap-1 mt-2">
+            <span className="text-xs text-gray-500 font-semibold">{label}</span>
+            <span className="text-sm font-semibold">
+              {label === "Birthdate" ? new Date(value).toLocaleDateString() : value}
+            </span>
+          </div>
+        ))}
+        {accountStatus === AccountStatusEnum.ACTIVE ? (
+          <button
+            className="
+          flex items-center justify-center gap-2 border-red-500 border
+         text-red-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-
+        "
+          >
+            <span>Close your account</span>
+          </button>
+        ) : (
+          <button
+            className="
+          flex items-center justify-center gap-2 border-green-500 border
+         text-green-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-6
+        "
+          >
+            <span>Reactivate your account</span>
+          </button>
+        )}
       </div>
     </div>
   );

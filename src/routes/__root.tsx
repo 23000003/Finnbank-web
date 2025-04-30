@@ -1,44 +1,44 @@
-import { createRootRoute, redirect, useLocation, useRouter } from "@tanstack/react-router";
+import { createRootRoute, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
 import LandingLayout from "../components/layout/LandingLayout";
 import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
-import { Context } from "../types/contexts.types";
 import { useAuth } from "../contexts/AuthContext";
 import AuthLayout from "../components/layout/AuthLayout";
+import { useEffect } from "react";
+import { isTokenExpired } from "../utils/validate-token-expiry";
+import { Context } from "../types/interfaces/auth-context.interface";
 
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  beforeLoad: ({ context, location }) => {
+  errorComponent: ErrorComponent,
+  beforeLoad: async ({ context }) => {
     const { auth } = context as Context;
-
-    if (auth.tokenExp) {
-      const tokenExp = new Date(auth.tokenExp * 1000);
-      const now = new Date();
-      if (tokenExp < now) {
-        auth.logout();
-        return;
+    // validate session without refreshing the page
+    if (auth.isAuthenticated && auth.tokenExp) {
+      if (isTokenExpired(auth.tokenExp)) {
+        console.log("Token expired");
+        await auth.logout();
       }
     }
-
-    // redirect to dashboard if authenticated
-    if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
-      throw redirect({
-        to: "/home/dashboard",
-      });
-      // redirect to welcome (landing page) if not authenticated
-    } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
-      throw redirect({
-        to: "/welcome",
-      });
-    }
-
-    return { auth };
   },
 });
 
 function RootComponent() {
-  const { isAuthenticated } = useAuth();
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (auth.loading) {
+      return;
+    }
+    if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
+      navigate({ to: "/home/dashboard", replace: true });
+    } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
+      navigate({ to: "/welcome", replace: true });
+    }
+  }, [auth, navigate, location]);
 
   const IsAtAuthPage = () => {
     const loc = useLocation();
@@ -50,7 +50,7 @@ function RootComponent() {
 
   return (
     <>
-      {isAuthenticated ? <HomeLayout /> : IsAtAuthPage()}
+      {auth.isAuthenticated ? <HomeLayout /> : IsAtAuthPage()}
       <ToastContainer autoClose={3000} />
     </>
   );
@@ -60,4 +60,8 @@ function NotFoundComponent() {
   const router = useRouter();
   router.history.back();
   return <></>;
+}
+
+function ErrorComponent() {
+  return <div>Something went wrong</div>;
 }

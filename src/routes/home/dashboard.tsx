@@ -1,129 +1,105 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { OpenedAccountService } from "../../services/opened-account.service";
-
+import { AccountCard } from "../../components/component/accountcard";
+import { useEffect, useState } from "react";
+import { OpenedAccount } from "../../types/entities/opened-account.entity";
+import { showToast } from "../../utils/toast";
+import { ActivityData } from "../../types/entities/transaction.entity";
+import { useAuth } from "../../contexts/AuthContext";
+import TransactionService from "../../services/transaction.service";
+import ActivityDataTable from "../../components/activity/ActivityDataTable";
 export const Route = createFileRoute("/home/dashboard")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  // Test Api call to golang backend
-  const handleGetAll = async () => {
-    try {
-      const data = await OpenedAccountService.getAllOpenedAccountsOfUser(2);
-      console.log("Opened accounts:", data);
-    } catch (error) {
-      console.error("Error fetching opened accounts:", error);
-    }
-  };
+  const [accounts, setAccounts] = useState<OpenedAccount[]>([]);
+  const [activityData, setActivityData] = useState<ActivityData[]>([]);
+  const [openedAccountIds, setOpenedAccountIds] = useState<number[]>([]);
+  const [limit] = useState(5);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { userId } = useAuth();
 
-  const handleCreate = async () => {
-    try {
-      const data = await OpenedAccountService.createOpenedAccount(1, 1000, "savings");
-      console.log("Created account:", data);
-    } catch (error) {
-      console.error("Error creating opened account:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchedAccounts = async () => {
+      try {
+        const { data, openData } = await TransactionService.getAllTransaction(
+          userId as string,
+          limit
+        );
+        const accData = await OpenedAccountService.getAllOpenedAccountsOfUser(userId as string);
+        setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
+        setAccounts(accData);
+        setActivityData(data);
+      } catch (error) {
+        console.error("Error fetching opened accounts: ", error);
+        showToast.error("Error fetching opened accounts");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchedAccounts();
+  }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center">
+        <svg
+          className="animate-spin h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+          ></path>
+        </svg>
+      </div>
+    );
+  }
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
-      {/* <h1 className="text-2xl font-bold underline">Dashboard</h1>
-
-      <input
-        type="text"
-        placeholder="finnbank ads"
-        className="w-full p-3 border border-gray-300 rounded"
-      /> */}
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Checking Account */}
-        <div className="bg-white p-4 rounded shadow">
-          <div className="flex justify-between items-center text-blue-700 font-semibold">
-            <span>Checking Account</span>
-            <span className="text-sm text-gray-500">this is debit</span>
-            <button className="text-sm text-blue-600 underline">View card</button>
-          </div>
-          <p className="text-2xl font-bold my-4">696969.00</p>
-          <p className="text-gray-600">Balance</p>
-          <div className="mt-4 text-sm text-blue-600 space-x-4">
-            <span>Deposit</span>
-            <span>|</span>
-            <span>Transfer</span>
-            <span>|</span>
-            <span>Pay Bills</span>
-          </div>
-        </div>
-
-        {/* Credit Account */}
-        <div className="bg-white p-4 rounded shadow">
-          <div className="flex justify-between items-center text-blue-700 font-semibold">
-            <span>Credit Account</span>
-            <button className="text-sm text-blue-600 underline">View card</button>
-          </div>
-          <p className="text-2xl font-bold my-4">696969.00</p>
-          <p className="text-gray-600">Balance</p>
-          <div className="mt-4 text-sm text-blue-600 space-x-4">
-            <span>Loan</span>
-            <span>|</span>
-            <span>Pay Bills</span>
-          </div>
-        </div>
-
-        {/* Savings */}
-        <div className="bg-white p-4 rounded shadow">
-          <div className="flex justify-between items-center text-blue-700 font-semibold">
-            <span>Savings</span>
-          </div>
-          <p className="text-2xl font-bold my-4">696969.00</p>
-          <p className="text-gray-600">Balance</p>
-          <div className="mt-4 text-sm text-blue-600 space-x-4">
-            <span>Deposit</span>
-            <span>|</span>
-            <span>Transfer</span>
-          </div>
-        </div>
+        {accounts.map((account) => (
+          <AccountCard
+            key={account.openedaccount_id}
+            accountType={account.account_type}
+            balance={account.balance}
+            status={account.openedaccount_status}
+            userId={account.account_number}
+            accountId={account.openedaccount_id}
+            bankCardId={account.bankcard_id}
+          />
+        ))}
       </div>
 
-      {/* Recent Activity */}
       <div className="bg-white p-4 rounded shadow">
         <div className="flex justify-between items-center mb-2">
           <h2 className="font-semibold">Recent activity</h2>
-          <button className="text-blue-600 text-sm">View all</button>
+          <button
+            className="text-blue-600 text-sm hover:underline font-semibold"
+            onClick={() => navigate({ to: `/home/activity` })}
+          >
+            View all
+          </button>
         </div>
-        <p className="text-gray-500 italic">No recent activity to show.</p>
-      </div>
-
-      {/* Optional Debug Buttons */}
-      <div className="pt-4">
-        <button
-          onClick={handleGetAll}
-          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer mr-2"
-        >
-          Get All
-        </button>
-        <button
-          onClick={handleCreate}
-          className="bg-green-500 text-white px-4 py-2 rounded cursor-pointer"
-        >
-          Create
-        </button>
+        {activityData.length > 0 ? (
+          <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
+        ) : (
+          <p className="text-gray-500 italic">No recent activity to show.</p>
+        )}
       </div>
     </div>
   );
-  // return (
-  //   <div>
-  //     <button
-  //       onClick={handleGetAll}
-  //       className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
-  //     >
-  //       Get All
-  //     </button>
-  //     <button
-  //       onClick={handleCreate}
-  //       className="bg-green-500 text-white px-4 py-2 rounded ml-2 cursor-pointer"
-  //     >
-  //       Create
-  //     </button>
-  //   </div>
-  // );
 }

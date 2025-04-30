@@ -2,9 +2,10 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { showToast } from "../../utils/toast";
+import { getInputBorderClass } from "../../utils/input-error";
 
 const LoginForm: React.FC = () => {
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,22 +19,15 @@ const LoginForm: React.FC = () => {
       showToast.error("Please fill in all fields");
       return;
     }
-
     await login(email, password)
       .then(() => {
         showToast.success("Login successful");
+        console.log("Login OK");
         navigate({ to: "/home/dashboard", replace: true });
       })
       .catch((error) => {
         showToast.error(error.message);
       });
-  };
-
-  // Turn input field to red if empty (helper fn)
-  const getInputBorderClass = (value: string) => {
-    return hasSubmitted && !value
-      ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
   };
 
   return (
@@ -49,7 +43,7 @@ const LoginForm: React.FC = () => {
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(email)}`}
+          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(email, hasSubmitted)}`}
         />
         {hasSubmitted && !email && <p className="text-sm text-red-600">Email is required</p>}
       </div>
@@ -65,7 +59,7 @@ const LoginForm: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
-          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(password)}`}
+          className={`w-full px-4 py-2 border rounded-md ${getInputBorderClass(password, hasSubmitted)}`}
         />
         {hasSubmitted && !password && <p className="text-sm text-red-600">Password is required</p>}
       </div>
@@ -86,13 +80,42 @@ const LoginForm: React.FC = () => {
           Forgot password?
         </Link>
       </div>
-
-      {/* Sign in button */}
       <button
+        className={`px-4 py-2 rounded-lg shadow-sm w-full cursor-pointer ${
+          loading
+            ? "bg-blue-300 text-white cursor-not-allowed"
+            : "bg-blue-500 text-white hover:bg-blue-600"
+        }`}
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+        disabled={loading}
       >
-        Sign In
+        {loading ? (
+          // Loading spinner copied from uiverse
+          <div className="flex items-center justify-center">
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+          </div>
+        ) : (
+          "Login"
+        )}
       </button>
     </form>
   );
