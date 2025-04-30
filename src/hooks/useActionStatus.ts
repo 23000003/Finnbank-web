@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { showToast } from "../utils/toast";
 
-export default function useActionStatus() {
-  const [loading, setLoading] = useState(true);
+export default function useActionStatus(loadingState: boolean) {
+  const [loading, setLoading] = useState(loadingState);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (loading) {
-      showToast.loading("Loading...");
-    }
-  }, [loading]);
 
   useEffect(() => {
     if (errorMessage) {

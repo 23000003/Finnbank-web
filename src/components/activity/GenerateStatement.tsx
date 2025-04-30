@@ -4,7 +4,7 @@ import DownloadStatementButton from "./DownloadStatementButton";
 import useActionStatus from "../../hooks/useActionStatus";
 
 const GenerateStatement: React.FC = () => {
-  const { setErrorMessage, setSuccessMessage } = useActionStatus();
+  const { setErrorMessage, setSuccessMessage } = useActionStatus(false);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
@@ -12,7 +12,7 @@ const GenerateStatement: React.FC = () => {
   const handleGenerateStatement = async () => {
     setIsGenerating(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const buffer = await StatementService.getAllStatements({
         creditId: 1,

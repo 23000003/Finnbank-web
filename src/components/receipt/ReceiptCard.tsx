@@ -113,9 +113,7 @@ const ReceiptCard: React.FC<ReceiptCardProps> = ({ activityData, accountNums }) 
           )}
         </div>
       </div>
-      <div className="bg-gray-50 p-4 border-t border-gray-100 text-center">
-        <p className="text-gray-500 text-sm">Transaction ID: {activityData.transaction_id}</p>
-      </div>
+      <div className="bg-gray-50 p-4 border-t border-gray-100 text-center"></div>
     </div>
   );
 };

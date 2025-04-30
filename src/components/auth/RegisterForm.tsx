@@ -88,10 +88,15 @@ const RegisterForm: React.FC = () => {
             <label className="text-sm font-medium text-gray-600">Phone Number</label>
             <input
               className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              type="text"
+              type="tel"
               placeholder="Phone Number"
               value={formData.phoneNumber}
-              onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+              maxLength={11}
+              pattern="[0-9]{11}"
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "").slice(0, 11);
+                setFormData({ ...formData, phoneNumber: value });
+              }}
             />
             <label className="text-sm font-medium text-gray-600">Country</label>
             <input
@@ -178,7 +183,7 @@ const RegisterForm: React.FC = () => {
         {currentStep > 1 && (
           <button
             type="button"
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-400"
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-400 cursor-pointer"
             onClick={prevStep}
             disabled={isLoading}
           >
@@ -187,7 +192,7 @@ const RegisterForm: React.FC = () => {
         )}
         {currentStep < 4 && (
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 cursor-pointer"
             onClick={handleNext}
             disabled={isLoading}
           >
@@ -196,7 +201,7 @@ const RegisterForm: React.FC = () => {
         )}
         {currentStep === 4 && (
           <button
-            className={`px-4 py-2 rounded-lg shadow-sm ${
+            className={`px-4 py-2 rounded-lg shadow-sm cursor-pointer ${
               isLoading
                 ? "bg-blue-300 text-white cursor-not-allowed"
                 : "bg-blue-500 text-white hover:bg-blue-600"
