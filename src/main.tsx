@@ -42,3 +42,69 @@ if (!rootElement.innerHTML) {
     </StrictMode>
   );
 }
+
+// import { createRootRoute, redirect, useLocation, useNavigate, useRouter } from "@tanstack/react-router";
+// import LandingLayout from "../components/layout/LandingLayout";
+// import HomeLayout from "../components/layout/HomeLayout";
+// import { ToastContainer } from "react-toastify";
+// import { useAuth } from "../contexts/AuthContext";
+// import AuthLayout from "../components/layout/AuthLayout";
+// import { useEffect } from "react";
+
+// export const Route = createRootRoute({
+//   component: RootComponent,
+//   notFoundComponent: NotFoundComponent,
+//   // onEnter: ({ context }) => {
+//   //   const { auth } = context as Context;
+//   //   // check if token is expired
+//   //   console.log(auth.isAuthenticated, "ON ENTER")
+//   //   console.log(auth.loading, "LOADING  ON ENTER");
+//   // },
+// });
+
+// function RootComponent() {
+//   const auth = useAuth();
+//   const navigate = useNavigate()
+//   const location = useLocation();
+//   useEffect(() => {
+//     if (auth.loading) {
+//       return;
+//     }
+//     // redirect to dashboard if authenticated
+//     if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
+//       console.log("redirecting to dashboard");
+//       navigate({
+//         to: "/home/dashboard",
+//         replace: true,
+//       });
+//       // redirect to welcome (landing page) if not authenticated
+//     } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
+//       console.log("redirecting to welcome");
+//       navigate({
+//         to: "/welcome",
+//         replace: true,
+//       });
+//     }
+//   }, [auth, navigate, location])
+
+//   const IsAtAuthPage = () => {
+//     const loc = useLocation();
+//     if (loc.pathname.startsWith("/welcome/sign")) {
+//       return <AuthLayout />;
+//     }
+//     return <LandingLayout />;
+//   };
+
+//   return (
+//     <>
+//       {auth.isAuthenticated ? <HomeLayout /> : IsAtAuthPage()}
+//       <ToastContainer autoClose={3000} />
+//     </>
+//   );
+// }
+
+// function NotFoundComponent() {
+//   const router = useRouter();
+//   router.history.back();
+//   return <></>;
+// }

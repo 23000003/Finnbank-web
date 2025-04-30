@@ -2,6 +2,7 @@ import React, { useEffect, useState, createContext, useContext } from "react";
 import { AuthContextType } from "../types/interfaces/auth-context.interface";
 import { jwtDecode } from "jwt-decode";
 import { AuthService } from "../services/auth.service";
+import { isTokenExpired } from "../utils/validate-token-expiry";
 
 const Auth = createContext<AuthContextType>({
   loading: true,
@@ -28,21 +29,28 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     const token = localStorage.getItem("token");
     const name = localStorage.getItem("username");
     const userId = localStorage.getItem("userId");
-    const tokenExp = localStorage.getItem("tokenExp");
 
-    if (token && name && userId && tokenExp) {
-      setIsAuthenticated(true);
+    if (token && name && userId) {
+      const { exp } = jwtDecode<TokenDecoded>(token);
+      setTokenExp(exp);
       setUsername(name);
       setUserId(userId);
-      setTokenExp(Number(tokenExp));
+      if (!isTokenExpired(Number(tokenExp))) {
+        console.log("Token is valid");
+        setIsAuthenticated(true);
+      } else {
+        console.log("Token expired");
+        logout();
+      }
     }
-
     setLoading(false);
-  }, []);
+  }, [tokenExp]);
 
   const login = async (email: string, password: string) => {
     try {
       console.log(email, password);
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const data = await AuthService.login(email, password);
       const { access_token: token, full_name: name, account_id: userId } = data;
       const { exp } = jwtDecode<TokenDecoded>(token);
@@ -50,7 +58,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       localStorage.setItem("token", token);
       localStorage.setItem("username", name);
       localStorage.setItem("userId", userId);
-      localStorage.setItem("tokenExp", String(exp));
 
       setTokenExp(exp);
       setIsAuthenticated(true);
@@ -67,13 +74,10 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("userId");
-    localStorage.removeItem("tokenExp");
-    // remove from localstorage
     setIsAuthenticated(false);
     setUsername(null);
     setUserId(null);
     setTokenExp(null);
-    window.location.reload();
     return true;
   };
 
