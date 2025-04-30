@@ -94,11 +94,7 @@ function RouteComponent() {
             View all
           </button>
         </div>
-        {activityData.length > 0 ? (
-          <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
-        ) : (
-          <p className="text-gray-500 italic">No recent activity to show.</p>
-        )}
+        <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
       </div>
     </div>
   );
