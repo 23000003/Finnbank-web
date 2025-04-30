@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import logo from "../../../assets/finnbank-logo.png";
 
-const LandingNavbar: React.FC = () => {
+export default function LandingNavbar() {
   return (
-    <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
+    <nav className="bg-blue-500 sticky top-0 z-50 text-white px-4 md:px-12 lg:px-24">
       <div className="flex flex-wrap items-center justify-between h-16 mx-auto max-w-screen-2xl">
         <div className="flex items-center gap-3">
           <img src={logo} alt="finnbank-logo" className="h-12 w-16" />
@@ -26,6 +26,4 @@ const LandingNavbar: React.FC = () => {
       </div>
     </nav>
   );
-};
-
-export default LandingNavbar;
+}
