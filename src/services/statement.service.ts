@@ -28,9 +28,6 @@ export default class StatementService {
             start_date: data.startDate,
             end_date: data.endDate,
           },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
         })
         .then((res) => res.data.data);
       console.log(res);
