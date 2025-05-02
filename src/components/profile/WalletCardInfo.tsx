@@ -68,7 +68,8 @@ const WalletCardInfo: React.FC<{ viewBankcard: Bankcard }> = ({ viewBankcard }) 
       </div>
       <div className="w-full space-y-4">
         <motion.div
-          className="p-3 bg-red-50 rounded-lg text-sm text-red-700 text-center cursor-pointer hover:bg-red-100 duration-300 hover:text-red-400"
+          className="p-3 text-sm text-center border border-red-500 text-red-300 font-semibold py-2 px-4 rounded-lg  cursor-pointer 
+                    hover:bg-red-500 hover:text-white active:bg-red-300 text-red-700 font-semibold py-2 px-4 rounded-lg transition duration-200"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
