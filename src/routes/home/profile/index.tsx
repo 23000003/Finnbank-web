@@ -5,6 +5,11 @@ import InfoCard from "../../../components/profile/InfoCard";
 import { useProfileData } from "../../../hooks/useProfileData";
 import { useAuth } from "../../../contexts/AuthContext";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { UpdateInfoForm } from "../../../components/profile/ChangeAccountDetails";
+import { AccountService } from "../../../services/account.service";
+import { showToast } from "../../../utils/toast";
+import { UpdateUserForm } from "../../../components/profile/UpdateAccount";
 
 export const Route = createFileRoute("/home/profile/")({
   component: RouteComponent,
@@ -13,6 +18,33 @@ export const Route = createFileRoute("/home/profile/")({
 function RouteComponent() {
   const { userId } = useAuth();
   const { infoCardContent, loading, profileData } = useProfileData(userId as string);
+  const [editingInfo, setEditingInfo] = useState<{
+    type: "Emails" | "Phone Numbers" | "Addresses";
+    value: string;
+  } | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleUpdate = async (
+    type: "Emails" | "Phone Numbers" | "Addresses",
+    updatedValue: string
+  ) => {
+    console.log(`Updating ${type} with value: ${updatedValue}`);
+    try {
+      const backendType = {
+        Emails: "Email",
+        "Phone Numbers": "Phone",
+        Addresses: "Address",
+      }[type] as "Email" | "Phone" | "Address";
+
+      await AccountService.updateUserDetails(userId as string, backendType, updatedValue);
+      console.log(`Successfully updated ${type} to ${updatedValue}`);
+      showToast.success("Update Sucessfull");
+      setEditingInfo(null);
+    } catch (err) {
+      console.error("Error updating user details:", err);
+      showToast.error("Update Failed");
+    }
+  };
 
   if (loading) {
     return (
@@ -35,6 +67,7 @@ function RouteComponent() {
             fullName={profileData.fullName}
             dateCreated={profileData.dateCreated}
             accountStatus={profileData.accountStatus}
+            onEdit={() => setIsEditing(true)}
           />
           <AccountInformation
             nationalIdNumber={profileData.nationalIdNumber}
@@ -58,10 +91,35 @@ function RouteComponent() {
               key={index}
               type={info.type as "Emails" | "Phone Numbers" | "Addresses"}
               value={info.value}
+              onEdit={(type, value) => setEditingInfo({ type, value })}
             />
           ))}
         </motion.div>
       </div>
+      {editingInfo && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <UpdateInfoForm
+            type={editingInfo.type}
+            value={editingInfo.value}
+            onUpdate={handleUpdate}
+            onClose={() => setEditingInfo(null)}
+          />
+        </div>
+      )}
+      {isEditing && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <UpdateUserForm
+            userID={userId as string}
+            firstName={profileData.firstName}
+            middleName={profileData.middleName}
+            lastName={profileData.lastName}
+            email={profileData.email}
+            phone={profileData.phoneNumber}
+            address={profileData.address}
+            onClose={() => setIsEditing(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }

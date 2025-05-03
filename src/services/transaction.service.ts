@@ -17,9 +17,6 @@ export default class TransactionService {
             savings: openData[2].openedaccount_id,
             limit: limit,
           },
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
         })
         .then((res) => res.data.data);
       console.log(data);
@@ -31,22 +28,14 @@ export default class TransactionService {
   }
   static async createTransaction(data: PostTransaction) {
     try {
-      const response = await api.post(
-        `${this.prefix}/generate-transaction`,
-        {
-          sender_id: data.sender_id,
-          receiver_id: data.receiver_id,
-          transaction_type: data.transaction_type,
-          amount: data.amount,
-          transaction_fee: data.transaction_fee,
-          notes: data.notes,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await api.post(`${this.prefix}/generate-transaction`, {
+        sender_id: data.sender_id,
+        receiver_id: data.receiver_id,
+        transaction_type: data.transaction_type,
+        amount: data.amount,
+        transaction_fee: data.transaction_fee,
+        notes: data.notes,
+      });
       console.log(response);
       return response.data;
     } catch (error) {

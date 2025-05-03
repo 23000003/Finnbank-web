@@ -2,6 +2,9 @@ import { AccountStatusEnum, AccountTypeEnum } from "../enums/account.enum";
 
 export type PersonalData = {
   fullName: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   address: string;

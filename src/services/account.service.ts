@@ -7,14 +7,13 @@ export class AccountService {
   static async getAccountPersonalData(userId: string) {
     try {
       const data = await api
-        .get(`${this.prefix}/get-user-by-id/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        })
+        .get(`${this.prefix}/get-user-by-id/${userId}`)
         .then((res) => res.data.data);
       const personalData: PersonalData = {
         fullName: ((data.first_name as string) + " " + data.last_name) as string,
+        firstName: data.first_name as string,
+        middleName: data.middle_name as string,
+        lastName: data.last_name as string,
         email: data.email as string,
         phoneNumber: data.phone_number as string,
         address: data.address as string,
@@ -30,6 +29,62 @@ export class AccountService {
     } catch (err) {
       console.error("Error fetching account personal data:", err);
       throw err;
+    }
+  }
+  static async updateUser(
+    userID: string,
+    firstName: string,
+    middleName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    address: string
+  ) {
+    try {
+      const data = await api
+        .patch(`${this.prefix}/update-user`, {
+          account_id: userID,
+          first_name: firstName,
+          middle_name: middleName,
+          last_name: lastName,
+          email,
+          phone,
+          address,
+        })
+        .then((res) => res.data);
+      window.location.reload();
+      return data;
+    } catch (err) {
+      console.error("Error updating :", err);
+      throw err;
+    }
+  }
+  static async updateUserDetails(
+    userID: string,
+    type: "Email" | "Phone" | "Address",
+    value: string
+  ) {
+    try {
+      const payload: {
+        account_id: string;
+        type: string;
+        email?: string;
+        phone?: string;
+        address?: string;
+      } = {
+        account_id: userID,
+        type,
+      };
+      if (type === "Email") payload.email = value;
+      if (type === "Phone") payload.phone = value;
+      if (type === "Address") payload.address = value;
+      console.log("Payload being sent to backend:", payload);
+      const data = await api.patch(`${this.prefix}/update-user-details`, payload);
+      window.location.reload();
+      return data;
+    } catch (error) {
+      console.error("Error updating :", error);
+      throw error;
     }
   }
 }

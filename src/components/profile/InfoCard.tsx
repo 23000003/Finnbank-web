@@ -1,9 +1,10 @@
 type InfoProps = {
   type: "Emails" | "Phone Numbers" | "Addresses";
   value: string;
+  onEdit: (type: "Emails" | "Phone Numbers" | "Addresses", value: string) => void;
 };
 
-const InfoCard: React.FC<InfoProps> = ({ type, value }) => {
+const InfoCard: React.FC<InfoProps> = ({ type, value, onEdit }) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-row justify-between items-center">
@@ -19,9 +20,12 @@ const InfoCard: React.FC<InfoProps> = ({ type, value }) => {
               </span>
               <span className={`text-sm ${type === "Addresses" ? "w-2/3" : ""}`}>{value}</span>
             </div>
-            <span className="text-xs text-blue-600 font-semibold hover:text-blue-400 cursor-pointer">
+            <button
+              className="text-xs text-blue-600 font-semibold hover:text-blue-400 cursor-pointer focus:outline-none"
+              onClick={() => onEdit(type, value)}
+            >
               Change
-            </span>
+            </button>
           </div>
         </div>
       </div>
