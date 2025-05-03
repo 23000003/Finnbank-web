@@ -95,6 +95,12 @@ export const useTransferMoney = (props: TransferProps) => {
       setErrorMessage("Transfer failed. Please try again.");
       console.error("Transfer error:", error);
     } finally {
+      if (selectedAccount) {
+        setSelectedAccount({
+          ...selectedAccount,
+          balance: selectedAccount.balance - amount,
+        });
+      }
       setLoading(false);
       setAmount(0);
       setDescription("");

@@ -87,7 +87,6 @@ const TransferForm: React.FC<TransferFormProps> = ({
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          onBlur={() => setDescription(description.replace(/\s/g, ""))}
           maxLength={40}
           placeholder="What's this transfer for?"
           className={`

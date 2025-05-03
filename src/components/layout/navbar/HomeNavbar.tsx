@@ -1,8 +1,9 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import notif from "../../../assets/notif.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import logo from "../../../assets/finnbank-logo.png";
+import { useSocketConnection } from "../../../hooks/useSocketConnection";
 
 type NavLinks = "dashboard" | "service" | "activity";
 
@@ -67,8 +68,18 @@ const HomeNavbar: React.FC = () => {
 export default HomeNavbar;
 
 const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, username }) => {
-  const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
   const navigate = useNavigate();
+  const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
+  const [notifCount, setNotifCount] = useState(0);
+
+  useEffect(() => {}, []);
+
+  useSocketConnection({
+    url: "listen-to-notification",
+    type: "notification",
+    setNotifCount: setNotifCount,
+  });
+
   const handleLogout = () => {
     logout();
     setToggle(null);
@@ -79,12 +90,16 @@ const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, u
     <div className="flex items-center w-full gap-6 justify-end">
       {/* notif and settings icon */}
       <div className="flex gap-8 mr-5">
-        <Link className="flex flex-col" to="/home/updates">
-          <img
-            src={notif}
-            alt="notif-icon"
-            className="w-4 h-5 cursor-pointer hover:opacity-60 duration-300"
-          />
+        <Link
+          className="flex flex-col cursor-pointer hover:opacity-40 duration-300"
+          to="/home/updates"
+        >
+          {notifCount > 0 ? (
+            <span className="absolute -mt-1 ml-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-light ">
+              1
+            </span>
+          ) : null}
+          <img src={notif} alt="notif-icon" className="w-4 h-5" />
         </Link>
       </div>
       {/* user view bar */}

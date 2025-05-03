@@ -8,6 +8,7 @@ import TransactionService from "../../services/transaction.service";
 import { ArrowDown } from "lucide-react";
 import GenerateStatement from "../../components/activity/GenerateStatement";
 import { motion } from "framer-motion";
+import { useSocketConnection } from "../../hooks/useSocketConnection";
 
 export const Route = createFileRoute("/home/activity")({
   component: RouteComponent,
@@ -19,8 +20,13 @@ function RouteComponent() {
   const [limit, setLimit] = useState(10);
   const [filterByTime, setFilterByTime] = useState("all");
 
-  const { setErrorMessage, setLoading, setSuccessMessage, loading } = useActionStatus(true);
   const { userId } = useAuth();
+  useSocketConnection({
+    url: "listen-to-transaction",
+    type: "transaction",
+    setActivityData: setActivityData,
+  });
+  const { setErrorMessage, setLoading, setSuccessMessage, loading } = useActionStatus(true);
 
   useEffect(() => {
     const fetchActivityData = async () => {
