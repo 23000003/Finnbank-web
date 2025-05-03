@@ -20,11 +20,15 @@ function RouteComponent() {
   const [limit, setLimit] = useState(10);
   const [filterByTime, setFilterByTime] = useState("all");
 
-  const { userId } = useAuth();
+  const { userId, username } = useAuth();
   useSocketConnection({
     url: "listen-to-transaction",
     type: "transaction",
     setActivityData: setActivityData,
+    openedAccountIds: openedAccountIds,
+    userId: userId as string,
+    fullName: username as string,
+    activityData: activityData,
   });
   const { setErrorMessage, setLoading, setSuccessMessage, loading } = useActionStatus(true);
 

@@ -26,15 +26,15 @@ export default class TransactionService {
       throw new Error("Failed to fetch statements");
     }
   }
-  static async createTransaction(data: PostTransaction) {
+  static async createTransaction(dto: PostTransaction) {
     try {
       const response = await api.post(`${this.prefix}/generate-transaction`, {
-        sender_id: data.sender_id,
-        receiver_id: data.receiver_id,
-        transaction_type: data.transaction_type,
-        amount: data.amount,
-        transaction_fee: data.transaction_fee,
-        notes: data.notes,
+        sender_id: dto.sender_id,
+        receiver_id: dto.receiver_id,
+        transaction_type: dto.transaction_type,
+        amount: dto.amount,
+        transaction_fee: dto.transaction_fee,
+        notes: dto.notes,
       });
       console.log(response);
       return response.data;

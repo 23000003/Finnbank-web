@@ -1,4 +1,4 @@
-export enum NotificationEnum {
+export enum NotificationTypeEnum {
   TRANSACTION = "Transaction",
   SYSTEM = "System",
 }

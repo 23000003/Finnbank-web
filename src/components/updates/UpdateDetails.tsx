@@ -1,30 +1,78 @@
 import React from "react";
+import { Notification } from "../../types/entities/notification.entity";
 
-interface UpdateDetailsProps {
-  sender: string;
-  title: string;
-  date: string;
-  content: string;
-}
+type UpdateDetailsProps = {
+  notif: Notification;
+  loading: boolean;
+  readNotification: (notifId: string) => Promise<void>;
+};
 
-export const UpdateDetails: React.FC<UpdateDetailsProps> = ({ sender, title, date, content }) => {
+export const UpdateDetails: React.FC<UpdateDetailsProps> = ({
+  notif: { notif_id, notif_type, notif_from_name, content, date_notified, is_read },
+  readNotification,
+  loading,
+}) => {
   return (
-    <div className="flex flex-col w-full max-w-3xl h-full p-8 border border-gray-200 bg-white rounded-2xl shadow-md">
+    <div className="flex flex-col w-full max-w-3xl p-6 bg-white rounded-xl shadow-lg border border-gray-100">
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 pb-6 border-b border-gray-100">
         <div>
-          <div className="text-sm font-semibold text-blue-800 uppercase tracking-wide">
-            {sender}
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-3 h-3 bg-blue-600 rounded-full"></span>
+            <span className="text-xs font-medium text-blue-600 uppercase tracking-wider">
+              {notif_from_name}
+            </span>
           </div>
-          <div className="text-2xl font-semibold text-blue-700 mt-1">{title}</div>
+          <h1 className="text-2xl font-bold text-gray-900 mt-2">{notif_type}</h1>
         </div>
-        <div className="text-sm font-semibold text-blue-800 whitespace-nowrap">{date}</div>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span>
+            {new Date(date_notified).toLocaleDateString("en-US", {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </span>
+        </div>
       </div>
-
-      {/* Scrollable Content */}
-      <div className="prose prose-blue text-gray-800 leading-relaxed overflow-y-auto max-h-[500px] flex-1 pr-2">
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+      {/* Content */}
+      <div className="prose prose-sm sm:prose-base max-w-none text-gray-700 flex-1 overflow-y-auto pr-2">
+        <div
+          className="[&_a]:text-blue-600 [&_a]:underline [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
+      {/* Footer */}
+      {!is_read ? (
+        <div className="mt-6 pt-6 border-t border-gray-100 flex justify-end">
+          <button
+            className={`px-4 py-2 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={() => readNotification(notif_id)}
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Mark as Read"}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

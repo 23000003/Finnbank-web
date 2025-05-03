@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import TransferModal from "../../../components/service/TransferModal";
 import { useState } from "react";
 import { PostTransaction } from "../../../types/entities/transaction.entity";
+import RecentlySent from "../../../components/service/RecentlySent";
 
 export const Route = createFileRoute("/home/service/transfer")({
   component: RouteComponent,
@@ -59,13 +60,13 @@ function RouteComponent() {
   return (
     <>
       <motion.div
-        className="flex flex-col items-center md:flex-row justify-between gap-8 p-6 max-w-6xl mx-auto"
+        className="flex flex-col md:flex-row justify-between gap-8 p-6 max-w-6xl mx-auto"
         initial={{ y: 20 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
         {/* Transfer Form */}
-        <div className="flex flex-col gap-6 w-full max-w-md bg-white rounded-xl shadow-md p-6">
+        <div className="flex flex-col gap-6 w-full max-w-md bg-white rounded-xl shadow-md p-6 h-fit">
           <h2 className="text-2xl font-bold text-gray-800">Transfer To</h2>
           <TransferForm
             amount={amount}
@@ -81,11 +82,18 @@ function RouteComponent() {
             handleValidateTransfer={handleValidateTransfer}
           />
         </div>
-        <AccountSelection
-          accounts={openedAccounts}
-          selectedAccount={selectedAccount}
-          setSelectedAccount={setSelectedAccount}
-        />
+        <div className="flex flex-col gap-6 w-full max-w-md p-6">
+          <AccountSelection
+            accounts={openedAccounts}
+            selectedAccount={selectedAccount}
+            setSelectedAccount={setSelectedAccount}
+          />
+          <RecentlySent
+            transferToAccNo={transferToAccNo}
+            setTransferToAccNo={setTransferToAccNo}
+            userId={userId as string}
+          />
+        </div>
       </motion.div>
       <TransferModal
         isOpen={openModal}

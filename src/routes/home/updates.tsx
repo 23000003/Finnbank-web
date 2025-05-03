@@ -1,44 +1,93 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { UpdatesList, Update } from "../../components/updates/UpdateList";
+import { UpdatesList } from "../../components/updates/UpdateList";
 import { UpdateDetails } from "../../components/updates/UpdateDetails";
 import { MessageCenterNotice } from "../../components/updates/MessengerCenterNotice";
-
-const mockUpdates: Update[] = [
-  { id: "1", title: "Upcoming Changes to FinnBank", date: "Jan 15", isRead: false },
-  { id: "2", title: "Upcoming Changes to FinnBank", date: "Aug 06", isRead: true },
-  { id: "3", title: "Upcoming Changes to FinnBank", date: "Mar 24", isRead: true },
-  { id: "4", title: "Upcoming Changes to FinnBank", date: "Dec 08", isRead: true },
-];
+import { useNotification } from "../../hooks/useNotification";
+import { useAuth } from "../../contexts/AuthContext";
+import { Notification } from "../../types/entities/notification.entity";
 
 export const Route = createFileRoute("/home/updates")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [selectedId, setSelectedId] = useState<string>(mockUpdates[0].id);
+  const { userId } = useAuth();
 
-  const selectedUpdate = mockUpdates.find((u) => u.id === selectedId);
+  const {
+    loading,
+    notifications,
+    viewNotification,
+    selectedNotification,
+    setLimit,
+    limit,
+    notifCount,
+    readNotification,
+  } = useNotification(userId as string, "/home/updates");
+
+  if (loading && notifications.length === 0) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
+  const hasMoreNotifs = (notifCount as number) > (limit as number);
+  console.log("hasMoreNotifs", hasMoreNotifs);
 
   return (
-    <div className="flex min-h-screen text-[#2c2e33] gap-5">
-      <div className="flex flex-col w-[450px] px-0 pt-4 pb-0 overflow-y-auto h-full">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Updates</h1>
-        <UpdatesList updates={mockUpdates} selectedId={selectedId} onSelect={setSelectedId} />
+    <div className="flex flex-col items-center md:items-start md:flex-row text-[#2c2e33] gap-5 mx-auto max-w-screen-xl">
+      <div className="flex flex-col w-[450px] px-0 pt-4 pb-0 overflow-y-hidden">
+        <div className="flex flex-row items-center gap-4">
+          <h1 className="text-2xl font-semibold text-gray-800">Updates</h1>
+        </div>
+        <UpdatesList
+          hasMoreNotifs={hasMoreNotifs}
+          loading={loading as boolean}
+          setLimit={setLimit as React.Dispatch<React.SetStateAction<number>>}
+          updates={notifications as Notification[]}
+          selectedId={selectedNotification?.notif_id}
+          viewNotification={viewNotification as (notifId: string) => Promise<void>}
+        />
         <div className="mt-auto p-4 text-sm text-center text-gray-500">
           <MessageCenterNotice />
         </div>
       </div>
-      <div className="w-2/3">
-        {selectedUpdate && (
+      <div className="w-2/3 mt-16">
+        {selectedNotification ? (
           <UpdateDetails
-            sender="K. Maratas"
-            title={selectedUpdate.title}
-            date={selectedUpdate.date}
-            content={`<p>Hello,<br/>We are updating our legal agreements. Visit the <a href="#">Policy Update page</a> to review all changes.</p>. Update brought to you by KentWAR, White Beard, Papa Raul, OppenJayme and Marqt. NIG- WHY DID YOU MAKE ME DO THIS? Your fighting, so you watch everyone around you die, THINK MARK, you'll outlast every fragile, insignificant being on this planet. You'll live to see this world crumble to dust and BLOW AWAY!
-
-Everyone, and everything you know, WILL BE GONE... WHAT WILL YOU HAVE AFTER 500 YEARS? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`}
+            notif={selectedNotification as Notification}
+            readNotification={readNotification as (notifId: string) => Promise<void>}
+            loading={loading as boolean}
           />
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+            <div className="mb-5 p-4 rounded-full bg-blue-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+            </div>
+
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">No update selected</h2>
+
+            <p className="text-gray-500 dark:text-gray-400 max-w-md mb-6">
+              Select a notification from the list to view details
+            </p>
+
+            <div className="w-24 border-t border-gray-200 dark:border-gray-600 my-4"></div>
+
+            <p className="text-sm text-gray-400 dark:text-gray-500">
+              <span className="font-medium text-gray-500 dark:text-gray-400">Tip:</span> Click items
+              to view details
+            </p>
+          </div>
         )}
       </div>
     </div>

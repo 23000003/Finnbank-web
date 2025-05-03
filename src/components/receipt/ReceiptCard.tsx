@@ -92,7 +92,9 @@ const ReceiptCard: React.FC<ReceiptCardProps> = ({ activityData, accountNums }) 
           </div>
           <div>
             <p className="text-gray-500 text-sm">To Account</p>
-            <p className="font-mono mt-1 text-sm">{hideAccountNumber("21451231252131")}</p>
+            <p className="font-mono mt-1 text-sm">
+              {hideAccountNumber(accountNums[1].account_number)}
+            </p>
           </div>
         </div>
         {/* Transaction Info */}

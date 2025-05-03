@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 
-type NavLinks = "transfer" | "loan" | "pay-bills";
+type NavLinks = "transfer" | "pay-bills";
 
 const ServiceNavbar: React.FC = () => {
   const location = useLocation();
@@ -8,7 +8,7 @@ const ServiceNavbar: React.FC = () => {
   return (
     <div className="bg-gray-200 text-black h-16 flex items-center justify-center">
       <div className="flex gap-4">
-        {["transfer", "loan", "pay-bills"].map((link) => {
+        {["transfer", "pay-bills"].map((link) => {
           const match = location.pathname.includes(link);
           return (
             <Link

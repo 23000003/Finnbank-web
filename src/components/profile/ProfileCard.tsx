@@ -39,7 +39,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           )}
         </div>
         <button
-          className="text-xs font-semibold text-blue-600 hover:text-blue-300 focus:outline-none"
+          className="text-xs font-semibold text-blue-600 hover:text-blue-300 focus:outline-none mr-auto"
           onClick={onEdit}
         >
           Edit personal information

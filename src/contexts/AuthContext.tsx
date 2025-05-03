@@ -67,6 +67,8 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     } catch (err) {
       console.error("Error logging in:", err);
       throw new Error("User does not exists.");
+    } finally {
+      setLoading(false);
     }
   };
 

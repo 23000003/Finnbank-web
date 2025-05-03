@@ -46,6 +46,18 @@ export class OpenedAccountService {
       throw error;
     }
   }
+  static async getUserIdByOpenedAccountId(openedAccountId: number) {
+    try {
+      const res = await api
+        .get<{ data: { account_id: string } }>(`${this.prefix}/get-user-id/${openedAccountId}`)
+        .then((res) => res.data.data);
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.error("Error fetching user ID:", error);
+      throw error;
+    }
+  }
   static async createOpenedAccount(accountId: string) {
     try {
       const response = await api.post(`${this.prefix}/create-account`, {
