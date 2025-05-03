@@ -1,6 +1,4 @@
 import axios from "axios";
-import { showToast } from "../utils/toast";
-
 export const api = axios.create({
   baseURL: "http://localhost:8080/api",
   withCredentials: true,
@@ -20,20 +18,6 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    // redirect to the login page if the server returns a 401
-    if (error.response && error.response.status === 401) {
-      showToast.error("Session Expired");
-      window.location.href = "/login";
-    }
     return Promise.reject(error);
   }
 );
