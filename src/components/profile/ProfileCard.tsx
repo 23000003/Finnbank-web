@@ -4,9 +4,15 @@ type ProfileCardProps = {
   fullName: string;
   dateCreated: string;
   accountStatus: AccountStatusEnum;
+  onEdit: () => void;
 };
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ fullName, dateCreated, accountStatus }) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  fullName,
+  dateCreated,
+  accountStatus,
+  onEdit,
+}) => {
   return (
     <div className="flex flex-col">
       {/* PFP */}
@@ -32,7 +38,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ fullName, dateCreated, accoun
             <span className="text-red-500 text-xs font-semibold">{accountStatus}</span>
           )}
         </div>
-        <span className="text-xs font-semibold text-blue-600">Edit personal information</span>
+        <button
+          className="text-xs font-semibold text-blue-600 hover:text-blue-300 focus:outline-none"
+          onClick={onEdit}
+        >
+          Edit personal information
+        </button>
       </div>
     </div>
   );

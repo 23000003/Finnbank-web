@@ -11,11 +11,7 @@ export class OpenedAccountService {
     try {
       console.log(userId);
       const response = await api
-        .get<OpenedAccountResponse>(`${this.prefix}/get-all/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        })
+        .get<OpenedAccountResponse>(`${this.prefix}/get-all/${userId}`)
         .then((res) => res.data.data);
       console.log(response);
       return response;
@@ -27,11 +23,7 @@ export class OpenedAccountService {
   static async getOpenedAccountIdByAccountNumber(accountNumber: string) {
     try {
       const res = await api
-        .get<{ data: number }>(`${this.prefix}/find-by-account-number/${accountNumber}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        })
+        .get<{ data: number }>(`${this.prefix}/find-by-account-number/${accountNumber}`)
         .then((res) => res.data.data);
       console.log(res);
       return res;
@@ -43,14 +35,9 @@ export class OpenedAccountService {
   static async getBothAccountNumber(senderId: number, receiverId: number) {
     try {
       const res = await api
-        .get<{ data: OpenedAccountNumber[] }>(
-          `${this.prefix}/get-both-account-number/${senderId}/${receiverId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        )
+        .get<{
+          data: OpenedAccountNumber[];
+        }>(`${this.prefix}/get-both-account-number/${senderId}/${receiverId}`)
         .then((res) => res.data.data);
       console.log(res);
       return res;
@@ -61,17 +48,9 @@ export class OpenedAccountService {
   }
   static async createOpenedAccount(accountId: string) {
     try {
-      const response = await api.post(
-        `${this.prefix}/create-account`,
-        {
-          account_id: accountId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await api.post(`${this.prefix}/create-account`, {
+        account_id: accountId,
+      });
       return response.data;
     } catch (error) {
       console.error("Error creating opened account:", error);
