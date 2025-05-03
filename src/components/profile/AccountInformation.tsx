@@ -44,11 +44,11 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
         {accountStatus === AccountStatusEnum.ACTIVE ? (
           <button
             className="
-          flex items-center justify-center gap-2 border-red-500 border
-         text-red-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-
+          flex items-center justify-center gap-2 border border-red-500 text-red-500 font-semibold py-2 px-4 rounded-lg 
+          hover:bg-red-500 hover:text-white transition duration-200
         "
           >
-            <span>Close your account</span>
+            <span>Close Your Account</span>
           </button>
         ) : (
           <button
@@ -57,7 +57,7 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
          text-green-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-6
         "
           >
-            <span>Reactivate your account</span>
+            <span>Reactivate Your Account</span>
           </button>
         )}
       </div>
