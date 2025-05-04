@@ -3,12 +3,14 @@ import notif from "../../../assets/notif.svg";
 import { useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import logo from "../../../assets/finnbank-logo.png";
+import { useSocketConnection } from "../../../hooks/useSocketConnection";
+import { useNotification } from "../../../hooks/useNotification";
 
 type NavLinks = "dashboard" | "service" | "activity";
 
 const HomeNavbar: React.FC = () => {
   const location = useLocation();
-  const { logout, username } = useAuth();
+  const { logout, username, userId } = useAuth();
 
   return (
     <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
@@ -58,7 +60,7 @@ const HomeNavbar: React.FC = () => {
 
         {/* Profile section */}
         <div className="hidden lg:flex items-center">
-          <Profile logout={logout} username={username as string} />
+          <Profile logout={logout} username={username as string} userId={userId as string} />
         </div>
       </div>
     </nav>
@@ -66,9 +68,25 @@ const HomeNavbar: React.FC = () => {
 };
 export default HomeNavbar;
 
-const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, username }) => {
-  const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
+type ProfileProps = {
+  logout: () => void;
+  username: string;
+  userId: string;
+};
+
+const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
   const navigate = useNavigate();
+  const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
+
+  const { unreadNotif, setUnreadNotif } = useNotification(userId);
+
+  useSocketConnection({
+    url: "listen-to-notification",
+    type: "notification",
+    setNotifCount: setUnreadNotif,
+    userId: userId,
+  });
+
   const handleLogout = () => {
     logout();
     setToggle(null);
@@ -79,12 +97,16 @@ const Profile: React.FC<{ logout: () => void; username: string }> = ({ logout, u
     <div className="flex items-center w-full gap-6 justify-end">
       {/* notif and settings icon */}
       <div className="flex gap-8 mr-5">
-        <Link className="flex flex-col" to="/home/updates">
-          <img
-            src={notif}
-            alt="notif-icon"
-            className="w-4 h-5 cursor-pointer hover:opacity-60 duration-300"
-          />
+        <Link
+          className="flex flex-col cursor-pointer hover:opacity-40 duration-300"
+          to="/home/updates"
+        >
+          {(unreadNotif as number) > 0 ? (
+            <span className="absolute -mt-1 ml-2 bg-red-500 text-white rounded-full w-fit h-fit px-1 flex items-center justify-center text-[10px] font-light ">
+              {unreadNotif as number}
+            </span>
+          ) : null}
+          <img src={notif} alt="notif-icon" className="w-4 h-5" />
         </Link>
       </div>
       {/* user view bar */}

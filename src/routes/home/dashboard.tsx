@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { OpenedAccountService } from "../../services/opened-account.service";
-import { AccountCard } from "../../components/component/accountcard";
+import { AccountCard } from "../../components/dashboard/accountcard";
 import { useEffect, useState } from "react";
 import { OpenedAccount } from "../../types/entities/opened-account.entity";
 import { showToast } from "../../utils/toast";
@@ -40,7 +40,7 @@ function RouteComponent() {
       }
     };
     fetchedAccounts();
-  }, []);
+  }, [limit, userId]);
 
   if (loading) {
     return (
@@ -69,8 +69,8 @@ function RouteComponent() {
     );
   }
   return (
-    <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="p-6 space-y-6 bg-gray-100">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {accounts.map((account) => (
           <AccountCard
             key={account.openedaccount_id}
@@ -88,7 +88,7 @@ function RouteComponent() {
         <div className="flex justify-between items-center mb-2">
           <h2 className="font-semibold">Recent activity</h2>
           <button
-            className="text-blue-600 text-sm hover:underline font-semibold"
+            className="text-blue-600 text-sm hover:underline font-semibold cursor-pointer"
             onClick={() => navigate({ to: `/home/activity` })}
           >
             View all

@@ -48,6 +48,8 @@ export class AuthService {
           birthdate: formattedBirthDate,
         })
         .then((res) => res.data.data);
+
+      console.log(data, "DATA");
       if (data) {
         const openedAccount = await OpenedAccountService.createOpenedAccount(data.account_id);
         console.log("Opened account:", openedAccount);

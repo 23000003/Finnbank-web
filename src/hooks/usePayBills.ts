@@ -67,7 +67,7 @@ export const usePayBills = (props: PayBillsProps) => {
       };
       const res = await TransactionService.createTransaction(data);
       console.log("Transaction response:", res);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       setSuccessMessage("Payment successful!");
     } catch (error) {
       setErrorMessage("Payment failed. Please try again.");

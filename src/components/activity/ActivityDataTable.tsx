@@ -12,7 +12,7 @@ const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds }) 
   const navigate = useNavigate();
 
   return (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="rounded-lg overflow-auto">
       <table className="w-full">
         <thead className="bg-gray-50">
           <tr>

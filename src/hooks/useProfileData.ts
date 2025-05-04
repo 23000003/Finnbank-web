@@ -14,7 +14,7 @@ export const useProfileData = (userId: string) => {
   const [profileData, setProfileData] = useState<PersonalData>();
   const [infoCardContent, setInfoCardContent] = useState<InfoCardContent>([]);
 
-  const { setLoading, setErrorMessage, setSuccessMessage, loading } = useActionStatus();
+  const { setLoading, setErrorMessage, setSuccessMessage, loading } = useActionStatus(true);
 
   useEffect(() => {
     console.log("Fetching user personal data...");
@@ -37,7 +37,6 @@ export const useProfileData = (userId: string) => {
             value: data.address,
           },
         ]);
-        setSuccessMessage("Fetch Successful"); // to remove
         setLoading(false);
       } catch (err) {
         console.error("Error fetching user personal data:", err);

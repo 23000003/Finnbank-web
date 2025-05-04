@@ -19,7 +19,6 @@ import { Route as HomeUpdatesImport } from "./routes/home/updates";
 import { Route as HomeInboxImport } from "./routes/home/inbox";
 import { Route as HomeDashboardImport } from "./routes/home/dashboard";
 import { Route as HomeActivityImport } from "./routes/home/activity";
-import { Route as HomeAccountsImport } from "./routes/home/accounts";
 import { Route as HomeServiceIndexImport } from "./routes/home/service/index";
 import { Route as HomeProfileIndexImport } from "./routes/home/profile/index";
 import { Route as HomeServiceTransferImport } from "./routes/home/service/transfer";
@@ -77,12 +76,6 @@ const HomeDashboardRoute = HomeDashboardImport.update({
 const HomeActivityRoute = HomeActivityImport.update({
   id: "/home/activity",
   path: "/home/activity",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const HomeAccountsRoute = HomeAccountsImport.update({
-  id: "/home/accounts",
-  path: "/home/accounts",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -149,13 +142,6 @@ declare module "@tanstack/react-router" {
       path: "/";
       fullPath: "/";
       preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/home/accounts": {
-      id: "/home/accounts";
-      path: "/home/accounts";
-      fullPath: "/home/accounts";
-      preLoaderRoute: typeof HomeAccountsImport;
       parentRoute: typeof rootRoute;
     };
     "/home/activity": {
@@ -277,7 +263,6 @@ declare module "@tanstack/react-router" {
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
-  "/home/accounts": typeof HomeAccountsRoute;
   "/home/activity": typeof HomeActivityRoute;
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
@@ -298,7 +283,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
-  "/home/accounts": typeof HomeAccountsRoute;
   "/home/activity": typeof HomeActivityRoute;
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
@@ -320,7 +304,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   "/": typeof IndexRoute;
-  "/home/accounts": typeof HomeAccountsRoute;
   "/home/activity": typeof HomeActivityRoute;
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
@@ -343,7 +326,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | "/"
-    | "/home/accounts"
     | "/home/activity"
     | "/home/dashboard"
     | "/home/inbox"
@@ -363,7 +345,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
-    | "/home/accounts"
     | "/home/activity"
     | "/home/dashboard"
     | "/home/inbox"
@@ -383,7 +364,6 @@ export interface FileRouteTypes {
   id:
     | "__root__"
     | "/"
-    | "/home/accounts"
     | "/home/activity"
     | "/home/dashboard"
     | "/home/inbox"
@@ -405,7 +385,6 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  HomeAccountsRoute: typeof HomeAccountsRoute;
   HomeActivityRoute: typeof HomeActivityRoute;
   HomeDashboardRoute: typeof HomeDashboardRoute;
   HomeInboxRoute: typeof HomeInboxRoute;
@@ -426,7 +405,6 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  HomeAccountsRoute: HomeAccountsRoute,
   HomeActivityRoute: HomeActivityRoute,
   HomeDashboardRoute: HomeDashboardRoute,
   HomeInboxRoute: HomeInboxRoute,
@@ -456,7 +434,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/home/accounts",
         "/home/activity",
         "/home/dashboard",
         "/home/inbox",
@@ -477,9 +454,6 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/home/accounts": {
-      "filePath": "home/accounts.tsx"
     },
     "/home/activity": {
       "filePath": "home/activity.tsx"

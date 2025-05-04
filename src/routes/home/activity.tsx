@@ -7,6 +7,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import TransactionService from "../../services/transaction.service";
 import { ArrowDown } from "lucide-react";
 import GenerateStatement from "../../components/activity/GenerateStatement";
+import { motion } from "framer-motion";
+import { useSocketConnection } from "../../hooks/useSocketConnection";
 
 export const Route = createFileRoute("/home/activity")({
   component: RouteComponent,
@@ -18,19 +20,29 @@ function RouteComponent() {
   const [limit, setLimit] = useState(10);
   const [filterByTime, setFilterByTime] = useState("all");
 
-  const { setErrorMessage, setLoading, setSuccessMessage, loading } = useActionStatus();
-  const { userId } = useAuth();
+  const { userId, username } = useAuth();
+  useSocketConnection({
+    url: "listen-to-transaction",
+    type: "transaction",
+    setActivityData: setActivityData,
+    openedAccountIds: openedAccountIds,
+    userId: userId as string,
+    fullName: username as string,
+    activityData: activityData,
+  });
+  const { setErrorMessage, setLoading, setSuccessMessage, loading } = useActionStatus(true);
 
   useEffect(() => {
     const fetchActivityData = async () => {
       try {
+        setLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         const { data, openData } = await TransactionService.getAllTransaction(
           userId as string,
           limit
         );
         setActivityData(data);
         setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
-        setSuccessMessage("Activity data fetched successfully");
       } catch (err) {
         setErrorMessage("Error fetching activity data");
         console.error(err);
@@ -49,8 +61,15 @@ function RouteComponent() {
     );
   }
 
+  console.log("loading", loading);
+
   return (
-    <div className="pt-5 mb-24">
+    <motion.div
+      className="pt-5 mb-24"
+      initial={{ y: 20 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
       <div className="mt-6 mb-4 flex flex-row justify-between items-center">
         <div>
           <span className="text-gray-600 mr-2">Filter by:</span>
@@ -80,8 +99,12 @@ function RouteComponent() {
           <span className="text-sm">View more</span>
           <ArrowDown className="h-6 w-5" />
         </div>
+      ) : loading ? (
+        <div className="flex items-center justify-center py-4">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500" />
+        </div>
       ) : null}
-    </div>
+    </motion.div>
   );
 }
 

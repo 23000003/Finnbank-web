@@ -13,7 +13,7 @@ type ChangePinModalProps = {
 };
 
 const ChangePinModal: React.FC<ChangePinModalProps> = ({ selectedCard, handleClose }) => {
-  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus();
+  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus(false);
 
   const [pinNumbers, setPinNumbers] = useState({
     currentPin: "",

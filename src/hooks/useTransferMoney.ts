@@ -58,7 +58,7 @@ export const useTransferMoney = (props: TransferProps) => {
     if (!validateInputs()) return;
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       const data = await OpenedAccountService.getOpenedAccountIdByAccountNumber(transferToAccNo);
       const transaction: PostTransaction = {
         sender_id: (selectedAccount as OpenedAccount).openedaccount_id,
@@ -87,7 +87,7 @@ export const useTransferMoney = (props: TransferProps) => {
   const executeTransfer = async (data: PostTransaction) => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       const res = await TransactionService.createTransaction(data);
       console.log(res);
       setSuccessMessage("Transfer successful!");
@@ -95,6 +95,12 @@ export const useTransferMoney = (props: TransferProps) => {
       setErrorMessage("Transfer failed. Please try again.");
       console.error("Transfer error:", error);
     } finally {
+      if (selectedAccount) {
+        setSelectedAccount({
+          ...selectedAccount,
+          balance: selectedAccount.balance - amount,
+        });
+      }
       setLoading(false);
       setAmount(0);
       setDescription("");

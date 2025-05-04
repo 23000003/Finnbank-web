@@ -11,7 +11,7 @@ interface ChangePassProps {
 
 export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
   const { userId } = useAuth();
-  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus();
+  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const [passwords, setPasswords] = useState({
@@ -47,7 +47,7 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
     setLoading(true);
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       const data = {
         userId: userId,
         currentPassword: passwords.currentPassword,

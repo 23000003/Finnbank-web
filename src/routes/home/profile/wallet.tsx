@@ -13,7 +13,7 @@ export const Route = createFileRoute("/home/profile/wallet")({
 });
 
 function RouteComponent() {
-  const { loading, setLoading, setErrorMessage, setSuccessMessage } = useActionStatus();
+  const { loading, setLoading, setErrorMessage, setSuccessMessage } = useActionStatus(true);
   const { userId } = useAuth();
   const [bankcards, setBankcards] = useState<Bankcard[]>([]);
   const [selected, setSelected] = useState<Bankcard | null>(null);
@@ -21,9 +21,9 @@ function RouteComponent() {
     const fetchBankcards = async () => {
       setLoading(true);
       try {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         const data = await BankcardService.getAllBankcards(userId as string);
         setBankcards(data);
-        setSuccessMessage("Bankcards fetched successfully");
         setSelected(data[0]);
       } catch (error) {
         console.error("Error fetching bankcards:", error);
