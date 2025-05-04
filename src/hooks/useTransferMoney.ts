@@ -13,9 +13,9 @@ interface TransferProps extends IActionStatus {
 export const useTransferMoney = (props: TransferProps) => {
   const { setErrorMessage, setSuccessMessage, setLoading } = props;
 
-  const [selectedAccount, setSelectedAccount] = useState<OpenedAccount | null>(null);
   const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
+  const [selectedAccount, setSelectedAccount] = useState<OpenedAccount | null>(null);
   const [transferToAccNo, setTransferToAccNo] = useState<string>("");
 
   const validateInputs = () => {

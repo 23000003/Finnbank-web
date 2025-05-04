@@ -3,6 +3,7 @@ import { Billers } from "../../../../data/billers";
 import BillerForm from "../../../../components/service/billers/BillerForms";
 import { useAuth } from "../../../../contexts/AuthContext";
 import { useOpenedAccountData } from "../../../../hooks/useOpenedAccountData";
+import BillerLoading from "../../../../components/loading/BillerLoading";
 export const Route = createFileRoute("/home/service/billers/$billers")({
   component: RouteComponent,
 });
@@ -23,15 +24,9 @@ function RouteComponent() {
     return router.history.back();
   }
 
-  if (openedAccounts.length === 0 && loading) {
-    return (
-      <div className="flex justify-center items-center w-full h-full">
-        <div className="loader">loading...</div>
-      </div>
-    );
-  }
-
-  return (
+  return loading && openedAccounts.length === 0 ? (
+    <BillerLoading />
+  ) : (
     <div className="bg-white p-14 rounded-lg shadow-md w-full max-w-2xl mx-auto flex flex-col gap-6">
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-col">

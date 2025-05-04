@@ -2,13 +2,15 @@ import { ActivityData } from "../../types/entities/transaction.entity";
 import { useNavigate } from "@tanstack/react-router";
 import { resolveTransactionType } from "../../utils/resolve-transaction-type";
 import { TransactionStatusEnum } from "../../types/enums/transaction.enum";
+import ActivityTableLoading from "../loading/ActivityTableLoading";
 
 type ActivityProps = {
   data: ActivityData[];
   openedAccountIds: number[];
+  loading: boolean;
 };
 
-const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds }) => {
+const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds, loading }) => {
   const navigate = useNavigate();
 
   return (
@@ -40,7 +42,9 @@ const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds }) 
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {data.length > 0 ? (
+          {loading ? (
+            <ActivityTableLoading />
+          ) : data.length > 0 ? (
             data.map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

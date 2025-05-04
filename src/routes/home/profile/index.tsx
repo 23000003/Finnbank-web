@@ -10,6 +10,11 @@ import { UpdateInfoForm } from "../../../components/profile/ChangeAccountDetails
 import { AccountService } from "../../../services/account.service";
 import { showToast } from "../../../utils/toast";
 import { UpdateUserForm } from "../../../components/profile/UpdateAccount";
+import {
+  AccountInfoLoading,
+  InfoCardLoading,
+  ProfileCardLoading,
+} from "../../../components/loading/ProfileLoading";
 
 export const Route = createFileRoute("/home/profile/")({
   component: RouteComponent,
@@ -46,14 +51,6 @@ function RouteComponent() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col justify-center items-center">
-        <span className="text-lg font-semibold">Loading...</span>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col md:flex-row w-full gap-20 justify-center items-center md:items-start">
       <div className="max-w-[500px] w-full">
@@ -63,20 +60,29 @@ function RouteComponent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <ProfileCard
-            fullName={profileData.fullName}
-            dateCreated={profileData.dateCreated}
-            accountStatus={profileData.accountStatus}
-            onEdit={() => setIsEditing(true)}
-          />
-          <AccountInformation
-            nationalIdNumber={profileData.nationalIdNumber}
-            accountNumber={profileData.accountNumber}
-            nationality={profileData.nationality}
-            accountStatus={profileData.accountStatus}
-            accountType={profileData.accountType}
-            birthdate={profileData.birthDate}
-          />
+          {loading ? (
+            <>
+              <ProfileCardLoading />
+              <AccountInfoLoading />
+            </>
+          ) : (
+            <>
+              <ProfileCard
+                fullName={profileData.fullName}
+                dateCreated={profileData.dateCreated}
+                accountStatus={profileData.accountStatus}
+                onEdit={() => setIsEditing(true)}
+              />
+              <AccountInformation
+                nationalIdNumber={profileData.nationalIdNumber}
+                accountNumber={profileData.accountNumber}
+                nationality={profileData.nationality}
+                accountStatus={profileData.accountStatus}
+                accountType={profileData.accountType}
+                birthdate={profileData.birthDate}
+              />
+            </>
+          )}
         </motion.div>
       </div>
       <div className="max-w-[500px] md:max-w-[400px] w-full">
@@ -86,14 +92,18 @@ function RouteComponent() {
           animate={{ y: 0 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
-          {infoCardContent.map((info, index) => (
-            <InfoCard
-              key={index}
-              type={info.type as "Emails" | "Phone Numbers" | "Addresses"}
-              value={info.value}
-              onEdit={(type, value) => setEditingInfo({ type, value })}
-            />
-          ))}
+          {loading ? (
+            <InfoCardLoading />
+          ) : (
+            infoCardContent.map((info, index) => (
+              <InfoCard
+                key={index}
+                type={info.type as "Emails" | "Phone Numbers" | "Addresses"}
+                value={info.value}
+                onEdit={(type, value) => setEditingInfo({ type, value })}
+              />
+            ))
+          )}
         </motion.div>
       </div>
       {editingInfo && (

@@ -41,8 +41,7 @@ function RootComponent() {
   }, [auth, navigate, location]);
 
   const IsAtAuthPage = () => {
-    const loc = useLocation();
-    if (loc.pathname.startsWith("/welcome/sign")) {
+    if (location.pathname.startsWith("/welcome/sign")) {
       return <AuthLayout />;
     }
     return <LandingLayout />;

@@ -17,7 +17,6 @@ const WalletCards: React.FC<WalletCardProps> = ({ bankcards, selected, setSelect
       <div className="flex flex-col gap-4">
         {bankcards.map((bc) => {
           const isSelected = selected?.bankcard_id === bc.bankcard_id;
-
           return (
             <motion.div
               key={bc.bankcard_id}
