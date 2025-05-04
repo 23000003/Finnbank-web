@@ -15,8 +15,8 @@ export const Route = createFileRoute("/home/service/transfer")({
   component: RouteComponent,
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      accountNum: search.accountNum as string,
-      type: search.type as string,
+      accountNum: (search.accountNum as string) || undefined,
+      type: (search.type as string) || undefined,
     };
   },
 });

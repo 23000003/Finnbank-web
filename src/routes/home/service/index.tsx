@@ -3,6 +3,10 @@ export const Route = createFileRoute("/home/service/")({
   beforeLoad: () => {
     throw redirect({
       to: "/home/service/transfer",
+      search: {
+        accountNum: undefined,
+        type: undefined,
+      },
     });
   },
   component: RouteComponent,
