@@ -34,11 +34,10 @@ export const useNotification = (userId: string, route?: string) => {
         const data = await NotificationService.getAllNotifications(userId, limit);
         setNotifications(data);
         console.log("Notifications:", data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching notifications:", error);
         setErrorMessage("Something went wrong...");
-      } finally {
-        setLoading(false);
       }
     };
     if (route === "/home/updates") {
@@ -58,10 +57,10 @@ export const useNotification = (userId: string, route?: string) => {
         prev && prev.notif_id === notifId ? { ...prev, is_read: true } : prev
       );
       setUnreadNotif((prev) => prev - 1);
+      setLoading(false);
     } catch (error) {
       console.error("Error reading notification:", error);
-    } finally {
-      setLoading(false);
+      setErrorMessage("Something went wrong...");
     }
   };
 

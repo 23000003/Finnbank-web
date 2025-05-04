@@ -174,16 +174,16 @@ const RegisterForm: React.FC = () => {
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
         >
           {renderStep()}
         </motion.div>
       </AnimatePresence>
-      <div className="flex gap-2 mt-6 justify-end">
+      <div className="flex gap-2 mt-6">
         {currentStep > 1 && (
           <button
             type="button"
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-400 cursor-pointer"
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-sm hover:bg-gray-400 cursor-pointer w-full"
             onClick={prevStep}
             disabled={isLoading}
           >
@@ -192,7 +192,7 @@ const RegisterForm: React.FC = () => {
         )}
         {currentStep < 4 && (
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 cursor-pointer"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 cursor-pointer w-full"
             onClick={handleNext}
             disabled={isLoading}
           >
@@ -201,7 +201,7 @@ const RegisterForm: React.FC = () => {
         )}
         {currentStep === 4 && (
           <button
-            className={`px-4 py-2 rounded-lg shadow-sm cursor-pointer ${
+            className={`px-4 py-2 rounded-lg shadow-sm cursor-pointer w-full ${
               isLoading
                 ? "bg-blue-300 text-white cursor-not-allowed"
                 : "bg-blue-500 text-white hover:bg-blue-600"

@@ -5,6 +5,7 @@ import { TransactionTypeEnum } from "../types/enums/transaction.enum";
 import { PostTransaction } from "../types/entities/transaction.entity";
 import { Biller } from "../types/entities/billers.entity";
 import TransactionService from "../services/transaction.service";
+import { OpenedAccountStatusEnum } from "../types/enums/opened-account.enum";
 
 interface PayBillsProps extends IActionStatus {
   account: OpenedAccount;
@@ -55,6 +56,10 @@ export const usePayBills = (props: PayBillsProps) => {
 
   const handlePayBills = async () => {
     if (!validateInputs()) return;
+    if (selected.openedaccount_status !== OpenedAccountStatusEnum.ACTIVE) {
+      setErrorMessage("Account Chosen is not active.");
+      return;
+    }
     setLoading(true);
     try {
       const data: PostTransaction = {

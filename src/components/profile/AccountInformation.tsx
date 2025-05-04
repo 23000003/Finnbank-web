@@ -22,9 +22,7 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
     <div className="flex flex-col gap-4">
       <h1 className="text-xl font-semibold">Account Options</h1>
       <div className="flex flex-col bg-white p-4 rounded-lg gap-4">
-        {/* Language DropDown */}
         <LanguageDropdown />
-        {/* Timezone Dropdown */}
         <TimezoneDropdown />
         {/* Info */}
         {[
@@ -45,7 +43,7 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
           <button
             className="
           flex items-center justify-center gap-2 border-red-500 border
-         text-red-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-
+        text-red-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-
         "
           >
             <span>Close your account</span>
@@ -54,7 +52,7 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
           <button
             className="
           flex items-center justify-center gap-2 border-green-500 border
-         text-green-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-6
+        text-green-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-6
         "
           >
             <span>Reactivate your account</span>

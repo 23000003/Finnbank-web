@@ -47,12 +47,12 @@ export const UpdateUserForm: React.FC<UpdateUserProps> = ({
         address
       );
       showToast.success("Account updated successfully!");
-      onClose();
+      setLoading(false);
     } catch (error) {
       console.error("Error updating account:", error);
       showToast.error("Failed to update account. Please try again.");
     } finally {
-      setLoading(false);
+      onClose();
     }
   };
 

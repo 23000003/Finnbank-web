@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import TransactionService from "../../services/transaction.service";
 import { OpenedAccountService } from "../../services/opened-account.service";
-
+import { showToast } from "../../utils/toast";
+import { RecentlySentLoading } from "../loading/TransferTabLoading";
 type AccountSelectionProps = {
   userId: string;
   transferToAccNo: string;
@@ -30,13 +31,15 @@ const RecentlySent: React.FC<AccountSelectionProps> = ({
           uniqueAccounts.add(accountNos[1].account_number);
         }
         setAccounts(Array.from(uniqueAccounts));
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching accounts:", error);
-      } finally {
-        setLoading(false);
+        showToast.error("Something went wrong...");
       }
     };
-    fetchAccounts();
+    setTimeout(() => {
+      fetchAccounts();
+    }, 2000);
   }, [userId]);
 
   return (
@@ -44,28 +47,7 @@ const RecentlySent: React.FC<AccountSelectionProps> = ({
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Recently Sent #</h2>
 
       {loading ? (
-        <div className="flex items-center justify-center h-32">
-          <svg
-            className="animate-spin h-5 w-5 text-gray-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            ></path>
-          </svg>
-        </div>
+        <RecentlySentLoading />
       ) : (
         <div className="flex flex-col gap-4">
           {accounts.length > 0 ? (

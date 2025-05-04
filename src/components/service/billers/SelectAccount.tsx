@@ -17,7 +17,6 @@ const SelectAccount: React.FC<SelectAccountProps> = ({ selected, setSelected, ac
   return (
     <Listbox value={selected} onChange={setSelected}>
       <div className="relative">
-        {/* Default selected account */}
         <ListboxButton
           as="button"
           className="w-full border border-gray-300 cursor-pointer rounded-lg p-3 pr-10 text-left focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -31,7 +30,7 @@ const SelectAccount: React.FC<SelectAccountProps> = ({ selected, setSelected, ac
             </div>
             <span
               className={`${
-                selected.openedaccount_status == OpenedAccountStatusEnum.ACTIVE
+                selected.openedaccount_status === OpenedAccountStatusEnum.ACTIVE
                   ? "text-green-500"
                   : "text-red-500"
               } text-sm font-medium`}
@@ -55,17 +54,23 @@ const SelectAccount: React.FC<SelectAccountProps> = ({ selected, setSelected, ac
             </svg>
           </span>
         </ListboxButton>
-        {/* Dropdown choices */}
+
         <ListboxOptions className="absolute z-10 w-full mt-1 max-h-60 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {accounts.map((account, idx) => {
             if (account.account_type === OpenedAccountTypeEnum.SAVINGS) return null;
+            const isClosed = account.openedaccount_status === OpenedAccountStatusEnum.CLOSED;
             return (
               <ListboxOption
                 key={idx}
                 value={account}
-                className={({ active }) =>
-                  `relative cursor-pointer select-none py-2 pl-4 pr-4 flex flex-row justify-between ${
-                    active ? "bg-blue-100 text-blue-900" : "text-gray-900"
+                disabled={isClosed}
+                className={({ active, disabled }) =>
+                  `relative select-none py-2 pl-4 pr-4 flex flex-row justify-between ${
+                    disabled
+                      ? "text-gray-400 bg-gray-50 opacity-50 cursor-not-allowed"
+                      : active
+                        ? "bg-blue-100 text-blue-900 cursor-pointer"
+                        : "text-gray-900 cursor-pointer"
                   }`
                 }
               >
@@ -78,14 +83,16 @@ const SelectAccount: React.FC<SelectAccountProps> = ({ selected, setSelected, ac
                 <div className="flex flex-col w-1/2 items-end">
                   <span
                     className={`${
-                      selected.openedaccount_status == OpenedAccountStatusEnum.ACTIVE
+                      account.openedaccount_status === OpenedAccountStatusEnum.ACTIVE
                         ? "text-green-500"
-                        : "text-red-500"
+                        : isClosed
+                          ? "text-red-500"
+                          : null
                     } text-sm font-medium`}
                   >
                     {account.openedaccount_status}
                   </span>
-                  <span className="text-sm text-gray-500">{`₱${account.balance.toFixed(2)}`}</span>
+                  <span className="text-sm text-gray-500">₱{account.balance.toFixed(2)}</span>
                 </div>
               </ListboxOption>
             );

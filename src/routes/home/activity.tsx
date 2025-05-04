@@ -43,23 +43,14 @@ function RouteComponent() {
         );
         setActivityData(data);
         setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
-      } catch (err) {
-        setErrorMessage("Error fetching activity data");
-        console.error(err);
-      } finally {
         setLoading(false);
+      } catch (err) {
+        setErrorMessage("Something went wrong...");
+        console.error(err);
       }
     };
     fetchActivityData();
   }, [setErrorMessage, setLoading, setSuccessMessage, userId, limit]);
-
-  if (loading && activityData.length === 0) {
-    return (
-      <div className="flex justify-center items-center">
-        <span>Loading...</span>
-      </div>
-    );
-  }
 
   console.log("loading", loading);
 
@@ -87,8 +78,11 @@ function RouteComponent() {
         </div>
         <GenerateStatement />
       </div>
-
-      <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
+      <ActivityDataTable
+        data={activityData}
+        openedAccountIds={openedAccountIds}
+        loading={loading && activityData.length === 0}
+      />
       {activityData.length === limit ? (
         <div
           className="flex items-center justify-center py-4 gap-2 cursor-pointer hover:text-blue-400 text-blue-500 duration-300"

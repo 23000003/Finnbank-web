@@ -112,10 +112,12 @@ const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
       {/* user view bar */}
       <div className="flex flex-col">
         <div
-          className="flex items-center gap-6 hover:opacity-70 p-2 cursor-pointer duration-300"
+          className="flex items-center gap-4 hover:opacity-70 p-2 cursor-pointer duration-300"
           onClick={() => setToggle(toggle === "user" ? null : "user")}
         >
-          <img src="" alt="user-profile-image" className="bg-white w-9 h-9 rounded-full" />
+          <span className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold">
+            {username[0]}
+          </span>
           <span>{username}</span>
         </div>
         {toggle === "user" ? (

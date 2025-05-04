@@ -6,6 +6,7 @@ import { ActivityData } from "../../../types/entities/transaction.entity";
 import { useEffect, useState } from "react";
 import { OpenedAccountService } from "../../../services/opened-account.service";
 import { OpenedAccountNumber } from "../../../types/entities/opened-account.entity";
+import useActionStatus from "../../../hooks/useActionStatus";
 
 export const Route = createFileRoute("/home/receipt/$id")({
   component: ReceiptComponent,
@@ -13,11 +14,12 @@ export const Route = createFileRoute("/home/receipt/$id")({
 
 function ReceiptComponent() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
   const [accountNumbers, setAccountNumbers] = useState<OpenedAccountNumber[]>([]);
   const { activityData } = useRouterState({
     select: (s) => s.location.state as { activityData: ActivityData },
   });
+
+  const { loading, setLoading, setErrorMessage } = useActionStatus(true);
 
   useEffect(() => {
     const fetchAccountNumbers = async () => {
@@ -27,16 +29,16 @@ function ReceiptComponent() {
           activityData.receiver_id
         );
         setAccountNumbers(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching activity data:", error);
-      } finally {
-        setLoading(false);
+        setErrorMessage("Something went wrong...");
       }
     };
     if (activityData) {
       fetchAccountNumbers();
     }
-  }, [activityData]);
+  }, [activityData, setLoading, setErrorMessage]);
 
   if (loading) {
     return (

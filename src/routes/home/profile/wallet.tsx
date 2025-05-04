@@ -7,6 +7,10 @@ import { Bankcard } from "../../../types/entities/bankcard.entity";
 import { BankcardService } from "../../../services/bankcard.service";
 import { useAuth } from "../../../contexts/AuthContext";
 import { motion } from "framer-motion";
+import {
+  WalletCardInfoLoading,
+  WalletCardLoading,
+} from "../../../components/loading/WalletLoading";
 
 export const Route = createFileRoute("/home/profile/wallet")({
   component: RouteComponent,
@@ -25,19 +29,14 @@ function RouteComponent() {
         const data = await BankcardService.getAllBankcards(userId as string);
         setBankcards(data);
         setSelected(data[0]);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching bankcards:", error);
         setErrorMessage("Something went wrong...");
-      } finally {
-        setLoading(false);
       }
     };
     fetchBankcards();
   }, [setBankcards, setLoading, setErrorMessage, setSuccessMessage, userId]);
-
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  }
 
   return (
     <div className="min-h-screen py-10">
@@ -49,20 +48,27 @@ function RouteComponent() {
           transition={{ duration: 0.3 }}
         >
           <motion.div className="w-full max-w-md" layout>
-            <WalletCards
-              bankcards={bankcards}
-              selected={selected as Bankcard}
-              setSelected={setSelected}
-            />
+            {loading ? (
+              <WalletCardLoading />
+            ) : (
+              <WalletCards
+                bankcards={bankcards}
+                selected={selected as Bankcard}
+                setSelected={setSelected}
+              />
+            )}
           </motion.div>
           <motion.div
             className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sticky top-10"
-            layout
             initial={{ y: 20 }}
             animate={{ y: 0 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <WalletCardInfo viewBankcard={selected as Bankcard} />
+            {loading ? (
+              <WalletCardInfoLoading />
+            ) : (
+              <WalletCardInfo viewBankcard={selected as Bankcard} />
+            )}
           </motion.div>
         </motion.div>
       </div>

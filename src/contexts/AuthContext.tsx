@@ -48,7 +48,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
 
   const login = async (email: string, password: string) => {
     try {
-      console.log(email, password);
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const data = await AuthService.login(email, password);
@@ -60,15 +59,14 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       localStorage.setItem("userId", userId);
 
       setTokenExp(exp);
-      setIsAuthenticated(true);
+      setLoading(false);
       setUsername(name);
+      setIsAuthenticated(true);
       setUserId(String(userId));
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
       throw new Error("User does not exists.");
-    } finally {
-      setLoading(false);
     }
   };
 

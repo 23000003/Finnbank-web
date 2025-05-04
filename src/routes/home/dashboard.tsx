@@ -8,6 +8,7 @@ import { ActivityData } from "../../types/entities/transaction.entity";
 import { useAuth } from "../../contexts/AuthContext";
 import TransactionService from "../../services/transaction.service";
 import ActivityDataTable from "../../components/activity/ActivityDataTable";
+import DasboardLoading from "../../components/loading/DasboardLoading";
 export const Route = createFileRoute("/home/dashboard")({
   component: RouteComponent,
 });
@@ -24,6 +25,7 @@ function RouteComponent() {
   useEffect(() => {
     const fetchedAccounts = async () => {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         const { data, openData } = await TransactionService.getAllTransaction(
           userId as string,
           limit
@@ -32,58 +34,34 @@ function RouteComponent() {
         setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
         setAccounts(accData);
         setActivityData(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching opened accounts: ", error);
-        showToast.error("Error fetching opened accounts");
-      } finally {
-        setLoading(false);
+        showToast.error("Something went wrong...");
       }
     };
     fetchedAccounts();
   }, [limit, userId]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center">
-        <svg
-          className="animate-spin h-5 w-5 text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-          ></path>
-        </svg>
-      </div>
-    );
-  }
   return (
     <div className="p-6 space-y-6 bg-gray-100">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {accounts.map((account) => (
-          <AccountCard
-            key={account.openedaccount_id}
-            accountType={account.account_type}
-            balance={account.balance}
-            status={account.openedaccount_status}
-            userId={account.account_number}
-            accountId={account.openedaccount_id}
-            bankCardId={account.bankcard_id}
-          />
-        ))}
+        {loading ? (
+          <DasboardLoading />
+        ) : (
+          accounts.map((account) => (
+            <AccountCard
+              key={account.openedaccount_id}
+              accountType={account.account_type}
+              balance={account.balance}
+              status={account.openedaccount_status}
+              accountNumber={account.account_number}
+              accountId={account.openedaccount_id}
+              bankCardId={account.bankcard_id}
+            />
+          ))
+        )}
       </div>
-
       <div className="bg-white p-4 rounded shadow">
         <div className="flex justify-between items-center mb-2">
           <h2 className="font-semibold">Recent activity</h2>
@@ -94,7 +72,11 @@ function RouteComponent() {
             View all
           </button>
         </div>
-        <ActivityDataTable data={activityData} openedAccountIds={openedAccountIds} />
+        <ActivityDataTable
+          data={activityData}
+          openedAccountIds={openedAccountIds}
+          loading={loading}
+        />
       </div>
     </div>
   );

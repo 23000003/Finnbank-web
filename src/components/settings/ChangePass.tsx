@@ -55,12 +55,12 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
       };
       console.log(data);
       setSuccessMessage("Password changed successfully!");
-      onClose();
+      setLoading(false);
     } catch (error) {
       setErrorMessage("Failed to change password. Please try again.");
       console.error(error);
     } finally {
-      setLoading(false);
+      onClose();
     }
   };
 
