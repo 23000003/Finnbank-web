@@ -22,20 +22,31 @@ function RouteComponent() {
     limit,
     notifCount,
     readNotification,
+    filterNotifications,
   } = useNotification(userId as string, "/home/updates");
 
-  if (loading && notifications.length === 0) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
-  }
-
   const hasMoreNotifs = (notifCount as number) > (limit as number);
-  console.log("hasMoreNotifs", hasMoreNotifs);
 
   return (
     <div className="flex flex-col items-center md:items-start md:flex-row text-[#2c2e33] gap-5 mx-auto max-w-screen-xl">
       <div className="flex flex-col w-[450px] px-0 pt-4 pb-0 overflow-y-hidden">
-        <div className="flex flex-row items-center gap-4">
+        <div className="flex flex-row items-center gap-4 justify-between">
           <h1 className="text-2xl font-semibold text-gray-800">Updates</h1>
+          <select
+            name="filter"
+            id="notif-filter"
+            className="border border-gray-300 rounded-md p-2"
+            onChange={(e) => {
+              const filter = e.target.value;
+              if (filterNotifications) {
+                filterNotifications(filter);
+              }
+            }}
+          >
+            <option value="all">All</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+          </select>
         </div>
         <UpdatesList
           hasMoreNotifs={hasMoreNotifs}

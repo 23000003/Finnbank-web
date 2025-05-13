@@ -9,7 +9,7 @@ import TransferModal from "../../../components/service/TransferModal";
 import { useEffect, useState } from "react";
 import { PostTransaction } from "../../../types/entities/transaction.entity";
 import RecentlySent from "../../../components/service/RecentlySent";
-import { OpenedAccount } from "../../../types/entities/opened-account.entity";
+import { OpenedAccountTypeEnum } from "../../../types/enums/opened-account.enum";
 
 export const Route = createFileRoute("/home/service/transfer")({
   component: RouteComponent,
@@ -52,15 +52,33 @@ function RouteComponent() {
   });
 
   useEffect(() => {
-    if (accountNum && type) {
+    if (accountNum && type && !loading) {
       if (type === "transfer") {
         const account = openedAccounts.find((account) => account.account_number === accountNum);
-        setSelectedAccount(account as OpenedAccount);
+        if (!account) {
+          setSelectedAccount(null);
+          setErrorMessage("Account not found.");
+          return;
+        }
+        if (account.account_type === OpenedAccountTypeEnum.SAVINGS) {
+          setSelectedAccount(null);
+          setErrorMessage("You cannot transfer using savings account.");
+          return;
+        }
+        setSelectedAccount(account);
       } else if (type === "deposit") {
         setTransferToAccNo(accountNum);
       }
     }
-  }, [accountNum, type, openedAccounts, setTransferToAccNo, setSelectedAccount]);
+  }, [
+    accountNum,
+    type,
+    openedAccounts,
+    setTransferToAccNo,
+    setSelectedAccount,
+    setErrorMessage,
+    loading,
+  ]);
 
   const handleValidateTransfer = async () => {
     const data = await validateTransfer();

@@ -33,6 +33,20 @@ function RootComponent() {
     if (auth.loading) {
       return;
     }
+
+    const toMetaTitle = () => {
+      const pathSegments = location.pathname.split("/").filter(Boolean);
+      const lastSegment = pathSegments[pathSegments.length - 1] || "landing page";
+
+      const title = lastSegment
+        .replace(/-/g, " ") // Replace dashes with spaces
+        .replace(/\b\w/g, (c) => c.toUpperCase()); // Capitalize first letters
+
+      return `Finnbank | ${title}`;
+    };
+
+    document.title = toMetaTitle();
+
     if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
       navigate({ to: "/home/dashboard", replace: true });
     } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
@@ -40,16 +54,15 @@ function RootComponent() {
     }
   }, [auth, navigate, location]);
 
-  const IsAtAuthPage = () => {
-    if (location.pathname.startsWith("/welcome/sign")) {
-      return <AuthLayout />;
-    }
-    return <LandingLayout />;
-  };
-
   return (
     <>
-      {auth.isAuthenticated ? <HomeLayout /> : IsAtAuthPage()}
+      {auth.isAuthenticated ? (
+        <HomeLayout />
+      ) : !location.pathname.startsWith("/welcome/sign") ? (
+        <LandingLayout />
+      ) : (
+        <AuthLayout />
+      )}
       <ToastContainer autoClose={3000} />
     </>
   );
