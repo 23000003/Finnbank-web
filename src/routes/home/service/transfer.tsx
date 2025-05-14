@@ -94,7 +94,7 @@ function RouteComponent() {
   return (
     <>
       <motion.div
-        className="flex flex-col md:flex-row justify-between gap-8 p-6 max-w-6xl mx-auto"
+        className="flex flex-col items-center md:flex-row md:items-start justify-between gap-8 p-6 max-w-6xl mx-auto"
         initial={{ y: 20 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 300 }}
@@ -116,7 +116,7 @@ function RouteComponent() {
             handleValidateTransfer={handleValidateTransfer}
           />
         </div>
-        <div className="flex flex-col gap-6 w-full max-w-md p-6">
+        <div className="flex flex-col gap-6 w-full max-w-md px-6">
           <AccountSelection
             accounts={openedAccounts}
             loading={loading}
