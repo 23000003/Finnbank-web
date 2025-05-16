@@ -49,6 +49,24 @@ export default class TransactionService {
       throw new Error("Failed to fetch statements");
     }
   }
+  static async getIsAccountAtLimit(openData: number[]) {
+    try {
+      const data = await api
+        .get<{ data: boolean[] }>(`${this.prefix}/get-is-account-at-limit`, {
+          params: {
+            credit: openData[0],
+            debit: openData[1],
+            savings: openData[2],
+          },
+        })
+        .then((res) => res.data.data);
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error get is account at limit", error);
+      throw new Error("Failed to fetch statements");
+    }
+  }
   static async createTransaction(dto: PostTransaction) {
     try {
       const response = await api.post(`${this.prefix}/generate-transaction`, {

@@ -59,8 +59,12 @@ function RouteComponent() {
 
   const handleDateChange = async (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
+
     setStartDate(start);
     setEndDate(end);
+
+    console.log("start 1", start);
+    console.log("end 1", end);
 
     if (start && end) {
       try {
@@ -111,7 +115,11 @@ function RouteComponent() {
             />
           </div>
         </div>
-        <GenerateStatement />
+        <GenerateStatement
+          openedAccountIds={openedAccountIds}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </div>
       <ActivityDataTable
         data={activityData}

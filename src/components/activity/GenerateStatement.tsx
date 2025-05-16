@@ -3,11 +3,31 @@ import StatementService from "../../services/statement.service";
 import DownloadStatementButton from "./DownloadStatementButton";
 import useActionStatus from "../../hooks/useActionStatus";
 
-const GenerateStatement: React.FC = () => {
+type GenerateStatementProps = {
+  openedAccountIds: number[];
+  startDate: Date | null;
+  endDate: Date | null;
+};
+
+const GenerateStatement: React.FC<GenerateStatementProps> = ({
+  openedAccountIds,
+  startDate,
+  endDate,
+}) => {
   const { setErrorMessage, setSuccessMessage } = useActionStatus(false);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [pdfBuffer, setPdfBuffer] = useState<string | null>(null);
+
+  const formatDate = (date: Date | null): string => {
+    if (!date) return formatDate(new Date());
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  console.log(formatDate(startDate), formatDate(endDate), "startDate", "endDate");
 
   const handleGenerateStatement = async () => {
     setIsGenerating(true);
@@ -15,11 +35,11 @@ const GenerateStatement: React.FC = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const buffer = await StatementService.getAllStatements({
-        creditId: 1,
-        debitId: 2,
-        savingsId: 3,
-        startDate: "2025-01-01",
-        endDate: "2025-01-31",
+        creditId: openedAccountIds[0],
+        debitId: openedAccountIds[1],
+        savingsId: openedAccountIds[2],
+        startDate: startDate === null ? "2020-05-13T00:00:00Z" : startDate.toISOString(),
+        endDate: endDate === null ? new Date().toISOString() : endDate.toISOString(),
       });
 
       if (!buffer) {
