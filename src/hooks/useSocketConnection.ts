@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { ActivityData } from "../types/entities/transaction.entity";
 import { TransactionStatusEnum, TransactionTypeEnum } from "../types/enums/transaction.enum";
 import { NotificationTypeEnum } from "../types/enums/notification.enum";
-import { OpenedAccountService } from "../services/opened-account.service";
 import { NotificationService } from "../services/notification.service";
 
 type SocketProps = {
@@ -19,9 +18,12 @@ type SocketProps = {
 const sendNotification = async (
   status: TransactionStatusEnum,
   receiverId: number,
+  senderId: number,
   userId: string,
   fullName: string | undefined,
-  openedAccountIds: number[] | undefined
+  openedAccountIds: number[] | undefined,
+  amount: string,
+  notes: string
 ) => {
   const notifDto = {
     notif_type: NotificationTypeEnum.TRANSACTION,
@@ -30,27 +32,40 @@ const sendNotification = async (
     content: "",
   };
 
-  if (status === TransactionStatusEnum.FAILED) {
+  console.log(userId, senderId, receiverId, openedAccountIds);
+
+  if (status === TransactionStatusEnum.FAILED && openedAccountIds?.includes(senderId)) {
     notifDto.notif_to_id = userId;
     notifDto.notif_from_name = "Automated System";
     notifDto.content = "Transaction failed with the following reasons: ";
-  } else if (openedAccountIds?.includes(receiverId)) {
+  } else if (openedAccountIds?.includes(receiverId) && status === TransactionStatusEnum.COMPLETED) {
     notifDto.notif_to_id = userId;
     notifDto.notif_from_name = "Automated System";
     notifDto.content = "Deposit transaction successful.";
+    console.log("Deposit transaction successful", userId);
+  } else if (status === TransactionStatusEnum.COMPLETED && !openedAccountIds?.includes(senderId)) {
+    // Loophole for the receiver that is not the sender (since this function executes eachother)
+    notifDto.notif_to_id = userId;
+    notifDto.notif_from_name = fullName || "Automated System";
+    notifDto.content =
+      "You have received an amount ₱" + amount + " with the following Notes: " + notes;
+    // try {
+    //   const targetUserId = await OpenedAccountService.getUserIdByOpenedAccountId(receiverId);
+    //   notifDto.notif_to_id = targetUserId.account_id;
+    //   notifDto.notif_from_name = fullName || "Automated System";
+    //   notifDto.content = "You have received an amount ₱" + amount + " with the following Notes: " + notes;
+    //   console.log("Transaction completed successfully", targetUserId.account_id);
+    // } catch (error) {
+    //   console.error("Error fetching user ID:", error);
+    //   return;
+    // }
   } else {
-    try {
-      const targetUserId = await OpenedAccountService.getUserIdByOpenedAccountId(receiverId);
-      notifDto.notif_to_id = targetUserId.account_id;
-      notifDto.notif_from_name = fullName || "Automated System";
-      notifDto.content = "Transaction completed successfully.";
-    } catch (error) {
-      console.error("Error fetching user ID:", error);
-      return;
-    }
+    console.log("Nothing to do here");
+    return;
   }
   try {
-    console.log("notifDto", notifDto);
+    console.log("notifDto HERE", notifDto);
+    console.log(status, receiverId, userId);
     await NotificationService.generateNotification(notifDto);
   } catch (error) {
     console.error("Error generating notification:", error);
@@ -83,27 +98,30 @@ export const useSocketConnection = ({
         message.receiver_id = Number(message.receiver_id);
         message.sender_id = Number(message.sender_id);
 
-        const isUser =
+        const isInvolved =
           (openedAccountIds as number[]).includes(message.receiver_id) ||
           (openedAccountIds as number[]).includes(message.sender_id);
 
-        console.log("isUser", isUser);
+        console.log("isInvolved", isInvolved);
 
         const status = message.transaction_status.toUpperCase() as TransactionStatusEnum;
 
         console.log("status", status);
         console.log(status !== TransactionStatusEnum.PENDING);
-        // Ignore realtime messages for other users
-        if (!isUser && status === TransactionStatusEnum.PENDING) return;
+
+        if (!isInvolved) return;
 
         if (status !== TransactionStatusEnum.PENDING) {
           console.log("QUEUE DONE");
           void sendNotification(
             status,
             (activityData as ActivityData[])[0].receiver_id,
+            (activityData as ActivityData[])[0].sender_id,
             userId,
             fullName,
-            openedAccountIds
+            openedAccountIds,
+            (activityData as ActivityData[])[0].amount,
+            (activityData as ActivityData[])[0].notes
           );
           if (setActivityData) {
             setActivityData((prevData) => {
@@ -122,7 +140,9 @@ export const useSocketConnection = ({
           console.log("QUEUE PENDING");
           message.transaction_status = status;
           message.transaction_type = message.transaction_type.toUpperCase() as TransactionTypeEnum;
-          if (setActivityData) {
+          if (setActivityData && openedAccountIds?.includes(message.sender_id)) {
+            console.log(message.sender_id);
+            console.log(openedAccountIds);
             setActivityData((prevData) => [message, ...prevData]);
           }
         }

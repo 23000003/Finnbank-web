@@ -9,6 +9,8 @@ import { ArrowDown } from "lucide-react";
 import GenerateStatement from "../../components/activity/GenerateStatement";
 import { motion } from "framer-motion";
 import { useSocketConnection } from "../../hooks/useSocketConnection";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export const Route = createFileRoute("/home/activity")({
   component: RouteComponent,
@@ -17,8 +19,9 @@ export const Route = createFileRoute("/home/activity")({
 function RouteComponent() {
   const [activityData, setActivityData] = useState<ActivityData[]>([]);
   const [openedAccountIds, setOpenedAccountIds] = useState<number[]>([]);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [limit, setLimit] = useState(10);
-  const [filterByTime, setFilterByTime] = useState("all");
 
   const { userId, username } = useAuth();
   useSocketConnection({
@@ -54,6 +57,39 @@ function RouteComponent() {
 
   console.log("loading", loading);
 
+  const handleDateChange = async (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+
+    setStartDate(start);
+    setEndDate(end);
+
+    console.log("start 1", start);
+    console.log("end 1", end);
+
+    if (start && end) {
+      try {
+        setLoading(true);
+        const openData = await TransactionService.getTransactionByTimeStamp(
+          openedAccountIds,
+          end,
+          start
+        );
+        setActivityData(openData);
+        setLoading(false);
+      } catch (err) {
+        setErrorMessage("Something went wrong...");
+        console.error(err);
+      }
+    } else {
+      const { data, openData } = await TransactionService.getAllTransaction(
+        userId as string,
+        limit
+      );
+      setActivityData(data);
+      setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
+    }
+  };
+
   return (
     <motion.div
       className="pt-5 mb-24"
@@ -62,21 +98,28 @@ function RouteComponent() {
       transition={{ type: "spring", stiffness: 300 }}
     >
       <div className="mt-6 mb-4 flex flex-row justify-between items-center">
-        <div>
-          <span className="text-gray-600 mr-2">Filter by:</span>
-          <select
-            className="border rounded px-3 py-1 cursor-pointer"
-            value={filterByTime}
-            onChange={(e) => setFilterByTime(e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="7days">7 days</option>
-            <option value="1m">1 month</option>
-            <option value="6m">6 months</option>
-            <option value="1yr">1 year</option>
-          </select>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <DatePicker
+              selectsRange
+              startDate={startDate}
+              endDate={endDate}
+              onChange={handleDateChange}
+              isClearable
+              placeholderText="Select date range"
+              className="
+                border focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer w-64
+               border-blue-600 text-blue-600 placeholder:text-blue-600 rounded px-3 py-1 
+              "
+              dateFormat="MMM d, yyyy"
+            />
+          </div>
         </div>
-        <GenerateStatement />
+        <GenerateStatement
+          openedAccountIds={openedAccountIds}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </div>
       <ActivityDataTable
         data={activityData}

@@ -7,125 +7,92 @@ export const Route = createFileRoute("/welcome/learnmore")({
 function RouteComponent() {
   const data = [
     {
-      type: "Purpose",
-      values: [
-        "Primarily for storing funds and limited access",
-        "Everyday spending and bill management",
-        "For borrowing, paying off, or managing credit use",
-      ],
-    },
-    {
-      type: "Allowed Actions",
+      type: "Savings Account",
       values: [
         [
-          "✅ Receive deposits from other accounts",
-          "✅ Withdraw to credit card (cash-out only, not transfer)",
+          "🔒 No transactions allowed (view-only).",
+          "💼 Ideal for holding funds.",
+          "💰 50,000 PHP card withdrawal limit.",
         ],
         [
-          "✅ Pay bills",
-          "✅ Transfer to any account (except blocked savings direction)",
-          "✅ Receive salary, deposits from other accounts",
-          "✅ ATM withdrawals (if part of design)",
-        ],
-        [
-          "✅ Pay bills",
-          "✅ Transfer funds (to vendors or other linked accounts)",
-          "✅ Receive payments (loan top-ups, salary if enabled)",
+          "🔒 No transactions allowed (view-only).",
+          "🏢 Can link to multiple checking accounts.",
+          "💰 100,000 PHP card withdrawal limit.",
         ],
       ],
     },
     {
-      type: "Not Allowed",
+      type: "Checking Account",
       values: [
         [
-          "❌ Pay bills",
-          "❌ Transfer to other accounts directly",
-          "❌ Receive direct deposits from employers (optional)",
-        ],
-        ["🚫 Cannot loan money or go negative (unless overdraft enabled)"],
-        ["🚫 Cannot receive transfers from Savings"],
-      ],
-    },
-    {
-      type: "Limits & Rules",
-      values: [
-        [
-          "💸 Withdrawal limit: Max 50,000 per day",
-          "🛑 No withdrawal to other bank accounts (only to linked credit card)",
-          "♾️ No cap on how much the account can hold",
+          "💸 Transfer & Pay Bills allowed.",
+          "📅 Daily transaction limit: 100,000 PHP.",
+          "🧾 Used for daily expenses.",
         ],
         [
-          "💵 Daily spend limit (e.g., 100,000/day for security)",
-          "🧾 Optional: Require 500 minimum balance",
-        ],
-        [
-          "🏦 Credit limit: Set per user (e.g., 200,000 total)",
-          "💰 Cash advance fee if transferring to checking or paying bills",
-          "⚠️ Minimum monthly payment enforced",
+          "💸 Transfer & Pay Bills allowed.",
+          "📅 Daily transaction limit: 250,000 PHP.",
+          "🏢 Priority processing and support.",
         ],
       ],
     },
     {
-      type: "Extra Features",
+      type: "Credit Account",
       values: [
         [
-          "✨ Add interest accrual over time",
-          "⏳ Add a cool-down period between large withdrawals",
+          "💳 Used for credit payments.",
+          "📅 Daily spend limit: 100,000 PHP.",
+          "⚠️ Monthly minimum payment required.",
         ],
         [
-          "🔔 Instant transaction notifications",
-          "📊 Budget setting based on spending patterns",
-          '🔄 Linked auto-transfer to savings ("Save the Change" type feature)',
-        ],
-        [
-          "💳 Interest applies only on used credit",
-          "🎨 Balance usage color indicators (e.g., Green/Yellow/Red)",
-          "📈 Spending categories dashboard",
+          "💳 Used for credit payments.",
+          "📅 Daily spend limit: 300,000 PHP.",
+          "🏦 Access to business credit tools.",
         ],
       ],
     },
   ];
 
-  const accountHeaders = ["Savings Account", "Checking Account", "Credit Account"];
-  const accountColors = ["bg-blue-50", "bg-green-50", "bg-purple-50"];
+  const accountHeaders = ["Personal Account", "Business Account"];
 
   return (
-    <div className="p-4 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Account Features and Rules</h2>
+    <div className="h-svh lg:h-[70vh] flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <div className="p-4 mb-10 max-w-6xl w-full">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center sm:text-left">
+          Account Benefits
+        </h2>
 
-      <div className="overflow-x-auto shadow-lg rounded-xl">
-        <table className="w-full text-left">
-          <thead>
-            <tr>
-              <th className="p-4 text-lg font-semibold text-gray-700 bg-gray-100 rounded-tl-xl sticky left-0">
-                Category
-              </th>
-              {accountHeaders.map((header, index) => (
-                <th
-                  key={index}
-                  className={`p-4 text-lg font-semibold text-gray-700 ${accountColors[index]} ${index === accountHeaders.length - 1 ? "rounded-tr-xl" : ""}`}
-                >
-                  {header}
+        <div className="overflow-x-auto shadow-lg rounded-xl">
+          <table className="w-full text-left min-w-[600px]">
+            <thead>
+              <tr>
+                <th className="p-4 text-base sm:text-lg font-semibold text-gray-700 bg-gray-100 rounded-tl-xl sticky left-0 z-10">
+                  Account Type
                 </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className={`border-t ${rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-              >
-                <td className="p-4 font-medium text-gray-600 sticky left-0 bg-inherit min-w-[200px]">
-                  {row.type}
-                </td>
-                {row.values.map((val, valIndex) => (
-                  <td
-                    key={valIndex}
-                    className={`p-4 ${accountColors[valIndex]} border-l border-gray-200`}
+                {accountHeaders.map((header, index) => (
+                  <th
+                    key={index}
+                    className={`p-4 text-base sm:text-lg font-semibold text-gray-700 bg-gray-100 whitespace-nowrap ${
+                      index === accountHeaders.length - 1 ? "rounded-tr-xl" : ""
+                    }`}
                   >
-                    {Array.isArray(val) ? (
-                      <ul className="space-y-2">
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className={`border-t ${rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+                >
+                  <td className="p-4 font-medium text-gray-600 sticky left-0 bg-inherit min-w-[200px] z-0">
+                    {row.type}
+                  </td>
+                  {row.values.map((val, valIndex) => (
+                    <td key={valIndex} className={`p-4 border-l border-gray-200 align-top`}>
+                      <ul className="space-y-2 text-sm sm:text-base">
                         {val.map((item, i) => (
                           <li key={i} className="flex items-start">
                             <span className="mr-2">{item.match(/^[^\s]+/)?.[0]}</span>
@@ -133,36 +100,12 @@ function RouteComponent() {
                           </li>
                         ))}
                       </ul>
-                    ) : (
-                      <div>{val}</div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-lg font-semibold mb-2 text-gray-700">Key to Symbols</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="flex items-center">
-            <span className="mr-2">✅</span>
-            <span>Allowed</span>
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">❌</span>
-            <span>Not Allowed</span>
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">🚫</span>
-            <span>Restricted</span>
-          </div>
-          <div className="flex items-center">
-            <span className="mr-2">✨</span>
-            <span>Special Feature</span>
-          </div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

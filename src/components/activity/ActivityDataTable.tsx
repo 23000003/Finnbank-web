@@ -11,8 +11,6 @@ type ActivityProps = {
 };
 
 const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds, loading }) => {
-  const navigate = useNavigate();
-
   return (
     <div className="rounded-lg overflow-auto">
       <table className="w-full">
@@ -45,58 +43,8 @@ const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds, lo
           {loading ? (
             <ActivityTableLoading />
           ) : data.length > 0 ? (
-            data.map((item, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(item.date_transaction).toLocaleDateString()}
-                </td>
-                <td
-                  className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 cursor-pointer underline hover:text-blue-400"
-                  onClick={() => {
-                    // Handle click event for ref_no
-                    console.log(item);
-                    navigate({
-                      to: `/home/receipt/$id`,
-                      params: { id: item.ref_no },
-                      state: { activityData: item },
-                    });
-                  }}
-                >
-                  {item.ref_no}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">{item.notes}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {resolveTransactionType({
-                      type: item.transaction_type,
-                      receiver_id: item.receiver_id,
-                      sender_id: item.sender_id,
-                      openedAccountIds,
-                    })}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  ₱{Number(item.amount).toFixed(2)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                  ₱{item.transaction_fee}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      item.transaction_status === TransactionStatusEnum.PENDING
-                        ? "bg-yellow-100 text-yellow-800"
-                        : item.transaction_status === TransactionStatusEnum.COMPLETED
-                          ? "bg-green-100 text-green-800"
-                          : item.transaction_status === TransactionStatusEnum.FAILED
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {item.transaction_status}
-                  </span>
-                </td>
-              </tr>
+            data.map((item) => (
+              <LoadActivityData key={item.ref_no} item={item} openedAccountIds={openedAccountIds} />
             ))
           ) : (
             <tr>
@@ -112,3 +60,78 @@ const ActivityDataTable: React.FC<ActivityProps> = ({ data, openedAccountIds, lo
 };
 
 export default ActivityDataTable;
+
+type LoadActivityDataProps = {
+  item: ActivityData;
+  openedAccountIds: number[];
+};
+
+const LoadActivityData: React.FC<LoadActivityDataProps> = ({ item, openedAccountIds }) => {
+  const navigate = useNavigate();
+
+  if (item.transaction_status === TransactionStatusEnum.FAILED) {
+    const resolved = resolveTransactionType({
+      type: item.transaction_type,
+      receiver_id: item.receiver_id,
+      sender_id: item.sender_id,
+      openedAccountIds,
+    });
+    if (resolved === "Received") {
+      return null;
+    }
+  }
+
+  return (
+    <tr key={item.ref_no}>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        {new Date(item.date_transaction).toLocaleDateString()}
+      </td>
+      <td
+        className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 cursor-pointer underline hover:text-blue-400"
+        onClick={() => {
+          // Handle click event for ref_no
+          console.log(item);
+          navigate({
+            to: `/home/receipt/$id`,
+            params: { id: item.ref_no },
+            state: { activityData: item },
+          });
+        }}
+      >
+        {item.ref_no}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-500">{item.notes}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+          {resolveTransactionType({
+            type: item.transaction_type,
+            receiver_id: item.receiver_id,
+            sender_id: item.sender_id,
+            openedAccountIds,
+          })}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+        ₱{Number(item.amount).toFixed(2)}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+        ₱{item.transaction_fee}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+        <span
+          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+            item.transaction_status === TransactionStatusEnum.PENDING
+              ? "bg-yellow-100 text-yellow-800"
+              : item.transaction_status === TransactionStatusEnum.COMPLETED
+                ? "bg-green-100 text-green-800"
+                : item.transaction_status === TransactionStatusEnum.FAILED
+                  ? "bg-red-100 text-red-800"
+                  : "bg-gray-100 text-gray-800"
+          }`}
+        >
+          {item.transaction_status}
+        </span>
+      </td>
+    </tr>
+  );
+};

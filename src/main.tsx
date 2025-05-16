@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { createRouter, createHashHistory } from "@tanstack/react-router";
 import "./index.css";
@@ -35,11 +34,9 @@ const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
-    <StrictMode>
-      <AuthProvider>
-        <InitApp />
-      </AuthProvider>
-    </StrictMode>
+    <AuthProvider>
+      <InitApp />
+    </AuthProvider>
   );
 }
 
