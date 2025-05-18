@@ -58,10 +58,13 @@ function RootComponent() {
     <>
       {auth.isAuthenticated ? (
         <HomeLayout />
-      ) : !location.pathname.startsWith("/welcome/sign") ? (
-        <LandingLayout />
-      ) : (
+      ) : // tweaked logic for this so that forgot password and sign up pages are not included in the home layout
+      // if i did a mistake pls correct lng
+      location.pathname.startsWith("/welcome/sign") ||
+        location.pathname.startsWith("/welcome/forgotpass") ? (
         <AuthLayout />
+      ) : (
+        <LandingLayout />
       )}
       <ToastContainer autoClose={3000} />
     </>
