@@ -77,9 +77,9 @@ function RouteComponent() {
                 nationalIdNumber={profileData.nationalIdNumber}
                 accountNumber={profileData.accountNumber}
                 nationality={profileData.nationality}
-                accountStatus={profileData.accountStatus}
                 accountType={profileData.accountType}
                 birthdate={profileData.birthDate}
+                userID={userId as string}
               />
             </>
           )}

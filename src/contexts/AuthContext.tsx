@@ -3,6 +3,7 @@ import { AuthContextType } from "../types/interfaces/auth-context.interface";
 import { jwtDecode } from "jwt-decode";
 import { AuthService } from "../services/auth.service";
 import { isTokenExpired } from "../utils/validate-token-expiry";
+import { AccountStatusEnum } from "../types/enums/account.enum";
 
 const Auth = createContext<AuthContextType>({
   loading: true,
@@ -12,6 +13,7 @@ const Auth = createContext<AuthContextType>({
   tokenExp: null,
   login: async () => false,
   logout: async () => false,
+  validateEmail: async () => "",
 });
 
 type TokenDecoded = {
@@ -22,7 +24,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null); //fullname
   const [userId, setUserId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [tokenExp, setTokenExp] = useState<number | null>(null);
 
   useEffect(() => {
@@ -43,7 +45,6 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         logout();
       }
     }
-    setLoading(false);
   }, [tokenExp]);
 
   const login = async (email: string, password: string) => {
@@ -51,6 +52,14 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
       const data = await AuthService.login(email, password);
+      if (
+        data.account_status == AccountStatusEnum.CLOSED ||
+        data.account_status == AccountStatusEnum.SUSPENDED
+      ) {
+        throw new EvalError(
+          "Your account is either closed or suspended, please follow the steps to reactivate your account"
+        );
+      }
       const { access_token: token, full_name: name, account_id: userId } = data;
       const { exp } = jwtDecode<TokenDecoded>(token);
 
@@ -59,14 +68,15 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
       localStorage.setItem("userId", userId);
 
       setTokenExp(exp);
-      setLoading(false);
       setUsername(name);
       setIsAuthenticated(true);
       setUserId(String(userId));
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
-      throw new Error("User does not exists.");
+      throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,6 +91,20 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     return true;
   };
 
+  const validateEmail = async (email: string): Promise<string> => {
+    try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const data = await AuthService.validateEmail(email);
+      return data;
+    } catch (err) {
+      console.error("Error validating email:", err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Auth.Provider
       value={{
@@ -88,6 +112,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         isAuthenticated,
         login,
         logout,
+        validateEmail,
         username,
         userId,
         tokenExp,
