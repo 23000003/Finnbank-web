@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { AccountService } from "../../services/account.service";
 import { AccountTypeEnum } from "../../types/enums/account.enum";
@@ -20,7 +21,16 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
   userID,
 }) => {
   const { logout } = useAuth();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmation, setConfirmation] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleAccountStatus = async () => {
+    if (confirmation !== "I CONFIRM") {
+      setShowConfirm(true);
+      return;
+    }
+    setLoading(true);
     try {
       const type = "DEACTIVATE";
       await AccountService.updateAccountStatus(userID, type);
@@ -29,6 +39,10 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
     } catch (err) {
       console.error("Update Account Status error: ", err);
       throw err;
+    } finally {
+      setLoading(false);
+      setShowConfirm(false);
+      setConfirmation("");
     }
   };
   return (
@@ -62,6 +76,46 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
           <span>Close your account</span>
         </button>
       </div>
+      {/* confirmation module before closing account. 
+      wa nalang nako gi separate nga component kay gamay rmn */}
+      {showConfirm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-lg font-semibold mb-4 text-red-600">Confirm Account Closure</h2>
+            <p className="mb-4 text-gray-700">
+              Type <span className="font-mono bg-gray-100 px-1 rounded">I CONFIRM</span> to close
+              your account.
+            </p>
+            <input
+              type="text"
+              value={confirmation}
+              onChange={(e) => setConfirmation(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded mb-4"
+              placeholder='Type "I CONFIRM"'
+              disabled={loading}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded bg-gray-200 text-gray-700"
+                onClick={() => {
+                  setShowConfirm(false);
+                  setConfirmation("");
+                }}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                className={`px-4 py-2 rounded text-white ${loading ? "bg-gray-400" : "bg-red-600 hover:bg-red-700"}`}
+                onClick={handleAccountStatus}
+                disabled={loading}
+              >
+                {loading ? "Closing..." : "Confirm"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
