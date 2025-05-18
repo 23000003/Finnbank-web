@@ -1,23 +1,36 @@
-import { AccountStatusEnum, AccountTypeEnum } from "../../types/enums/account.enum";
+import { useAuth } from "../../contexts/AuthContext";
+import { AccountService } from "../../services/account.service";
+import { AccountTypeEnum } from "../../types/enums/account.enum";
 
 type AccountOptionsProps = {
   nationality: string;
   accountNumber: string;
   nationalIdNumber: string;
-  accountStatus: AccountStatusEnum;
   accountType: AccountTypeEnum;
   birthdate: string;
+  userID: string;
 };
 
 const AccountInformation: React.FC<AccountOptionsProps> = ({
   nationalIdNumber,
   accountNumber,
-  accountStatus,
   accountType,
   birthdate,
   nationality,
+  userID,
 }) => {
-  console.log("Status", accountStatus);
+  const { logout } = useAuth();
+  const handleAccountStatus = async () => {
+    try {
+      const type = "DEACTIVATE";
+      await AccountService.updateAccountStatus(userID, type);
+      logout();
+      console.log("logout ok");
+    } catch (err) {
+      console.error("Update Account Status error: ", err);
+      throw err;
+    }
+  };
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-xl font-semibold">Account Options</h1>
@@ -39,25 +52,15 @@ const AccountInformation: React.FC<AccountOptionsProps> = ({
             </span>
           </div>
         ))}
-        {accountStatus === AccountStatusEnum.ACTIVE ? (
-          <button
-            className="
+        <button
+          className="
           flex items-center justify-center gap-2 border-red-500 border
         text-red-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-
         "
-          >
-            <span>Close your account</span>
-          </button>
-        ) : (
-          <button
-            className="
-          flex items-center justify-center gap-2 border-green-500 border
-        text-green-500 font-semibold py-2 px-4 rounded-lg hover:opacity-50 transition duration-300 cursor-pointer mt-6
-        "
-          >
-            <span>Reactivate your account</span>
-          </button>
-        )}
+          onClick={() => handleAccountStatus()}
+        >
+          <span>Close your account</span>
+        </button>
       </div>
     </div>
   );
