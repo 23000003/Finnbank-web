@@ -29,6 +29,11 @@ export const useTransferMoney = (props: TransferProps) => {
       setErrorMessage("Please select an account to transfer from.");
       return false;
     }
+    if (selectedAccount.account_number === transferToAccNo) {
+      setErrorMessage("You cannot transfer to the same account.");
+      setTransferToAccNo("");
+      return false;
+    }
     if (amount > selectedAccount.balance) {
       setErrorMessage("Insufficient balance.");
       setAmount(0);
@@ -65,7 +70,7 @@ export const useTransferMoney = (props: TransferProps) => {
         receiver_id: data,
         transaction_type: TransactionTypeEnum.TRANSFER,
         amount: amount,
-        transaction_fee: 10,
+        transaction_fee: amount * 0.025,
         notes: description,
       };
       return transaction;
@@ -102,10 +107,6 @@ export const useTransferMoney = (props: TransferProps) => {
         });
       }
       setLoading(false);
-      setAmount(0);
-      setDescription("");
-      setTransferToAccNo("");
-      setSelectedAccount(null);
     }
   };
 

@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import notif from "../../../assets/notif.svg";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import logo from "../../../assets/finnbank-logo.png";
 import { useSocketConnection } from "../../../hooks/useSocketConnection";
@@ -79,6 +79,23 @@ const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
   const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
 
   const { unreadNotif, setUnreadNotif } = useNotification(userId);
+  const outsideRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    interface ClickEvent {
+      target: EventTarget | null;
+    }
+
+    function handleClickOutside(event: ClickEvent): void {
+      if (outsideRef.current && !outsideRef.current.contains(event.target as Node)) {
+        setToggle(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [outsideRef]);
 
   useSocketConnection({
     url: "listen-to-notification",
@@ -112,64 +129,70 @@ const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
       {/* user view bar */}
       <div className="flex flex-col">
         <div
-          className="flex items-center gap-4 hover:opacity-70 p-2 cursor-pointer duration-300"
+          className="flex flex-col items-center gap-4 p-2 cursor-pointer duration-300"
           onClick={() => setToggle(toggle === "user" ? null : "user")}
         >
-          <span className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold">
-            {username[0]}
-          </span>
-          <span>{username}</span>
-        </div>
-        {toggle === "user" ? (
-          <div className="absolute right-5 mt-12 w-64 bg-white rounded-lg shadow-xl overflow-hidden border border-gray-100 z-50">
-            <div className="p-4 border-b border-gray-100">
-              <span className="font-medium text-gray-800">User Menu</span>
-            </div>
-            <div className="flex flex-col p-2">
-              <Link
-                className="px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 flex items-center gap-2"
-                to="/home/profile"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                View Profile
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="px-3 py-2 cursor-pointer text-red-600 hover:bg-red-50 rounded-md transition-all duration-200 flex items-center gap-2 mt-1"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-red-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-                Logout
-              </button>
-            </div>
-            <div className="px-4 py-2 border-t border-gray-100 bg-gray-50 text-xs text-gray-500"></div>
+          <div className="flex items-center gap-4 hover:opacity-70">
+            <span className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold">
+              {username[0]}
+            </span>
+            <span>{username}</span>
           </div>
-        ) : null}
+          {toggle === "user" ? (
+            <div
+              ref={outsideRef}
+              className="absolute mt-11 w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50"
+            >
+              <div className="p-4 border-b border-gray-100">
+                <span className="font-medium text-gray-800">User Menu</span>
+              </div>
+              <div className="flex flex-col p-2">
+                <Link
+                  className="px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 flex items-center gap-2"
+                  to="/home/profile"
+                  onClick={() => setToggle(null)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                  View Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 cursor-pointer text-red-600 hover:bg-red-50 rounded-md transition-all duration-200 flex items-center gap-2 mt-1"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-red-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  Logout
+                </button>
+              </div>
+              <div className="px-4 py-2 border-t border-gray-100 bg-gray-50 text-xs text-gray-500"></div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );

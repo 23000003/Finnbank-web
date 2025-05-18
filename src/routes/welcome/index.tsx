@@ -59,7 +59,7 @@ function RouteComponent() {
                 Apply Now
               </Link>
               <Link
-                to="/welcome/signup"
+                to="/welcome/learnmore"
                 className="px-8 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-100 font-semibold rounded-lg shadow-sm transition duration-300"
               >
                 Learn More

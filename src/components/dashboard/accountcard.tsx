@@ -1,5 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
-import { OpenedAccountStatusEnum } from "../../types/enums/opened-account.enum";
+import {
+  OpenedAccountStatusEnum,
+  OpenedAccountTypeEnum,
+} from "../../types/enums/opened-account.enum";
 import { useState } from "react";
 import CloseOrReactivateAccount from "./CloseOrReactivateAccount";
 import useActionStatus from "../../hooks/useActionStatus";
@@ -133,20 +136,24 @@ export function AccountCard({
             >
               Deposit
             </button>
-            <span className="text-gray-300">|</span>
-            <button
-              className="hover:underline focus:outline-none cursor-pointer"
-              onClick={() => handleNavigation("transfer")}
-            >
-              Transfer
-            </button>
-            <span className="text-gray-300">|</span>
-            <button
-              className="hover:underline focus:outline-none cursor-pointer"
-              onClick={() => handleNavigation("paybills")}
-            >
-              Pay Bills
-            </button>
+            {accountType !== OpenedAccountTypeEnum.SAVINGS ? (
+              <>
+                <span className="text-gray-300">|</span>
+                <button
+                  className="hover:underline focus:outline-none cursor-pointer"
+                  onClick={() => handleNavigation("transfer")}
+                >
+                  Transfer
+                </button>
+                <span className="text-gray-300">|</span>
+                <button
+                  className="hover:underline focus:outline-none cursor-pointer"
+                  onClick={() => handleNavigation("paybills")}
+                >
+                  Pay Bills
+                </button>
+              </>
+            ) : null}
           </div>
           <div>
             <button

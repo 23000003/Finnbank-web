@@ -5,6 +5,7 @@ import { NotificationService } from "../services/notification.service";
 
 export const useNotification = (userId: string, route?: string) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [tempNotifications, setTempNotifications] = useState<Notification[]>([]);
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   const [notifCount, setNotifCount] = useState(0);
   const [unreadNotif, setUnreadNotif] = useState(0);
@@ -33,6 +34,7 @@ export const useNotification = (userId: string, route?: string) => {
         await new Promise((resolve) => setTimeout(resolve, 1500));
         const data = await NotificationService.getAllNotifications(userId, limit);
         setNotifications(data);
+        setTempNotifications(data);
         console.log("Notifications:", data);
         setLoading(false);
       } catch (error) {
@@ -68,6 +70,20 @@ export const useNotification = (userId: string, route?: string) => {
     setSelectedNotification(notifications.find((notif) => notif.notif_id === notifId) || null);
   };
 
+  const filterNotifications = (filterBy: string) => {
+    switch (filterBy) {
+      case "unread":
+        setNotifications(tempNotifications.filter((notif) => !notif.is_read));
+        break;
+      case "read":
+        setNotifications(tempNotifications.filter((notif) => notif.is_read));
+        break;
+      default:
+        setNotifications(tempNotifications);
+        break;
+    }
+  };
+
   if (route === "/home/updates") {
     return {
       notifications,
@@ -78,6 +94,7 @@ export const useNotification = (userId: string, route?: string) => {
       viewNotification,
       selectedNotification,
       readNotification,
+      filterNotifications,
     };
   }
 

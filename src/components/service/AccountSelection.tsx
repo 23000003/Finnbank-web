@@ -1,5 +1,8 @@
 import { OpenedAccount } from "../../types/entities/opened-account.entity";
-import { OpenedAccountStatusEnum } from "../../types/enums/opened-account.enum";
+import {
+  OpenedAccountStatusEnum,
+  OpenedAccountTypeEnum,
+} from "../../types/enums/opened-account.enum";
 import { hideAccountNumber } from "../../utils/hide-account-number";
 import { AccountSelectionLoading } from "../loading/TransferTabLoading";
 
@@ -25,7 +28,7 @@ const AccountSelection: React.FC<AccountSelectionProps> = ({
           <AccountSelectionLoading />
         ) : (
           accounts.map((account) => {
-            if (account.account_type.toUpperCase() === "CHECKING") return null;
+            if (account.account_type === OpenedAccountTypeEnum.SAVINGS) return null;
 
             const isSelected = selectedAccount?.account_type === account.account_type;
             const isClosed = account.openedaccount_status === OpenedAccountStatusEnum.CLOSED;

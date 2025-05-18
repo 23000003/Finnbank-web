@@ -9,7 +9,7 @@ import TransferModal from "../../../components/service/TransferModal";
 import { useEffect, useState } from "react";
 import { PostTransaction } from "../../../types/entities/transaction.entity";
 import RecentlySent from "../../../components/service/RecentlySent";
-import { OpenedAccount } from "../../../types/entities/opened-account.entity";
+import { OpenedAccountTypeEnum } from "../../../types/enums/opened-account.enum";
 
 export const Route = createFileRoute("/home/service/transfer")({
   component: RouteComponent,
@@ -52,15 +52,33 @@ function RouteComponent() {
   });
 
   useEffect(() => {
-    if (accountNum && type) {
+    if (accountNum && type && !loading) {
       if (type === "transfer") {
         const account = openedAccounts.find((account) => account.account_number === accountNum);
-        setSelectedAccount(account as OpenedAccount);
+        if (!account) {
+          setSelectedAccount(null);
+          setErrorMessage("Account not found.");
+          return;
+        }
+        if (account.account_type === OpenedAccountTypeEnum.SAVINGS) {
+          setSelectedAccount(null);
+          setErrorMessage("You cannot transfer using savings account.");
+          return;
+        }
+        setSelectedAccount(account);
       } else if (type === "deposit") {
         setTransferToAccNo(accountNum);
       }
     }
-  }, [accountNum, type, openedAccounts, setTransferToAccNo, setSelectedAccount]);
+  }, [
+    accountNum,
+    type,
+    openedAccounts,
+    setTransferToAccNo,
+    setSelectedAccount,
+    setErrorMessage,
+    loading,
+  ]);
 
   const handleValidateTransfer = async () => {
     const data = await validateTransfer();
@@ -76,7 +94,7 @@ function RouteComponent() {
   return (
     <>
       <motion.div
-        className="flex flex-col md:flex-row justify-between gap-8 p-6 max-w-6xl mx-auto"
+        className="flex flex-col items-center md:flex-row md:items-start justify-between gap-8 p-6 max-w-6xl mx-auto"
         initial={{ y: 20 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 300 }}
@@ -98,7 +116,7 @@ function RouteComponent() {
             handleValidateTransfer={handleValidateTransfer}
           />
         </div>
-        <div className="flex flex-col gap-6 w-full max-w-md p-6">
+        <div className="flex flex-col gap-6 w-full max-w-md px-6">
           <AccountSelection
             accounts={openedAccounts}
             loading={loading}
