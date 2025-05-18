@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { showToast } from "../../utils/toast";
 import { getInputBorderClass } from "../../utils/input-error";
+import ReactivationForm from "./ReactivateAccount";
 
 const LoginForm: React.FC = () => {
   const { login, loading } = useAuth();
@@ -10,6 +11,7 @@ const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isClosed, setClosed] = useState(false);
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,9 +28,18 @@ const LoginForm: React.FC = () => {
         navigate({ to: "/home/dashboard", replace: true });
       })
       .catch((error) => {
-        showToast.error(error.message);
+        if (error instanceof EvalError) {
+          setClosed(true);
+          showToast.error("Your account is closed.");
+          return;
+        }
+        showToast.error("Invalid credentials");
       });
   };
+
+  if (isClosed) {
+    return <ReactivationForm />;
+  }
 
   return (
     <form className="space-y-6" onSubmit={handleLogin}>

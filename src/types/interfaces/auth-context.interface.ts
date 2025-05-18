@@ -6,6 +6,7 @@ export interface AuthContextType {
   tokenExp: number | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
+  validateEmail: (email: string) => Promise<string>;
 }
 
 export interface Context {

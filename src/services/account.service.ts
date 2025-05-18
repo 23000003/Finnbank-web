@@ -87,4 +87,17 @@ export class AccountService {
       throw error;
     }
   }
+  static async updateAccountStatus(userID: string, type: "DEACTIVATE" | "ACTIVATE" | "SUSPEND") {
+    try {
+      const data = await api.patch(`${this.prefix}/update-account-status`, {
+        account_id: userID,
+        type,
+      });
+      console.log("Update Account Status called: ", data);
+      return data;
+    } catch (err) {
+      console.error("Error updating :", err);
+      throw err;
+    }
+  }
 }

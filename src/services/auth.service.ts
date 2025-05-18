@@ -60,4 +60,13 @@ export class AuthService {
       throw err;
     }
   }
+  static async validateEmail(email: string) {
+    try {
+      const res = await api.post(`${this.prefix}/validate-email`, { email });
+      return res.data.account_id;
+    } catch (err) {
+      console.error("Error validating email:", err);
+      throw err;
+    }
+  }
 }

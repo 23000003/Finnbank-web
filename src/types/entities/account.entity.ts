@@ -21,6 +21,7 @@ export type LoginResponse = {
   access_token: string;
   full_name: string;
   account_id: string;
+  account_status: string;
 };
 
 export type Acc = {
