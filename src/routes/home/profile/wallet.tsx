@@ -30,6 +30,7 @@ function RouteComponent() {
         setBankcards(data);
         setSelected(data[0]);
         setLoading(false);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching bankcards:", error);
         setErrorMessage("Something went wrong...");

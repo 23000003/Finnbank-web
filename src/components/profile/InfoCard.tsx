@@ -12,7 +12,7 @@ const InfoCard: React.FC<InfoProps> = ({ type, value, onEdit }) => {
       </div>
       <div className="flex flex-row bg-white justify-between items-center p-4 rounded-lg mt-4">
         <div className="flex flex-row gap-4 items-start w-full px-2">
-          <span>X</span>
+          <i className="fa-solid fa-envelope"></i>
           <div className="flex flex-row items-center justify-between w-full">
             <div className="flex flex-col gap-1">
               <span className="bg-gray-200 p-1 px-3 mr-auto rounded-xl font-semibold text-[10px]">

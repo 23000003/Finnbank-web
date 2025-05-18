@@ -4,7 +4,7 @@ import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import AuthLayout from "../components/layout/AuthLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isTokenExpired } from "../utils/validate-token-expiry";
 import { Context } from "../types/interfaces/auth-context.interface";
 
@@ -28,6 +28,8 @@ function RootComponent() {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showLoading, setShowLoading] = useState(false);
+  const [currentLayout, setCurrentLayout] = useState<string | null>(null);
 
   useEffect(() => {
     if (auth.loading) {
@@ -54,15 +56,39 @@ function RootComponent() {
     }
   }, [auth, navigate, location]);
 
+  // Handle layout transitions
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      return;
+    }
+    const getLayoutType = () => {
+      if (location.pathname.startsWith("/welcome/sign")) return "auth";
+      return "landing";
+    };
+    const newLayout = getLayoutType();
+    if (currentLayout !== null && currentLayout !== newLayout && newLayout !== "landing") {
+      setShowLoading(true);
+      setTimeout(() => setShowLoading(false), 500);
+    }
+    setCurrentLayout(newLayout);
+  }, [location.pathname, currentLayout, auth.loading, auth.isAuthenticated]);
+
+  const LoadingLayout = () => (
+    <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+    </div>
+  );
+
+  const getCurrentLayout = () => {
+    if (auth.isAuthenticated) return <HomeLayout />;
+    if (location.pathname.startsWith("/welcome/sign")) return <AuthLayout />;
+    return <LandingLayout />;
+  };
+
   return (
     <>
-      {auth.isAuthenticated ? (
-        <HomeLayout />
-      ) : !location.pathname.startsWith("/welcome/sign") ? (
-        <LandingLayout />
-      ) : (
-        <AuthLayout />
-      )}
+      {showLoading && <LoadingLayout />}
+      <div className={showLoading ? "hidden" : "block"}>{getCurrentLayout()}</div>
       <ToastContainer autoClose={3000} />
     </>
   );

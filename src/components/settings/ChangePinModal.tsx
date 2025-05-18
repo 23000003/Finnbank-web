@@ -3,6 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { hideAccountNumber } from "../../utils/hide-account-number";
 import useActionStatus from "../../hooks/useActionStatus";
 import { getInputBorderClass } from "../../utils/input-error";
+import { BankcardService } from "../../services/bankcard.service";
 
 type ChangePinModalProps = {
   handleClose: () => void;
@@ -13,7 +14,7 @@ type ChangePinModalProps = {
 };
 
 const ChangePinModal: React.FC<ChangePinModalProps> = ({ selectedCard, handleClose }) => {
-  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus(false);
+  const { setLoading, loading, setErrorMessage, setSuccessMessage } = useActionStatus(false);
 
   const [pinNumbers, setPinNumbers] = useState({
     currentPin: "",
@@ -61,13 +62,29 @@ const ChangePinModal: React.FC<ChangePinModalProps> = ({ selectedCard, handleClo
         newPin: pinNumbers.newPin,
       };
       console.log("Changing PIN for card:", data);
-      // Change this to your API call
-      // To services/change-pin
+      const verifyPin = await BankcardService.verifyBankcardPinNumber(
+        selectedCard.cardId,
+        pinNumbers.currentPin
+      );
+      if (verifyPin.status === 400) {
+        setErrorMessage("Current PIN is incorrect");
+        return;
+      }
+      const updatePin = await BankcardService.updateBankcardPinNumber(
+        selectedCard.cardId,
+        pinNumbers.newPin
+      );
+      if (updatePin.status === 400) {
+        setErrorMessage("Failed to update PIN");
+        return;
+      }
       setSuccessMessage("PIN changed successfully");
       handleClose();
     } catch (err) {
-      setErrorMessage("Failed to change PIN");
       console.error(err);
+      setErrorMessage((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,9 +138,13 @@ const ChangePinModal: React.FC<ChangePinModalProps> = ({ selectedCard, handleClo
             onClick={() => {
               handleChangePin();
             }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
+            disabled={loading}
+            className={`
+              bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer
+              ${loading ? "opacity-50 cursor-not-allowed" : ""}  
+            `}
           >
-            Confirm
+            {loading ? "Changing..." : "Change PIN"}
           </button>
         </div>
       </div>
