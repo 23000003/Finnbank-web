@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { showToast } from "../../utils/toast";
 
 interface UpdateInfoFormProps {
   type: "Emails" | "Phone Numbers" | "Addresses";
@@ -15,8 +16,16 @@ export const UpdateInfoForm: React.FC<UpdateInfoFormProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState(value);
 
+  let inputType = "text";
+  if (type === "Emails") inputType = "email";
+  if (type === "Phone Numbers") inputType = "tel";
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (type === "Phone Numbers" && inputValue.replace(/\D/g, "").length !== 11) {
+      showToast.error("Phone number must be exactly 11 digits.");
+      return;
+    }
     onUpdate(type, inputValue);
     onClose();
   };
@@ -31,7 +40,7 @@ export const UpdateInfoForm: React.FC<UpdateInfoFormProps> = ({
           </label>
           <input
             id="updateInput"
-            type="text"
+            type={inputType}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
