@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import useActionStatus from "../../hooks/useActionStatus";
 import { getInputBorderClass } from "../../utils/input-error";
+import { AccountService } from "../../services/account.service";
 
 interface ChangePassProps {
   isOpen: boolean;
@@ -11,7 +12,7 @@ interface ChangePassProps {
 
 export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
   const { userId } = useAuth();
-  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus(false);
+  const { setLoading, setErrorMessage, setSuccessMessage, loading } = useActionStatus(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const [passwords, setPasswords] = useState({
@@ -27,6 +28,14 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
       passwords.confirmNewPassword === ""
     ) {
       setErrorMessage("All fields are required");
+      return false;
+    }
+    if (passwords.newPassword.length < 8) {
+      setErrorMessage("Current password must be at least 8 characters");
+      return false;
+    }
+    if (!/\d/.test(passwords.newPassword) || !/[a-zA-Z]/.test(passwords.newPassword)) {
+      setErrorMessage("Password must contain at least one letter and one number");
       return false;
     }
     if (passwords.newPassword !== passwords.confirmNewPassword) {
@@ -46,13 +55,12 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
     }
     setLoading(true);
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      const data = {
-        userId: userId,
-        currentPassword: passwords.currentPassword,
-        newPassword: passwords.newPassword,
-      };
+      const data = await AccountService.updatePassword(
+        userId as string,
+        passwords.currentPassword,
+        passwords.newPassword
+      );
       console.log(data);
       setSuccessMessage("Password changed successfully!");
       setLoading(false);
@@ -109,9 +117,13 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
                 onClick={() => {
                   handleChangePassword();
                 }}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
+                disabled={loading}
+                className={
+                  `bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer` +
+                  (loading ? " opacity-50 cursor-not-allowed" : "")
+                }
               >
-                Confirm
+                {loading ? "Changing..." : "Change Password"}
               </button>
             </div>
           </div>

@@ -26,6 +26,25 @@ export default class TransactionService {
       throw new Error("Failed to fetch statements");
     }
   }
+  static async getRecentlySent(userId: string) {
+    try {
+      const openData = await OpenedAccountService.getAllOpenedAccountsOfUser(userId);
+      const data = await api
+        .get<{ data: ActivityData[] }>(`${this.prefix}/get-recently-sent`, {
+          params: {
+            credit: openData[0].openedaccount_id,
+            debit: openData[1].openedaccount_id,
+            savings: openData[2].openedaccount_id,
+          },
+        })
+        .then((res) => res.data.data);
+      console.log(data, "HERE");
+      return { data, openData };
+    } catch (error) {
+      console.error("Error fetching statements:", error);
+      throw new Error("Failed to fetch statements");
+    }
+  }
   static async getTransactionByTimeStamp(openData: number[], endDate: Date, startDate: Date) {
     try {
       console.log("start", startDate.toISOString());
@@ -49,7 +68,7 @@ export default class TransactionService {
       throw new Error("Failed to fetch statements");
     }
   }
-  static async getIsAccountAtLimit(openData: number[]) {
+  static async getIsAccountAtLimit(openData: number[], accountType: string) {
     try {
       const data = await api
         .get<{ data: boolean[] }>(`${this.prefix}/get-is-account-at-limit`, {
@@ -57,6 +76,7 @@ export default class TransactionService {
             credit: openData[0],
             debit: openData[1],
             savings: openData[2],
+            accountType: accountType,
           },
         })
         .then((res) => res.data.data);

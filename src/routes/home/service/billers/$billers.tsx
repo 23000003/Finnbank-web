@@ -13,10 +13,10 @@ function RouteComponent() {
 
   const { billers } = useParams({ from: "/home/service/billers/$billers" });
 
-  const { userId } = useAuth();
+  const { userId, accountType } = useAuth();
 
-  const { loading, setLoading, setErrorMessage, setSuccessMessage, openedAccounts } =
-    useOpenedAccountData(userId as string);
+  const { loading, setLoading, isAtLimit, setErrorMessage, setSuccessMessage, openedAccounts } =
+    useOpenedAccountData(userId as string, accountType as string);
 
   const billerData = Billers.find((b) => b.name.toLowerCase().replace(/\s+/g, "-") === billers);
 
@@ -57,6 +57,7 @@ function RouteComponent() {
         setLoading={setLoading}
         setErrorMessage={setErrorMessage}
         setSuccessMessage={setSuccessMessage}
+        isAtLimit={isAtLimit}
       />
     </div>
   );

@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-
 // position default to top right
 export const showToast = {
   success: (message: string) => {

@@ -32,6 +32,9 @@ const LoginForm: React.FC = () => {
           setClosed(true);
           showToast.error("Your account is closed.");
           return;
+        } else if ((error as Error).message.includes("Somethings wrong...")) {
+          showToast.error("Somethings wrong...");
+          return;
         }
         showToast.error("Invalid credentials");
       });

@@ -12,6 +12,20 @@ export const UpdateDetails: React.FC<UpdateDetailsProps> = ({
   readNotification,
   loading,
 }) => {
+  const validateContent = (content: string) => {
+    if (content.includes("Transaction failed with the following reasons:")) {
+      return `
+          Transaction failed with the following reasons:
+          <div style="margin-left: 20px; margin-top: 10px;">
+            <p>• Server is busy.</p>
+            <p>• Account you are sending to is disabled.</p>
+          </div>
+        `;
+    } else {
+      return content;
+    }
+  };
+
   return (
     <div className="flex flex-col w-full max-w-3xl p-6 bg-white rounded-xl shadow-lg border border-gray-100">
       {/* Header */}
@@ -56,7 +70,7 @@ export const UpdateDetails: React.FC<UpdateDetailsProps> = ({
       <div className="prose prose-sm sm:prose-base max-w-none text-gray-700 flex-1 overflow-y-auto pr-2">
         <div
           className="[&_a]:text-blue-600 [&_a]:underline [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5"
-          dangerouslySetInnerHTML={{ __html: content }}
+          dangerouslySetInnerHTML={{ __html: validateContent(content) }}
         />
       </div>
       {/* Footer */}

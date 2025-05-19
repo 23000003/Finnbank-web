@@ -67,6 +67,11 @@ const WalletCardInfo: React.FC<{ viewBankcard: Bankcard }> = ({ viewBankcard }) 
         ))}
       </div>
       <div className="w-full space-y-4">
+        {viewBankcard.pin_number === "1234" ? (
+          <span className="text-sm text-red-500 opacity-70">
+            <b>Note:</b> Default PIN is 1234. Please change it.
+          </span>
+        ) : null}
         <motion.div
           className="p-3 bg-red-50 rounded-lg text-sm text-red-700 text-center cursor-pointer hover:bg-red-100 duration-300 hover:text-red-400"
           initial={{ opacity: 0 }}

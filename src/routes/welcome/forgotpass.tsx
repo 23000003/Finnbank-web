@@ -19,9 +19,11 @@ function RouteComponent() {
       </div>
 
       {/* Placeholder for the form */}
-      <div className="bg-white p-6 rounded shadow-lg">
+      <div className="bg-white p-6">
         <ForgotPassForm />
-        <p className="text-gray-600 text-center">Enter your email to reset your password.</p>
+        <p className="text-gray-400 text-center mt-3 text-sm">
+          Enter your email to reset your password.
+        </p>
       </div>
 
       {/* Back to Sign In Link */}

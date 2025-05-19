@@ -4,7 +4,7 @@ import HomeLayout from "../components/layout/HomeLayout";
 import { ToastContainer } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import AuthLayout from "../components/layout/AuthLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isTokenExpired } from "../utils/validate-token-expiry";
 import { Context } from "../types/interfaces/auth-context.interface";
 
@@ -28,6 +28,8 @@ function RootComponent() {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showLoading, setShowLoading] = useState(false);
+  const [currentLayout, setCurrentLayout] = useState<string | null>(null);
 
   useEffect(() => {
     if (auth.loading) {
@@ -47,26 +49,60 @@ function RootComponent() {
 
     document.title = toMetaTitle();
 
-    if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
+    if (location.pathname.startsWith("/learnmore")) {
+      return;
+    } else if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
       navigate({ to: "/home/dashboard", replace: true });
     } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
       navigate({ to: "/welcome", replace: true });
     }
   }, [auth, navigate, location]);
 
+  // Handle layout transitions
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      return;
+    }
+    const getLayoutType = () => {
+      if (
+        location.pathname.startsWith("/welcome/sign") ||
+        location.pathname.startsWith("/welcome/forgot")
+      )
+        return "auth";
+      return "landing";
+    };
+    const newLayout = getLayoutType();
+    if (currentLayout !== null && currentLayout !== newLayout && newLayout !== "landing") {
+      setShowLoading(true);
+      setTimeout(() => setShowLoading(false), 500);
+    }
+    setCurrentLayout(newLayout);
+  }, [location.pathname, currentLayout, auth.loading, auth.isAuthenticated]);
+
+  const LoadingLayout = () => (
+    <div className="fixed inset-0 flex items-center justify-center bg-white z-50">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+    </div>
+  );
+
+  const getCurrentLayout = () => {
+    if (auth.isAuthenticated) return <HomeLayout />;
+    if (
+      location.pathname.startsWith("/welcome/sign") ||
+      location.pathname.startsWith("/welcome/forgot")
+    ) {
+      return <AuthLayout />;
+    }
+    return <LandingLayout />;
+  };
+
   return (
     <>
-      {auth.isAuthenticated ? (
-        <HomeLayout />
-      ) : // tweaked logic for this so that forgot password and sign up pages are not included in the home layout
-      // if i did a mistake pls correct lng
-      location.pathname.startsWith("/welcome/sign") ||
-        location.pathname.startsWith("/welcome/forgotpass") ? (
-        <AuthLayout />
-      ) : (
-        <LandingLayout />
-      )}
-      <ToastContainer autoClose={3000} />
+      {showLoading && <LoadingLayout />}
+      <div className={showLoading ? "hidden" : "block"}>
+        {getCurrentLayout()}
+        <ToastContainer autoClose={3000} />
+      </div>
     </>
   );
 }

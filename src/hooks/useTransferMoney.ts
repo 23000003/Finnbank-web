@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { OpenedAccount } from "../types/entities/opened-account.entity";
+import { Limit, OpenedAccount } from "../types/entities/opened-account.entity";
 import { IActionStatus } from "../types/interfaces/action-status.interface";
 import { PostTransaction } from "../types/entities/transaction.entity";
 import { TransactionTypeEnum } from "../types/enums/transaction.enum";
 import { OpenedAccountService } from "../services/opened-account.service";
 import TransactionService from "../services/transaction.service";
 
+type LimitAccounts = "credit" | "savings" | "checking";
 interface TransferProps extends IActionStatus {
   userId: string;
+  isAtLimit: Limit;
 }
 
 export const useTransferMoney = (props: TransferProps) => {
-  const { setErrorMessage, setSuccessMessage, setLoading } = props;
+  const { setErrorMessage, setSuccessMessage, setLoading, isAtLimit } = props;
 
   const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
@@ -52,6 +54,10 @@ export const useTransferMoney = (props: TransferProps) => {
     if (description.length < 10) {
       setErrorMessage("Description must be greater than 10 characters.");
       setDescription("");
+      return false;
+    }
+    if (isAtLimit[selectedAccount.account_type.toLowerCase() as LimitAccounts].isAtLimit) {
+      setErrorMessage("Account chosen has reached its daily limit.");
       return false;
     }
     return true;

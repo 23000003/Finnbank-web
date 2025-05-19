@@ -5,4 +5,5 @@ export type Bankcard = {
   expiry_date: string;
   cvv: string;
   date_created: string;
+  pin_number: string;
 };

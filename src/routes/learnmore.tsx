@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/welcome/learnmore")({
+export const Route = createFileRoute("/learnmore")({
   component: RouteComponent,
 });
 
@@ -56,7 +56,7 @@ function RouteComponent() {
   const accountHeaders = ["Personal Account", "Business Account"];
 
   return (
-    <div className="h-svh lg:h-[70vh] flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <div className="h-svh lg:h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="p-4 mb-10 max-w-6xl w-full">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center sm:text-left">
           Account Benefits

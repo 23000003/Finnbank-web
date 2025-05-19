@@ -11,11 +11,11 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
+import { Route as LearnmoreImport } from "./routes/learnmore";
 import { Route as IndexImport } from "./routes/index";
 import { Route as WelcomeIndexImport } from "./routes/welcome/index";
 import { Route as WelcomeSignupImport } from "./routes/welcome/signup";
 import { Route as WelcomeSigninImport } from "./routes/welcome/signin";
-import { Route as WelcomeLearnmoreImport } from "./routes/welcome/learnmore";
 import { Route as WelcomeForgotpassImport } from "./routes/welcome/forgotpass";
 import { Route as HomeUpdatesImport } from "./routes/home/updates";
 import { Route as HomeInboxImport } from "./routes/home/inbox";
@@ -32,6 +32,12 @@ import { Route as HomeProfileSettingsImport } from "./routes/home/profile/settin
 import { Route as HomeServiceBillersBillersImport } from "./routes/home/service/billers/$billers";
 
 // Create/Update Routes
+
+const LearnmoreRoute = LearnmoreImport.update({
+  id: "/learnmore",
+  path: "/learnmore",
+  getParentRoute: () => rootRoute,
+} as any);
 
 const IndexRoute = IndexImport.update({
   id: "/",
@@ -54,12 +60,6 @@ const WelcomeSignupRoute = WelcomeSignupImport.update({
 const WelcomeSigninRoute = WelcomeSigninImport.update({
   id: "/welcome/signin",
   path: "/welcome/signin",
-  getParentRoute: () => rootRoute,
-} as any);
-
-const WelcomeLearnmoreRoute = WelcomeLearnmoreImport.update({
-  id: "/welcome/learnmore",
-  path: "/welcome/learnmore",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -158,6 +158,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
+    "/learnmore": {
+      id: "/learnmore";
+      path: "/learnmore";
+      fullPath: "/learnmore";
+      preLoaderRoute: typeof LearnmoreImport;
+      parentRoute: typeof rootRoute;
+    };
     "/home/activity": {
       id: "/home/activity";
       path: "/home/activity";
@@ -191,13 +198,6 @@ declare module "@tanstack/react-router" {
       path: "/welcome/forgotpass";
       fullPath: "/welcome/forgotpass";
       preLoaderRoute: typeof WelcomeForgotpassImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/welcome/learnmore": {
-      id: "/welcome/learnmore";
-      path: "/welcome/learnmore";
-      fullPath: "/welcome/learnmore";
-      preLoaderRoute: typeof WelcomeLearnmoreImport;
       parentRoute: typeof rootRoute;
     };
     "/welcome/signin": {
@@ -291,12 +291,12 @@ declare module "@tanstack/react-router" {
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
+  "/learnmore": typeof LearnmoreRoute;
   "/home/activity": typeof HomeActivityRoute;
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
   "/home/updates": typeof HomeUpdatesRoute;
   "/welcome/forgotpass": typeof WelcomeForgotpassRoute;
-  "/welcome/learnmore": typeof WelcomeLearnmoreRoute;
   "/welcome/signin": typeof WelcomeSigninRoute;
   "/welcome/signup": typeof WelcomeSignupRoute;
   "/welcome": typeof WelcomeIndexRoute;
@@ -313,12 +313,12 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
+  "/learnmore": typeof LearnmoreRoute;
   "/home/activity": typeof HomeActivityRoute;
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
   "/home/updates": typeof HomeUpdatesRoute;
   "/welcome/forgotpass": typeof WelcomeForgotpassRoute;
-  "/welcome/learnmore": typeof WelcomeLearnmoreRoute;
   "/welcome/signin": typeof WelcomeSigninRoute;
   "/welcome/signup": typeof WelcomeSignupRoute;
   "/welcome": typeof WelcomeIndexRoute;
@@ -336,12 +336,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   "/": typeof IndexRoute;
+  "/learnmore": typeof LearnmoreRoute;
   "/home/activity": typeof HomeActivityRoute;
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
   "/home/updates": typeof HomeUpdatesRoute;
   "/welcome/forgotpass": typeof WelcomeForgotpassRoute;
-  "/welcome/learnmore": typeof WelcomeLearnmoreRoute;
   "/welcome/signin": typeof WelcomeSigninRoute;
   "/welcome/signup": typeof WelcomeSignupRoute;
   "/welcome/": typeof WelcomeIndexRoute;
@@ -360,12 +360,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | "/"
+    | "/learnmore"
     | "/home/activity"
     | "/home/dashboard"
     | "/home/inbox"
     | "/home/updates"
     | "/welcome/forgotpass"
-    | "/welcome/learnmore"
     | "/welcome/signin"
     | "/welcome/signup"
     | "/welcome"
@@ -381,12 +381,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
+    | "/learnmore"
     | "/home/activity"
     | "/home/dashboard"
     | "/home/inbox"
     | "/home/updates"
     | "/welcome/forgotpass"
-    | "/welcome/learnmore"
     | "/welcome/signin"
     | "/welcome/signup"
     | "/welcome"
@@ -402,12 +402,12 @@ export interface FileRouteTypes {
   id:
     | "__root__"
     | "/"
+    | "/learnmore"
     | "/home/activity"
     | "/home/dashboard"
     | "/home/inbox"
     | "/home/updates"
     | "/welcome/forgotpass"
-    | "/welcome/learnmore"
     | "/welcome/signin"
     | "/welcome/signup"
     | "/welcome/"
@@ -425,12 +425,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  LearnmoreRoute: typeof LearnmoreRoute;
   HomeActivityRoute: typeof HomeActivityRoute;
   HomeDashboardRoute: typeof HomeDashboardRoute;
   HomeInboxRoute: typeof HomeInboxRoute;
   HomeUpdatesRoute: typeof HomeUpdatesRoute;
   WelcomeForgotpassRoute: typeof WelcomeForgotpassRoute;
-  WelcomeLearnmoreRoute: typeof WelcomeLearnmoreRoute;
   WelcomeSigninRoute: typeof WelcomeSigninRoute;
   WelcomeSignupRoute: typeof WelcomeSignupRoute;
   WelcomeIndexRoute: typeof WelcomeIndexRoute;
@@ -447,12 +447,12 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LearnmoreRoute: LearnmoreRoute,
   HomeActivityRoute: HomeActivityRoute,
   HomeDashboardRoute: HomeDashboardRoute,
   HomeInboxRoute: HomeInboxRoute,
   HomeUpdatesRoute: HomeUpdatesRoute,
   WelcomeForgotpassRoute: WelcomeForgotpassRoute,
-  WelcomeLearnmoreRoute: WelcomeLearnmoreRoute,
   WelcomeSigninRoute: WelcomeSigninRoute,
   WelcomeSignupRoute: WelcomeSignupRoute,
   WelcomeIndexRoute: WelcomeIndexRoute,
@@ -478,12 +478,12 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/learnmore",
         "/home/activity",
         "/home/dashboard",
         "/home/inbox",
         "/home/updates",
         "/welcome/forgotpass",
-        "/welcome/learnmore",
         "/welcome/signin",
         "/welcome/signup",
         "/welcome/",
@@ -501,6 +501,9 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
+    "/learnmore": {
+      "filePath": "learnmore.tsx"
+    },
     "/home/activity": {
       "filePath": "home/activity.tsx"
     },
@@ -515,9 +518,6 @@ export const routeTree = rootRoute
     },
     "/welcome/forgotpass": {
       "filePath": "welcome/forgotpass.tsx"
-    },
-    "/welcome/learnmore": {
-      "filePath": "welcome/learnmore.tsx"
     },
     "/welcome/signin": {
       "filePath": "welcome/signin.tsx"

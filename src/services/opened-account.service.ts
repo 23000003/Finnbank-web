@@ -56,7 +56,7 @@ export class OpenedAccountService {
   }
   static async createOpenedAccount(accountId: string) {
     try {
-      const response = await api.post(`${this.prefix}/create-account`, {
+      const response = await api.post(`/auth/create-account`, {
         account_id: accountId,
       });
       return response.data;

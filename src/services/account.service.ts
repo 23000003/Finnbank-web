@@ -89,7 +89,7 @@ export class AccountService {
   }
   static async updateAccountStatus(userID: string, type: "DEACTIVATE" | "ACTIVATE" | "SUSPEND") {
     try {
-      const data = await api.patch(`${this.prefix}/update-account-status`, {
+      const data = await api.patch(`/auth/update-account-status`, {
         account_id: userID,
         type,
       });
@@ -97,6 +97,21 @@ export class AccountService {
       return data;
     } catch (err) {
       console.error("Error updating :", err);
+      throw err;
+    }
+  }
+  static async updatePassword(userId: string, currPass: string, newPass: string) {
+    try {
+      const data = await api
+        .patch(`${this.prefix}/update-password`, {
+          auth_id: userId,
+          old_password: currPass,
+          new_password: newPass,
+        })
+        .then((res) => res.data);
+      return data;
+    } catch (err) {
+      console.error("Error updating password:", err);
       throw err;
     }
   }

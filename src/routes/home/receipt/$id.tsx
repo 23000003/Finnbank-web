@@ -32,7 +32,6 @@ function ReceiptComponent() {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching activity data:", error);
-        setErrorMessage("Something went wrong...");
       }
     };
     if (activityData) {
