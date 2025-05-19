@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { showToast } from "../../utils/toast";
 import { getInputBorderClass } from "../../utils/input-error";
@@ -12,6 +12,17 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isClosed, setClosed] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    const storedRememberMe = localStorage.getItem("rememberMe");
+
+    if (storedEmail && storedRememberMe === "true") {
+      setEmail(storedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,6 +36,10 @@ const LoginForm: React.FC = () => {
       .then(() => {
         showToast.success("Login successful");
         console.log("Login OK");
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", "true");
+          localStorage.setItem("email", email);
+        }
         navigate({ to: "/home/dashboard", replace: true });
       })
       .catch((error) => {
@@ -43,6 +58,15 @@ const LoginForm: React.FC = () => {
   if (isClosed) {
     return <ReactivationForm />;
   }
+
+  // hahahaha
+  const handleRememberMe = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberMe(e.target.checked);
+    if (!e.target.checked) {
+      localStorage.removeItem("rememberMe");
+      localStorage.removeItem("email");
+    }
+  };
 
   return (
     <form className="space-y-6" onSubmit={handleLogin}>
@@ -85,6 +109,8 @@ const LoginForm: React.FC = () => {
             type="checkbox"
             id="remember-me"
             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            checked={rememberMe}
+            onChange={handleRememberMe}
           />
           <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
             Remember me

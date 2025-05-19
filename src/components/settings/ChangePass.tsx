@@ -63,12 +63,16 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
       );
       console.log(data);
       setSuccessMessage("Password changed successfully!");
-      setLoading(false);
+      onClose();
     } catch (error) {
-      setErrorMessage("Failed to change password. Please try again.");
+      if ((error as Error).message.includes("incorrect.")) {
+        setErrorMessage((error as Error).message);
+        return;
+      }
+      setErrorMessage("Something went wrong..");
       console.error(error);
     } finally {
-      onClose();
+      setLoading(false);
     }
   };
 

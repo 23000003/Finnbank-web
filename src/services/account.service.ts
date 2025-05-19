@@ -1,6 +1,7 @@
 import { PersonalData } from "../types/entities/account.entity";
 import { api } from "../configs/axios";
 import { AccountStatusEnum, AccountTypeEnum } from "../types/enums/account.enum";
+import { AxiosError } from "axios";
 
 export class AccountService {
   private static prefix: string = "/account";
@@ -112,6 +113,12 @@ export class AccountService {
       return data;
     } catch (err) {
       console.error("Error updating password:", err);
+      if (
+        err instanceof AxiosError &&
+        err.response?.data?.error[0].message.includes("old password is incorrect")
+      ) {
+        throw new Error("Current password is incorrect.");
+      }
       throw err;
     }
   }
