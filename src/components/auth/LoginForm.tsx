@@ -32,6 +32,9 @@ const LoginForm: React.FC = () => {
           setClosed(true);
           showToast.error("Your account is closed.");
           return;
+        } else if ((error as Error).message.includes("Somethings wrong...")) {
+          showToast.error("Somethings wrong...");
+          return;
         }
         showToast.error("Invalid credentials");
       });
@@ -87,7 +90,7 @@ const LoginForm: React.FC = () => {
             Remember me
           </label>
         </div>
-        <Link to="/welcome" className="text-sm text-blue-600 hover:text-blue-500">
+        <Link to="/welcome/forgotpass" className="text-sm text-blue-600 hover:text-blue-500">
           Forgot password?
         </Link>
       </div>

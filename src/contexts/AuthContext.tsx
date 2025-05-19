@@ -11,6 +11,7 @@ const Auth = createContext<AuthContextType>({
   username: null,
   userId: null,
   tokenExp: null,
+  accountType: null,
   login: async () => false,
   logout: async () => false,
   validateEmail: async () => "",
@@ -23,6 +24,7 @@ type TokenDecoded = {
 export function AuthProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null); //fullname
+  const [accountType, setAccountType] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [tokenExp, setTokenExp] = useState<number | null>(null);
@@ -31,12 +33,14 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     const token = localStorage.getItem("token");
     const name = localStorage.getItem("username");
     const userId = localStorage.getItem("userId");
+    const accountType = localStorage.getItem("account_type");
 
-    if (token && name && userId) {
+    if (token && name && userId && accountType) {
       const { exp } = jwtDecode<TokenDecoded>(token);
       setTokenExp(exp);
       setUsername(name);
       setUserId(userId);
+      setAccountType(accountType);
       if (!isTokenExpired(Number(tokenExp))) {
         console.log("Token is valid");
         setIsAuthenticated(true);
@@ -60,17 +64,19 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
           "Your account is either closed or suspended, please follow the steps to reactivate your account"
         );
       }
-      const { access_token: token, full_name: name, account_id: userId } = data;
-      const { exp } = jwtDecode<TokenDecoded>(token);
+      const { access_token, full_name, account_id, account_type } = data;
+      const { exp } = jwtDecode<TokenDecoded>(access_token);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("username", name);
-      localStorage.setItem("userId", userId);
+      localStorage.setItem("token", access_token);
+      localStorage.setItem("username", full_name);
+      localStorage.setItem("userId", account_id);
+      localStorage.setItem("account_type", account_type);
 
       setTokenExp(exp);
-      setUsername(name);
+      setUsername(full_name);
       setIsAuthenticated(true);
       setUserId(String(userId));
+      setAccountType(account_type);
       return true;
     } catch (err) {
       console.error("Error logging in:", err);
@@ -84,7 +90,9 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("userId");
+    localStorage.removeItem("account_type");
     setIsAuthenticated(false);
+    setAccountType(null);
     setUsername(null);
     setUserId(null);
     setTokenExp(null);
@@ -116,6 +124,7 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode 
         username,
         userId,
         tokenExp,
+        accountType,
       }}
     >
       {children}

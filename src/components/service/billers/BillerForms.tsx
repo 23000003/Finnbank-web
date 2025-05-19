@@ -1,5 +1,5 @@
 import SelectAccount from "./SelectAccount";
-import { OpenedAccount } from "../../../types/entities/opened-account.entity";
+import { Limit, OpenedAccount } from "../../../types/entities/opened-account.entity";
 import { usePayBills } from "../../../hooks/usePayBills";
 import { useState } from "react";
 import ConsumerRefInput from "./ConsumerRefInput";
@@ -11,6 +11,7 @@ import { Biller } from "../../../types/entities/billers.entity";
 interface BillerFormProps extends IActionStatus {
   accounts: OpenedAccount[];
   biller: Biller;
+  isAtLimit: Limit | null;
 }
 
 const BillerForm: React.FC<BillerFormProps> = ({
@@ -20,6 +21,7 @@ const BillerForm: React.FC<BillerFormProps> = ({
   setLoading,
   setErrorMessage,
   setSuccessMessage,
+  isAtLimit,
 }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -46,6 +48,7 @@ const BillerForm: React.FC<BillerFormProps> = ({
     setSuccessMessage,
     account: filterAccounts[0],
     biller,
+    isAtLimit: isAtLimit as Limit,
   });
 
   return (

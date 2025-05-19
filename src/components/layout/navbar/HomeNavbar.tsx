@@ -5,12 +5,33 @@ import { useAuth } from "../../../contexts/AuthContext";
 import logo from "../../../assets/finnbank-logo.png";
 import { useSocketConnection } from "../../../hooks/useSocketConnection";
 import { useNotification } from "../../../hooks/useNotification";
+import { menuItems } from "../../../data/menu";
 
 type NavLinks = "dashboard" | "service" | "activity";
 
 const HomeNavbar: React.FC = () => {
   const location = useLocation();
   const { logout, username, userId } = useAuth();
+
+  const [toggle, setToggle] = useState<"burger" | "user" | null>(null);
+  const outsideRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    interface ClickEvent {
+      target: EventTarget | null;
+    }
+
+    function handleClickOutside(event: ClickEvent): void {
+      if (outsideRef.current && !outsideRef.current.contains(event.target as Node)) {
+        console.log("Clicked outside");
+        setToggle(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [outsideRef]);
 
   return (
     <nav className="bg-blue-500 text-white px-4 md:px-12 lg:px-24">
@@ -21,8 +42,11 @@ const HomeNavbar: React.FC = () => {
             <h1 className="text-2xl font-bold">Finnbank</h1>
           </div>
 
-          <div className="lg:hidden flex items-center">
-            <button className="text-white focus:outline-none">
+          <div className="lg:hidden flex" ref={toggle === "burger" ? outsideRef : null}>
+            <button
+              className="text-white focus:outline-none cursor-pointer hover:opacity-70 duration-300"
+              onClick={() => setToggle(toggle === "burger" ? null : "burger")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -38,6 +62,12 @@ const HomeNavbar: React.FC = () => {
                 />
               </svg>
             </button>
+            <Toggle
+              toggle={toggle}
+              setToggle={setToggle}
+              outsideRef={outsideRef}
+              handleLogout={logout}
+            />
           </div>
         </div>
 
@@ -60,7 +90,14 @@ const HomeNavbar: React.FC = () => {
 
         {/* Profile section */}
         <div className="hidden lg:flex items-center">
-          <Profile logout={logout} username={username as string} userId={userId as string} />
+          <Profile
+            logout={logout}
+            toggle={toggle}
+            setToggle={setToggle}
+            outsideRef={outsideRef}
+            userId={userId as string}
+            username={username as string}
+          />
         </div>
       </div>
     </nav>
@@ -72,30 +109,21 @@ type ProfileProps = {
   logout: () => void;
   username: string;
   userId: string;
+  toggle: "user" | "burger" | null;
+  setToggle: React.Dispatch<React.SetStateAction<"user" | "burger" | null>>;
+  outsideRef: React.RefObject<HTMLDivElement | null>;
 };
 
-const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
+const Profile: React.FC<ProfileProps> = ({
+  logout,
+  username,
+  userId,
+  toggle,
+  setToggle,
+  outsideRef,
+}) => {
   const navigate = useNavigate();
-  const [toggle, setToggle] = useState<"settings" | "user" | null>(null);
-
   const { unreadNotif, setUnreadNotif } = useNotification(userId);
-  const outsideRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    interface ClickEvent {
-      target: EventTarget | null;
-    }
-
-    function handleClickOutside(event: ClickEvent): void {
-      if (outsideRef.current && !outsideRef.current.contains(event.target as Node)) {
-        setToggle(null);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [outsideRef]);
 
   useSocketConnection({
     url: "listen-to-notification",
@@ -131,6 +159,7 @@ const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
         <div
           className="flex flex-col items-center gap-4 p-2 cursor-pointer duration-300"
           onClick={() => setToggle(toggle === "user" ? null : "user")}
+          ref={toggle === "user" ? outsideRef : null}
         >
           <div className="flex items-center gap-4 hover:opacity-70">
             <span className="bg-blue-600 w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold">
@@ -138,61 +167,103 @@ const Profile: React.FC<ProfileProps> = ({ logout, username, userId }) => {
             </span>
             <span>{username}</span>
           </div>
-          {toggle === "user" ? (
-            <div
-              ref={outsideRef}
-              className="absolute mt-11 w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50"
-            >
-              <div className="p-4 border-b border-gray-100">
-                <span className="font-medium text-gray-800">User Menu</span>
-              </div>
-              <div className="flex flex-col p-2">
-                <Link
-                  className="px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md transition-all duration-200 flex items-center gap-2"
-                  to="/home/profile"
-                  onClick={() => setToggle(null)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                  View Profile
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-3 py-2 cursor-pointer text-red-600 hover:bg-red-50 rounded-md transition-all duration-200 flex items-center gap-2 mt-1"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-red-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                  Logout
-                </button>
-              </div>
-              <div className="px-4 py-2 border-t border-gray-100 bg-gray-50 text-xs text-gray-500"></div>
-            </div>
-          ) : null}
+          <Toggle
+            toggle={toggle}
+            setToggle={setToggle}
+            outsideRef={outsideRef}
+            handleLogout={handleLogout}
+          />
         </div>
+      </div>
+    </div>
+  );
+};
+
+type ToggleProps = {
+  toggle: "user" | "burger" | null;
+  setToggle: React.Dispatch<React.SetStateAction<"user" | "burger" | null>>;
+  outsideRef: React.RefObject<HTMLDivElement | null>;
+  handleLogout: () => void;
+};
+
+const Toggle: React.FC<ToggleProps> = ({ toggle, setToggle, handleLogout }) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setWindowWidth(width);
+
+      if (width >= 1024 && toggle === "burger") {
+        setToggle(null);
+      } else if (width < 1024 && toggle === "user") {
+        setToggle(null);
+      } else if (windowWidth === 10000) {
+        // silence linter
+        console.log("10000");
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+    return () => window.removeEventListener("resize", handleResize);
+  }, [toggle, setToggle, windowWidth]);
+
+  if (!toggle) return null;
+
+  return (
+    <div
+      className={`
+        absolute w-64 bg-white rounded-lg shadow-xl border border-gray-100 z-50
+        ${toggle === "user" ? "mt-11" : "right-0 mt-8"}
+      `}
+    >
+      <div className="p-4 border-b border-gray-100">
+        <span className="font-medium text-gray-800">
+          {toggle === "burger" ? "Menu" : "User Menu"}
+        </span>
+      </div>
+
+      <div className="flex flex-col p-2 gap-3">
+        {menuItems.map((item) => {
+          if (toggle === "user" && item.type !== "user") return null;
+          return toggle === "burger" || toggle === "user" ? (
+            <Link
+              key={item.to}
+              to={item.to}
+              className="px-3 py-2 text-gray-700 hover:bg-gray-200 rounded-md transition-all duration-200 flex items-center gap-2"
+              onClick={() => setToggle(null)}
+            >
+              {item.icon}
+              {item.label}
+            </Link>
+          ) : null;
+        })}
+
+        {/* Logout button */}
+        <button
+          onClick={() => {
+            handleLogout();
+            setToggle(null);
+          }}
+          className="px-3 py-2 cursor-pointer text-red-600 hover:bg-red-50 rounded-md transition-all duration-200 flex items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 text-red-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+          Logout
+        </button>
       </div>
     </div>
   );

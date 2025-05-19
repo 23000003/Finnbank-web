@@ -22,6 +22,7 @@ export type LoginResponse = {
   full_name: string;
   account_id: string;
   account_status: string;
+  account_type: string;
 };
 
 export type Acc = {

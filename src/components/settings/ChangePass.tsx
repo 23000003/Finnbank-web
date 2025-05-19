@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import useActionStatus from "../../hooks/useActionStatus";
 import { getInputBorderClass } from "../../utils/input-error";
+import { AccountService } from "../../services/account.service";
 
 interface ChangePassProps {
   isOpen: boolean;
@@ -29,6 +30,14 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
       setErrorMessage("All fields are required");
       return false;
     }
+    if (passwords.newPassword.length < 8) {
+      setErrorMessage("Current password must be at least 8 characters");
+      return false;
+    }
+    if (!/\d/.test(passwords.newPassword) || !/[a-zA-Z]/.test(passwords.newPassword)) {
+      setErrorMessage("Password must contain at least one letter and one number");
+      return false;
+    }
     if (passwords.newPassword !== passwords.confirmNewPassword) {
       setErrorMessage("New password and confirm password do not match");
       return false;
@@ -46,13 +55,12 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
     }
     setLoading(true);
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      const data = {
-        userId: userId,
-        currentPassword: passwords.currentPassword,
-        newPassword: passwords.newPassword,
-      };
+      const data = await AccountService.updatePassword(
+        userId as string,
+        passwords.currentPassword,
+        passwords.newPassword
+      );
       console.log(data);
       setSuccessMessage("Password changed successfully!");
       setLoading(false);

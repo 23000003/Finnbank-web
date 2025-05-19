@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { PostTransaction } from "../../../types/entities/transaction.entity";
 import RecentlySent from "../../../components/service/RecentlySent";
 import { OpenedAccountTypeEnum } from "../../../types/enums/opened-account.enum";
+import { Limit } from "../../../types/entities/opened-account.entity";
 
 export const Route = createFileRoute("/home/service/transfer")({
   component: RouteComponent,
@@ -22,15 +23,15 @@ export const Route = createFileRoute("/home/service/transfer")({
 });
 
 function RouteComponent() {
-  const { userId } = useAuth();
+  const { userId, accountType } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [transferData, setTransferData] = useState<PostTransaction | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const { accountNum, type } = useSearch({ from: "/home/service/transfer" });
 
-  const { loading, openedAccounts, setErrorMessage, setSuccessMessage, setLoading } =
-    useOpenedAccountData(userId as string);
+  const { loading, isAtLimit, openedAccounts, setErrorMessage, setSuccessMessage, setLoading } =
+    useOpenedAccountData(userId as string, accountType as string);
 
   const {
     selectedAccount,
@@ -49,6 +50,7 @@ function RouteComponent() {
     setErrorMessage,
     setSuccessMessage,
     setLoading,
+    isAtLimit: isAtLimit as Limit,
   });
 
   useEffect(() => {

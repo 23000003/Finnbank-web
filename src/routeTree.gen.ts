@@ -16,6 +16,7 @@ import { Route as IndexImport } from "./routes/index";
 import { Route as WelcomeIndexImport } from "./routes/welcome/index";
 import { Route as WelcomeSignupImport } from "./routes/welcome/signup";
 import { Route as WelcomeSigninImport } from "./routes/welcome/signin";
+import { Route as WelcomeForgotpassImport } from "./routes/welcome/forgotpass";
 import { Route as HomeUpdatesImport } from "./routes/home/updates";
 import { Route as HomeInboxImport } from "./routes/home/inbox";
 import { Route as HomeDashboardImport } from "./routes/home/dashboard";
@@ -59,6 +60,12 @@ const WelcomeSignupRoute = WelcomeSignupImport.update({
 const WelcomeSigninRoute = WelcomeSigninImport.update({
   id: "/welcome/signin",
   path: "/welcome/signin",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const WelcomeForgotpassRoute = WelcomeForgotpassImport.update({
+  id: "/welcome/forgotpass",
+  path: "/welcome/forgotpass",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -186,6 +193,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof HomeUpdatesImport;
       parentRoute: typeof rootRoute;
     };
+    "/welcome/forgotpass": {
+      id: "/welcome/forgotpass";
+      path: "/welcome/forgotpass";
+      fullPath: "/welcome/forgotpass";
+      preLoaderRoute: typeof WelcomeForgotpassImport;
+      parentRoute: typeof rootRoute;
+    };
     "/welcome/signin": {
       id: "/welcome/signin";
       path: "/welcome/signin";
@@ -282,6 +296,7 @@ export interface FileRoutesByFullPath {
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
   "/home/updates": typeof HomeUpdatesRoute;
+  "/welcome/forgotpass": typeof WelcomeForgotpassRoute;
   "/welcome/signin": typeof WelcomeSigninRoute;
   "/welcome/signup": typeof WelcomeSignupRoute;
   "/welcome": typeof WelcomeIndexRoute;
@@ -303,6 +318,7 @@ export interface FileRoutesByTo {
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
   "/home/updates": typeof HomeUpdatesRoute;
+  "/welcome/forgotpass": typeof WelcomeForgotpassRoute;
   "/welcome/signin": typeof WelcomeSigninRoute;
   "/welcome/signup": typeof WelcomeSignupRoute;
   "/welcome": typeof WelcomeIndexRoute;
@@ -325,6 +341,7 @@ export interface FileRoutesById {
   "/home/dashboard": typeof HomeDashboardRoute;
   "/home/inbox": typeof HomeInboxRoute;
   "/home/updates": typeof HomeUpdatesRoute;
+  "/welcome/forgotpass": typeof WelcomeForgotpassRoute;
   "/welcome/signin": typeof WelcomeSigninRoute;
   "/welcome/signup": typeof WelcomeSignupRoute;
   "/welcome/": typeof WelcomeIndexRoute;
@@ -348,6 +365,7 @@ export interface FileRouteTypes {
     | "/home/dashboard"
     | "/home/inbox"
     | "/home/updates"
+    | "/welcome/forgotpass"
     | "/welcome/signin"
     | "/welcome/signup"
     | "/welcome"
@@ -368,6 +386,7 @@ export interface FileRouteTypes {
     | "/home/dashboard"
     | "/home/inbox"
     | "/home/updates"
+    | "/welcome/forgotpass"
     | "/welcome/signin"
     | "/welcome/signup"
     | "/welcome"
@@ -388,6 +407,7 @@ export interface FileRouteTypes {
     | "/home/dashboard"
     | "/home/inbox"
     | "/home/updates"
+    | "/welcome/forgotpass"
     | "/welcome/signin"
     | "/welcome/signup"
     | "/welcome/"
@@ -410,6 +430,7 @@ export interface RootRouteChildren {
   HomeDashboardRoute: typeof HomeDashboardRoute;
   HomeInboxRoute: typeof HomeInboxRoute;
   HomeUpdatesRoute: typeof HomeUpdatesRoute;
+  WelcomeForgotpassRoute: typeof WelcomeForgotpassRoute;
   WelcomeSigninRoute: typeof WelcomeSigninRoute;
   WelcomeSignupRoute: typeof WelcomeSignupRoute;
   WelcomeIndexRoute: typeof WelcomeIndexRoute;
@@ -431,6 +452,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeDashboardRoute: HomeDashboardRoute,
   HomeInboxRoute: HomeInboxRoute,
   HomeUpdatesRoute: HomeUpdatesRoute,
+  WelcomeForgotpassRoute: WelcomeForgotpassRoute,
   WelcomeSigninRoute: WelcomeSigninRoute,
   WelcomeSignupRoute: WelcomeSignupRoute,
   WelcomeIndexRoute: WelcomeIndexRoute,
@@ -461,6 +483,7 @@ export const routeTree = rootRoute
         "/home/dashboard",
         "/home/inbox",
         "/home/updates",
+        "/welcome/forgotpass",
         "/welcome/signin",
         "/welcome/signup",
         "/welcome/",
@@ -492,6 +515,9 @@ export const routeTree = rootRoute
     },
     "/home/updates": {
       "filePath": "home/updates.tsx"
+    },
+    "/welcome/forgotpass": {
+      "filePath": "welcome/forgotpass.tsx"
     },
     "/welcome/signin": {
       "filePath": "welcome/signin.tsx"

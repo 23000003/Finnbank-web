@@ -121,6 +121,10 @@ export const useRegisterForm = () => {
       showToast.success("Registration successful");
       navigate({ to: "/welcome/signin" });
     } catch (error) {
+      if ((error as Error).message.includes("Somethings wrong...")) {
+        showToast.error("Somethings wrong...");
+        return;
+      }
       showToast.error("Registration failed");
       console.error("Registration error:", error);
     } finally {

@@ -20,7 +20,7 @@ const RecentlySent: React.FC<AccountSelectionProps> = ({
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const data = await TransactionService.getAllTransaction(userId, 2);
+        const data = await TransactionService.getRecentlySent(userId);
         const uniqueAccounts = new Set<string>();
 
         for (let i = 0; i < data.data.length; i++) {
@@ -29,6 +29,7 @@ const RecentlySent: React.FC<AccountSelectionProps> = ({
             data.data[i].sender_id
           );
           uniqueAccounts.add(accountNos[1].account_number);
+          console.log("accountNos", accountNos);
         }
         setAccounts(Array.from(uniqueAccounts));
         setLoading(false);

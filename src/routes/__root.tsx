@@ -64,7 +64,11 @@ function RootComponent() {
       return;
     }
     const getLayoutType = () => {
-      if (location.pathname.startsWith("/welcome/sign")) return "auth";
+      if (
+        location.pathname.startsWith("/welcome/sign") ||
+        location.pathname.startsWith("/welcome/forgot")
+      )
+        return "auth";
       return "landing";
     };
     const newLayout = getLayoutType();
@@ -83,7 +87,12 @@ function RootComponent() {
 
   const getCurrentLayout = () => {
     if (auth.isAuthenticated) return <HomeLayout />;
-    if (location.pathname.startsWith("/welcome/sign")) return <AuthLayout />;
+    if (
+      location.pathname.startsWith("/welcome/sign") ||
+      location.pathname.startsWith("/welcome/forgot")
+    ) {
+      return <AuthLayout />;
+    }
     return <LandingLayout />;
   };
 

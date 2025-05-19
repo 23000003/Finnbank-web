@@ -32,7 +32,7 @@ const sendNotification = async (
     content: "",
   };
 
-  console.log(userId, senderId, receiverId, openedAccountIds);
+  console.log(userId, senderId, receiverId, openedAccountIds, "NOTIFICATIONS WEBSOCKET");
 
   if (status === TransactionStatusEnum.FAILED && openedAccountIds?.includes(senderId)) {
     notifDto.notif_to_id = userId;
@@ -111,7 +111,7 @@ export const useSocketConnection = ({
         console.log("status", status);
         console.log(status !== TransactionStatusEnum.PENDING);
 
-        if (!isInvolved) return;
+        if (!isInvolved && message.receiver_id !== 0) return;
 
         if (status !== TransactionStatusEnum.PENDING) {
           console.log("QUEUE DONE");

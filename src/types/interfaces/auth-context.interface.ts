@@ -4,6 +4,7 @@ export interface AuthContextType {
   username: string | null;
   userId: string | null;
   tokenExp: number | null;
+  accountType: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
   validateEmail: (email: string) => Promise<string>;

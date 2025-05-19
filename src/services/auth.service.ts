@@ -1,6 +1,7 @@
 import { OpenedAccountService } from "./opened-account.service";
 import { Acc, OpenedAccountResponse, LoginResponse } from "../types/entities/account.entity";
 import { api } from "../configs/axios";
+import { AxiosError } from "axios";
 
 export class AuthService {
   private static prefix: string = "/auth";
@@ -15,6 +16,14 @@ export class AuthService {
       return data;
     } catch (err) {
       console.error("Error logging in:", err);
+      if (
+        err instanceof AxiosError &&
+        err.response?.data?.error[0].message.includes(
+          "No connection could be made because the target"
+        )
+      ) {
+        throw new Error("Somethings wrong...");
+      }
       throw err;
     }
   }
@@ -57,6 +66,14 @@ export class AuthService {
       return data;
     } catch (err) {
       console.error("Error registering:", err);
+      if (
+        err instanceof AxiosError &&
+        err.response?.data?.error[0].message.includes(
+          "No connection could be made because the target"
+        )
+      ) {
+        throw new Error("Somethings wrong...");
+      }
       throw err;
     }
   }

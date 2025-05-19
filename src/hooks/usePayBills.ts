@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { OpenedAccount } from "../types/entities/opened-account.entity";
+import { Limit, OpenedAccount } from "../types/entities/opened-account.entity";
 import { IActionStatus } from "../types/interfaces/action-status.interface";
 import { TransactionTypeEnum } from "../types/enums/transaction.enum";
 import { PostTransaction } from "../types/entities/transaction.entity";
@@ -7,13 +7,17 @@ import { Biller } from "../types/entities/billers.entity";
 import TransactionService from "../services/transaction.service";
 import { OpenedAccountStatusEnum } from "../types/enums/opened-account.enum";
 
+type LimitAccounts = "credit" | "savings" | "checking";
+
 interface PayBillsProps extends IActionStatus {
   account: OpenedAccount;
   biller: Biller;
+  isAtLimit: Limit;
 }
 
 export const usePayBills = (props: PayBillsProps) => {
-  const { loading, setLoading, setErrorMessage, setSuccessMessage, account, biller } = props;
+  const { loading, setLoading, setErrorMessage, setSuccessMessage, account, biller, isAtLimit } =
+    props;
 
   const [selected, setSelected] = useState<OpenedAccount>(account);
   const [consumerName, setConsumerName] = useState<string>("");
@@ -49,6 +53,10 @@ export const usePayBills = (props: PayBillsProps) => {
     }
     if (consumerName === "") {
       setErrorMessage("Consumer name cannot be empty.");
+      return false;
+    }
+    if (isAtLimit[selected.account_type.toLowerCase() as LimitAccounts].isAtLimit) {
+      setErrorMessage("Account chosen has reached its daily limit.");
       return false;
     }
     return true;
