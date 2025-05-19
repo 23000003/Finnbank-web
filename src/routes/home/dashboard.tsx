@@ -3,7 +3,6 @@ import { OpenedAccountService } from "../../services/opened-account.service";
 import { AccountCard } from "../../components/dashboard/accountcard";
 import { useEffect, useState } from "react";
 import { OpenedAccount } from "../../types/entities/opened-account.entity";
-import { showToast } from "../../utils/toast";
 import { ActivityData } from "../../types/entities/transaction.entity";
 import { useAuth } from "../../contexts/AuthContext";
 import TransactionService from "../../services/transaction.service";
@@ -37,7 +36,6 @@ function RouteComponent() {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching opened accounts: ", error);
-        showToast.error("Something went wrong...");
       }
     };
     fetchedAccounts();

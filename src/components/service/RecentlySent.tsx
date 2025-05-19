@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import TransactionService from "../../services/transaction.service";
 import { OpenedAccountService } from "../../services/opened-account.service";
-import { showToast } from "../../utils/toast";
 import { RecentlySentLoading } from "../loading/TransferTabLoading";
 type AccountSelectionProps = {
   userId: string;
@@ -35,7 +34,6 @@ const RecentlySent: React.FC<AccountSelectionProps> = ({
         setLoading(false);
       } catch (error) {
         console.error("Error fetching accounts:", error);
-        showToast.error("Something went wrong...");
       }
     };
     setTimeout(() => {

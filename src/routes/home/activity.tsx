@@ -48,7 +48,6 @@ function RouteComponent() {
         setOpenedAccountIds(openData.map((account) => account.openedaccount_id));
         setLoading(false);
       } catch (err) {
-        setErrorMessage("Something went wrong...");
         console.error(err);
       }
     };

@@ -33,7 +33,6 @@ function RouteComponent() {
         console.log(data);
       } catch (error) {
         console.error("Error fetching bankcards:", error);
-        setErrorMessage("Something went wrong...");
       }
     };
     fetchBankcards();

@@ -53,7 +53,6 @@ export const useNotification = (userId: string, route?: string) => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching notifications:", error);
-        setErrorMessage("Something went wrong...");
       }
     };
     if (route === "/home/updates") {
