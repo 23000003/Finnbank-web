@@ -49,7 +49,9 @@ function RootComponent() {
 
     document.title = toMetaTitle();
 
-    if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
+    if (location.pathname.startsWith("/learnmore")) {
+      return;
+    } else if (auth.isAuthenticated && !location.pathname.startsWith("/home")) {
       navigate({ to: "/home/dashboard", replace: true });
     } else if (!auth.isAuthenticated && !location.pathname.startsWith("/welcome")) {
       navigate({ to: "/welcome", replace: true });
@@ -88,8 +90,10 @@ function RootComponent() {
   return (
     <>
       {showLoading && <LoadingLayout />}
-      <div className={showLoading ? "hidden" : "block"}>{getCurrentLayout()}</div>
-      <ToastContainer autoClose={3000} />
+      <div className={showLoading ? "hidden" : "block"}>
+        {getCurrentLayout()}
+        <ToastContainer autoClose={3000} />
+      </div>
     </>
   );
 }

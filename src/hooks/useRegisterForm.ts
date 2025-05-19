@@ -36,13 +36,58 @@ export const useRegisterForm = () => {
 
   const validateForm = () => {
     if (currentStep === 1) {
-      return formData.surname && formData.firstname && formData.middlename && formData.nationality;
+      if (
+        !formData.surname ||
+        !formData.firstname ||
+        !formData.middlename ||
+        !formData.nationality
+      ) {
+        showToast.error("Please fill in all fields");
+        return false;
+      }
     } else if (currentStep === 2) {
-      return formData.email && formData.password && formData.confirmPassword;
+      const { email, password, confirmPassword } = formData;
+      if (!email || !password || !confirmPassword) {
+        showToast.error("Please fill in all fields");
+        return false;
+      }
+      if (email.length < 5 || !email.includes("@")) {
+        showToast.error("Email must be valid");
+        return false;
+      }
+      if (password.length < 8) {
+        showToast.error("Password must be at least 8 characters");
+        return false;
+      }
+      if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+        showToast.error("Password must contain at least one letter and one number");
+        return false;
+      }
+      if (password !== confirmPassword) {
+        showToast.error("Passwords do not match");
+        return false;
+      }
     } else if (currentStep === 3) {
-      return formData.phoneNumber && formData.country && formData.province && formData.city;
+      if (!formData.phoneNumber || !formData.country || !formData.province || !formData.city) {
+        showToast.error("Please fill in all fields");
+        return false;
+      }
     } else if (currentStep === 4) {
-      return formData.nationalID && formData.birthdate && formData.account_type;
+      if (!formData.nationalID || !formData.birthdate || !formData.account_type) {
+        showToast.error("Please fill in all fields");
+        return false;
+      }
+      const birthDate = new Date(formData.birthdate);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      if (
+        age < 18 ||
+        (age === 18 &&
+          today < new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate()))
+      ) {
+        showToast.error("You must be at least 18 years old to register");
+        return false;
+      }
     }
     return true;
   };
@@ -51,27 +96,11 @@ export const useRegisterForm = () => {
     e.preventDefault();
     if (validateForm()) {
       nextStep();
-    } else {
-      showToast.error("Please fill in all fields");
     }
-  };
-
-  const handleEdgeCases = () => {
-    if (!validateForm()) {
-      showToast.error("Please fill in all fields");
-      return false;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      showToast.error("Passwords do not match");
-      return false;
-    }
-    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!handleEdgeCases()) return;
-
     setIsLoading(true);
     const address = `${formData.country}, ${formData.province}, ${formData.city}`;
     try {

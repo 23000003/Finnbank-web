@@ -11,7 +11,7 @@ interface ChangePassProps {
 
 export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
   const { userId } = useAuth();
-  const { setLoading, setErrorMessage, setSuccessMessage } = useActionStatus(false);
+  const { setLoading, setErrorMessage, setSuccessMessage, loading } = useActionStatus(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const [passwords, setPasswords] = useState({
@@ -109,9 +109,13 @@ export default function ChangePass({ isOpen, onClose }: ChangePassProps) {
                 onClick={() => {
                   handleChangePassword();
                 }}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
+                disabled={loading}
+                className={
+                  `bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer` +
+                  (loading ? " opacity-50 cursor-not-allowed" : "")
+                }
               >
-                Confirm
+                {loading ? "Changing..." : "Change Password"}
               </button>
             </div>
           </div>

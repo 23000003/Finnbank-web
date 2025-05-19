@@ -22,7 +22,7 @@ function RouteComponent() {
     limit,
     notifCount,
     readNotification,
-    filterNotifications,
+    setFilter,
   } = useNotification(userId as string, "/home/updates");
 
   const hasMoreNotifs = (notifCount as number) > (limit as number);
@@ -38,8 +38,8 @@ function RouteComponent() {
             className="border border-gray-300 rounded-md p-2"
             onChange={(e) => {
               const filter = e.target.value;
-              if (filterNotifications) {
-                filterNotifications(filter);
+              if (setFilter) {
+                setFilter(filter);
               }
             }}
           >

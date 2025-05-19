@@ -10,6 +10,7 @@ export const useNotification = (userId: string, route?: string) => {
   const [notifCount, setNotifCount] = useState(0);
   const [unreadNotif, setUnreadNotif] = useState(0);
   const [limit, setLimit] = useState(3);
+  const [filter, setFilter] = useState("all");
 
   const { loading, setLoading, setErrorMessage } = useActionStatus(true);
 
@@ -28,13 +29,26 @@ export const useNotification = (userId: string, route?: string) => {
   }, [userId]);
 
   useEffect(() => {
+    switch (filter) {
+      case "unread":
+        setNotifications(tempNotifications.filter((notif) => !notif.is_read));
+        break;
+      case "read":
+        setNotifications(tempNotifications.filter((notif) => notif.is_read));
+        break;
+      default:
+        setNotifications(tempNotifications);
+        break;
+    }
+  }, [filter, tempNotifications]);
+
+  useEffect(() => {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 1500));
         const data = await NotificationService.getAllNotifications(userId, limit);
-        setNotifications(data);
-        setTempNotifications(data);
+        setTempNotifications(data); // this will trigger the other useEffect
         console.log("Notifications:", data);
         setLoading(false);
       } catch (error) {
@@ -46,13 +60,16 @@ export const useNotification = (userId: string, route?: string) => {
       fetchNotifications();
       console.log("fetchNotifications", route);
     }
-  }, [userId, setLoading, setErrorMessage, limit, route]);
+  }, [userId, limit, route, setLoading, setErrorMessage]);
 
   const readNotification = async (notifId: string) => {
     try {
       setLoading(true);
       await NotificationService.readNotification(notifId);
       setNotifications((prev) =>
+        prev.map((notif) => (notif.notif_id === notifId ? { ...notif, is_read: true } : notif))
+      );
+      setTempNotifications((prev) =>
         prev.map((notif) => (notif.notif_id === notifId ? { ...notif, is_read: true } : notif))
       );
       setSelectedNotification((prev) =>
@@ -70,20 +87,6 @@ export const useNotification = (userId: string, route?: string) => {
     setSelectedNotification(notifications.find((notif) => notif.notif_id === notifId) || null);
   };
 
-  const filterNotifications = (filterBy: string) => {
-    switch (filterBy) {
-      case "unread":
-        setNotifications(tempNotifications.filter((notif) => !notif.is_read));
-        break;
-      case "read":
-        setNotifications(tempNotifications.filter((notif) => notif.is_read));
-        break;
-      default:
-        setNotifications(tempNotifications);
-        break;
-    }
-  };
-
   if (route === "/home/updates") {
     return {
       notifications,
@@ -94,7 +97,7 @@ export const useNotification = (userId: string, route?: string) => {
       viewNotification,
       selectedNotification,
       readNotification,
-      filterNotifications,
+      setFilter,
     };
   }
 

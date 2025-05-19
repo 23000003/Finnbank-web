@@ -10,15 +10,6 @@ const HomeFooter: React.FC = () => {
             <img src={logo} alt="finnbank-logo" className="h-12 w-16" />
             <span className="text-2xl font-semibold text-gray-800">Finnbank</span>
           </div>
-
-          <div className="flex flex-row gap-8 text-gray-600">
-            <a href="#" className="hover:text-blue-500 transition-colors">
-              Help
-            </a>
-            <a href="#" className="hover:text-blue-500 transition-colors">
-              Contact Us
-            </a>
-          </div>
         </div>
 
         <div className="border-t border-gray-200 mt-6 pt-6 text-gray-500 text-sm">
