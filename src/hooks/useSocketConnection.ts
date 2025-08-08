@@ -3,6 +3,7 @@ import { ActivityData } from "../types/entities/transaction.entity";
 import { TransactionStatusEnum, TransactionTypeEnum } from "../types/enums/transaction.enum";
 import { NotificationTypeEnum } from "../types/enums/notification.enum";
 import { NotificationService } from "../services/notification.service";
+import { WS_BASE_URL } from "../configs/url";
 
 type SocketProps = {
   url: string;
@@ -83,11 +84,8 @@ export const useSocketConnection = ({
   activityData,
 }: SocketProps) => {
   useEffect(() => {
-    // // const token = localStorage.getItem("token");
-    // // const ws = new WebSocket(`ws://localhost:8080/api/ws/${url}?token=${encodeURIComponent(token as string)}`);
-    // const ws = new WebSocket(`ws://localhost:8080/api/ws/${url}`);
     const token = localStorage.getItem("token"); // or however you store it
-    const ws = new WebSocket(`ws://localhost:8080/api/ws/${url}?token=${token}`);
+    const ws = new WebSocket(`${WS_BASE_URL}/${url}?token=${token}`);
     ws.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
 
