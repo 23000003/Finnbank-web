@@ -7,12 +7,14 @@ type GenerateStatementProps = {
   openedAccountIds: number[];
   startDate: Date | null;
   endDate: Date | null;
+  hasData: boolean;
 };
 
 const GenerateStatement: React.FC<GenerateStatementProps> = ({
   openedAccountIds,
   startDate,
   endDate,
+  hasData,
 }) => {
   const { setErrorMessage, setSuccessMessage } = useActionStatus(false);
 
@@ -79,11 +81,11 @@ const GenerateStatement: React.FC<GenerateStatementProps> = ({
       {!pdfBuffer ? (
         <button
           onClick={handleGenerateStatement}
-          disabled={isGenerating}
-          className={`px-4 py-2 rounded transition-colors cursor-pointer ${
-            isGenerating
+          disabled={isGenerating || !hasData}
+          className={`px-4 py-2 rounded transition-colors ${
+            isGenerating || !hasData
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-400 text-white"
+              : "bg-blue-500 hover:bg-blue-400 text-white cursor-pointer"
           }`}
         >
           {isGenerating ? (
