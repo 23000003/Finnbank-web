@@ -84,11 +84,8 @@ export const useSocketConnection = ({
   activityData,
 }: SocketProps) => {
   useEffect(() => {
-    // // const token = localStorage.getItem("token");
-    // // const ws = new WebSocket(`ws://localhost:8080/api/ws/${url}?token=${encodeURIComponent(token as string)}`);
-    // const ws = new WebSocket(`ws://localhost:8080/api/ws/${url}`);
     const token = localStorage.getItem("token"); // or however you store it
-    const ws = new WebSocket(`${WS_BASE_URL}/ws/${url}?token=${token}`);
+    const ws = new WebSocket(`${WS_BASE_URL}/${url}?token=${token}`);
     ws.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
 

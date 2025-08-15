@@ -62,9 +62,6 @@ function RouteComponent() {
     setStartDate(start);
     setEndDate(end);
 
-    console.log("start 1", start);
-    console.log("end 1", end);
-
     if (start && end) {
       try {
         setLoading(true);
@@ -118,6 +115,7 @@ function RouteComponent() {
           openedAccountIds={openedAccountIds}
           startDate={startDate}
           endDate={endDate}
+          hasData={activityData.length > 0}
         />
       </div>
       <ActivityDataTable
