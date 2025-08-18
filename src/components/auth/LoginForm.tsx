@@ -11,8 +11,8 @@ const TEST_ACCOUNT_PASSWORD = "testaccount123";
 const LoginForm: React.FC = () => {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(TEST_ACCOUNT_EMAIL);
+  const [password, setPassword] = useState(TEST_ACCOUNT_PASSWORD);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isClosed, setClosed] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -69,13 +69,6 @@ const LoginForm: React.FC = () => {
       localStorage.removeItem("rememberMe");
       localStorage.removeItem("email");
     }
-  };
-
-  // login button also triggers since its inside a form which generates an error but who cares
-  const handleTestAccountLogin = async () => {
-    setEmail(TEST_ACCOUNT_EMAIL);
-    setPassword(TEST_ACCOUNT_PASSWORD);
-    await handleLogin({ preventDefault: () => {} } as FormEvent);
   };
 
   return (
@@ -165,43 +158,6 @@ const LoginForm: React.FC = () => {
           </div>
         ) : (
           "Login"
-        )}
-      </button>
-      <button
-        className={`px-4 py-2 rounded-lg shadow-sm w-full cursor-pointer ${
-          loading
-            ? "bg-blue-300 text-white cursor-not-allowed"
-            : "bg-blue-500 text-white hover:bg-blue-600"
-        }`}
-        onClick={handleTestAccountLogin}
-        disabled={loading}
-      >
-        {loading ? (
-          // Loading spinner copied from uiverse
-          <div className="flex items-center justify-center">
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              ></path>
-            </svg>
-          </div>
-        ) : (
-          "Test Account"
         )}
       </button>
     </form>
